@@ -166,8 +166,8 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         // compute available releases and passed time
         uint256 timePassedAfterStart = block.timestamp.sub(start);
         uint256 availableReleases = timePassedAfterStart.div(duration);
-        // difference is remaning vesting time
-        return duration.mul(availableReleases + 1).sub(timePassedAfterStart);
+        // return unlock timestamp in unix time
+        return start.add(duration.mul(availableReleases + 1)); //.sub(timePassedAfterStart);
     }
 
     function unlockVestedTokens() external nonReentrant {
