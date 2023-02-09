@@ -98,14 +98,12 @@ contract BitMaster is Ownable, ReentrancyGuard {
         BitGold _bit,
         BitRAM _ram,
         IWildlandCards _wildlandcard,
-        address _treasuryaddr,
-        uint256 _startBlock
+        address _treasuryaddr
     ) {
         bit = _bit;
         ram = _ram;
         wildlandcard = _wildlandcard;
         treasuryaddr = _treasuryaddr;
-        startBlock = _startBlock;
 
         // staking pool
         poolInfo.push(PoolInfo({
@@ -249,7 +247,9 @@ contract BitMaster is Ownable, ReentrancyGuard {
 
     
     function applyHalfing(uint256 _amount, uint256 testcounter) public view returns (uint256) {
-        if (block.number < startBlock)
+        // start block not reached -> no reward
+        // start block not set -> no reward
+        if (block.number < startBlock || startBlock == 0)
             return 0;
         // current active block counter
         uint256 blocks = block.number.add(testcounter).sub(startBlock);
@@ -281,15 +281,17 @@ contract BitMaster is Ownable, ReentrancyGuard {
         uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
         // bit reward
         uint256 bitReward = applyHalfing(multiplier.mul(bitPerBlock).mul(pool.allocPoint).div(totalAllocPoint), 0);
-        uint256 fee_tres = bitReward.div(10); 
-        // 1) Mint to ram
-        bit.mint(address(ram), bitReward);
-        // 2) transfer fee from ram to treasury
-        safeBitTransfer(treasuryaddr, fee_tres);
-        // 3) bit reward is deducted by fee
-        bitReward = bitReward.sub(fee_tres);
-        // set new distribution per LP
-        pool.accBitsPerShare = pool.accBitsPerShare.add(bitReward.mul(DECIMALS_SHARE_REWARD).div(lpSupply));
+        if (bitReward != 0) {
+            uint256 fee_tres = bitReward.div(10); 
+            // 1) Mint to ram
+            bit.mint(address(ram), bitReward);
+            // 2) transfer fee from ram to treasury
+            safeBitTransfer(treasuryaddr, fee_tres);
+            // 3) bit reward is deducted by fee
+            bitReward = bitReward.sub(fee_tres);
+            // set new distribution per LP
+            pool.accBitsPerShare = pool.accBitsPerShare.add(bitReward.mul(DECIMALS_SHARE_REWARD).div(lpSupply));
+        }
         pool.lastRewardBlock = block.number;
     }
 
@@ -416,7 +418,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
                 uint256 burn_fee = amount_fee.mul(pool.burnDepositFeeBP).div(pool.depositFeeBP);
                 handleFee(_pid, amount_fee, burn_fee);
             }
-            // store user LPs
+            // store user amount
             user.amount = user.amount.add(_amount).sub(amount_fee);
             // set new locked amount based on average locking window
             lockedFor = timeToUnlock(_pid, msg.sender);
@@ -498,7 +500,19 @@ contract BitMaster is Ownable, ReentrancyGuard {
         emit EmitTreasuryChanged(_treasuryaddr);
     }
 
-    /// SECTION ADMIN
+    /// SECTION ADMIN    
+    
+    function setStartblock(uint256 _block) public onlyOwner {
+        require(
+            _block >= block.number,
+            "set startblock: can not start in past"
+        );
+        require(
+            startBlock == 0,
+            "set startblock: start block already set"
+        );
+        startBlock = _block;
+    }
     
     function setPaused(bool _paused, bool _withUpdate) external onlyOwner {
         // only in case of emergency.
