@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts\WildlandCardSale.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> WildlandCardSale.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/76</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/84</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/16</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/82</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.1;
+pragma abicoder v2;
+&nbsp;
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "./IWildlandCards.sol";
+&nbsp;
+/**
+ *  @title Wildland's Cards Sale
+ *  Copyright @ Wildlands
+ *  App: https://wildlands.me
+ */
+&nbsp;
+contract WildlandCardSale is Ownable {
+    using SafeMath for uint256;
+    // prices
+    uint256 public wildPrice = 2 * 10 ** 16;
+    uint256 public blackPrice = 8 * 10 ** 16;
+    uint256 public goldPrice = 16 * 10 ** 16;
+    uint256 public bitPrice = 48 * 10 ** 16;
+    uint256 public salesStartTimestamp;
+    uint256 public interval;
+    uint256 public offset;
+&nbsp;
+    IWildlandCards public wmc;
+    address payable public sale_1;
+    address payable public sale_2;
+    
+    mapping (uint256 =&gt; uint256) public affiliateCount;
+    mapping (uint256 =&gt; uint256) public cardEarnings;
+    
+    event Interval(uint256 interval);
+    event Offset(uint256 interval);
+    
+    /**
+     * @notice Constructor
+     */
+<span class="fstat-no" title="function not covered" >    constructor(</span>
+        IWildlandCards _wmc,
+        address payable _sale_1,
+        address payable _sale_2
+    ) {
+        wmc = _wmc;
+        sale_1 = _sale_1;
+        sale_2 = _sale_2;
+        salesStartTimestamp = 1665014400;
+        interval = 7 days;
+        offset = 24 hours;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function isCardAvailable(uint256 cardId) public view returns (bool) {</span>
+<span class="cstat-no" title="statement not covered" >        return wmc.isCardAvailable(cardId);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function isSalesManAround() public view returns (bool) {</span>
+<span class="cstat-no" title="statement not covered" >        if (block.timestamp &lt; salesStartTimestamp)</span>
+<span class="cstat-no" title="statement not covered" >            return false;</span>
+        // &gt; block.timestamp
+&nbsp;
+        // current sale index
+<span class="cstat-no" title="statement not covered" >        uint256 saleIndex = block.timestamp.sub(salesStartTimestamp).div(interval);</span>
+        // timestamp + interval * index + offset
+<span class="cstat-no" title="statement not covered" >        uint256 maxTimestampOpen = salesStartTimestamp.add(saleIndex.mul(interval)).add(offset);</span>
+        // check if max timestamp is greater than block timestamp
+<span class="cstat-no" title="statement not covered" >        return maxTimestampOpen &gt;= block.timestamp;</span>
+    }    
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function saleOpenTimestamp() public view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        if (block.timestamp &lt; salesStartTimestamp)</span>
+<span class="cstat-no" title="statement not covered" >            return salesStartTimestamp;</span>
+        // current index
+<span class="cstat-no" title="statement not covered" >        uint256 saleIndex = block.timestamp.sub(salesStartTimestamp).div(interval);</span>
+        // return salesStartTimestamp + (saleIndex + 1) * interval (-&gt; next sale at tis timestamp)
+<span class="cstat-no" title="statement not covered" >        return salesStartTimestamp.add(saleIndex.add(1).mul(interval));</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function saleCloseTimestamp() public view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        if (block.timestamp &lt; salesStartTimestamp){</span>
+<span class="cstat-no" title="statement not covered" >            return 0;</span>
+        }
+        // current index
+<span class="cstat-no" title="statement not covered" >        uint256 saleIndex = block.timestamp.sub(salesStartTimestamp).div(interval);</span>
+        // return salesStartTimestamp + (saleIndex + 1) * interval (-&gt; next sale at tis timestamp)
+<span class="cstat-no" title="statement not covered" >        return salesStartTimestamp.add(saleIndex.mul(interval)).add(offset);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function timerToOpen() external view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        if (isSalesManAround())</span>
+<span class="cstat-no" title="statement not covered" >            return 0;</span>
+<span class="cstat-no" title="statement not covered" >        return saleOpenTimestamp().sub(block.timestamp);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function timerToClose() external view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        if (!isSalesManAround())</span>
+<span class="cstat-no" title="statement not covered" >            return 0;</span>
+<span class="cstat-no" title="statement not covered" >        return saleCloseTimestamp().sub(block.timestamp);</span>
+    }
+    
+<span class="fstat-no" title="function not covered" >    function setInterval(uint256 _interval) external onlyOwner {</span>
+        interval = _interval;
+<span class="cstat-no" title="statement not covered" >        emit Interval(_interval);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function setOffset(uint256 _offset) external onlyOwner {</span>
+        offset = _offset;
+<span class="cstat-no" title="statement not covered" >        emit Offset(_offset);</span>
+    }
+&nbsp;
+    /// BUY Section
+&nbsp;
+<span class="fstat-no" title="function not covered" >    fallback() external payable{</span>
+<span class="cstat-no" title="statement not covered" >        buyCard(0, 0)</span>;
+    }
+    
+    receive() external payable{
+        buyCard(0, 0);
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function buyCard(uint256 _cardId, bytes4 _code) public payable {</span>
+<span class="cstat-no" title="statement not covered" >        require(isCardAvailable(_cardId), "buy: requested wmc card is sold out")</span>;
+<span class="cstat-no" title="statement not covered" >        require(_code == 0x0 || wmc.existsCode(_code), "affiliate: Invalid token id for non existing token")</span>;
+        // check timestamp condition (true if timestamp was not set but fct did not return)
+<span class="cstat-no" title="statement not covered" >        require(isSalesManAround(), "Mint: The salesman of Wildlands is not around")</span>;
+        // mint card and increment respective token id
+<span class="cstat-no" title="statement not covered" >        if (_code != 0x0 &amp;&amp; wmc.existsCode(_code)) {</span>
+            // if valid affiliate code was 
+<span class="cstat-no" title="statement not covered" >            if (_cardId == 0)</span>
+<span class="cstat-no" title="statement not covered" >                require (msg.value == wildPrice.mul(95).div(100), "buy 0: invalid purchase price")</span>;
+            else <span class="cstat-no" title="statement not covered" >if (_cardId == 1)</span>
+<span class="cstat-no" title="statement not covered" >                require (msg.value == blackPrice.mul(95).div(100), "buy 1: invalid purchase price")</span>;
+            else <span class="cstat-no" title="statement not covered" >if (_cardId == 2)</span>
+<span class="cstat-no" title="statement not covered" >                require (msg.value == goldPrice.mul(95).div(100), "buy 2: invalid purchase price")</span>;
+            else <span class="cstat-no" title="statement not covered" >if (_cardId == 3)</span>
+<span class="cstat-no" title="statement not covered" >                require (msg.value == bitPrice.mul(95).div(100), "buy 3: invalid purchase price")</span>;
+        }
+        else {
+<span class="cstat-no" title="statement not covered" >            if (_cardId == 0)</span>
+<span class="cstat-no" title="statement not covered" >                require (msg.value == wildPrice, "buy 0: invalid purchase price")</span>;
+            else <span class="cstat-no" title="statement not covered" >if (_cardId == 1)</span>
+<span class="cstat-no" title="statement not covered" >                require (msg.value == blackPrice, "buy 1: invalid purchase price")</span>;
+            else <span class="cstat-no" title="statement not covered" >if (_cardId == 2)</span>
+<span class="cstat-no" title="statement not covered" >                require (msg.value == goldPrice, "buy 2: invalid purchase price")</span>;
+            else <span class="cstat-no" title="statement not covered" >if (_cardId == 3)</span>
+<span class="cstat-no" title="statement not covered" >                require (msg.value == bitPrice, "buy 3: invalid purchase price")</span>;
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        uint256 affiliateAmount = 0;</span>
+        // transfer sale + affiliate fee if applicable
+<span class="cstat-no" title="statement not covered" >        if (_code != 0x0) {</span>
+<span class="cstat-no" title="statement not covered" >            uint256 tokenId = wmc.getTokenIdByCode(_code);</span>
+<span class="cstat-no" title="statement not covered" >            uint256 feeBP = getAffiliateBasePoints(tokenId);</span>
+            affiliateAmount = msg.value.mul(feeBP).div(100);
+            // transfer affiliate amount to owner of nft
+<span class="cstat-no" title="statement not covered" >            address payable addr = payable(wmc.ownerOf(tokenId));</span>
+<span class="cstat-no" title="statement not covered" >            addr.transfer(affiliateAmount)</span>;
+            // update earnings + affiliate counter
+            cardEarnings[tokenId] = cardEarnings[tokenId].add(affiliateAmount);
+            affiliateCount[tokenId] = affiliateCount[tokenId].add(1);
+        }
+        // remaining sale price to be transferred
+<span class="cstat-no" title="statement not covered" >        uint256 salePrice = msg.value.sub(affiliateAmount);</span>
+        // 50% of sale price goes to ...
+<span class="cstat-no" title="statement not covered" >        uint256 salePrice_1 = salePrice.div(2);</span>
+<span class="cstat-no" title="statement not covered" >        sale_1.transfer(salePrice_1)</span>;
+        // rest goes to
+<span class="cstat-no" title="statement not covered" >        sale_2.transfer(salePrice.sub(salePrice_1))</span>;
+        // mint card id
+<span class="cstat-no" title="statement not covered" >        wmc.mint(msg.sender, _cardId)</span>;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function setPurchasePrice(uint256 _wildPrice, uint256 _blackPrice, uint256 _goldPrice, uint256 _bitPrice) public onlyOwner {</span>
+<span class="cstat-no" title="statement not covered" >        require (_wildPrice &gt; 0 &amp;&amp; _blackPrice &gt; 0 &amp;&amp; _goldPrice &gt; 0 &amp;&amp; _bitPrice &gt; 0, "setPrice: invalid price - cannot be zero")</span>;
+        wildPrice = _wildPrice;
+        blackPrice = _blackPrice;
+        goldPrice = _goldPrice;
+        bitPrice = _bitPrice;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function setSale(address payable _sale_1, address payable _sale_2) public onlyOwner {</span>
+<span class="cstat-no" title="statement not covered" >        require (_sale_1 != address(0), "setSale: invalid address 1")</span>;
+<span class="cstat-no" title="statement not covered" >        require (_sale_2 != address(0), "setSale: invalid address 2")</span>;
+        sale_1 = _sale_1;
+        sale_2 = _sale_2;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getCardIndex(uint256 _cardID) public view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        return wmc.cardIndex(_cardID);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getCardPrice(uint256 _cardID) public view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        if (_cardID == 0)</span>
+<span class="cstat-no" title="statement not covered" >            return wildPrice;</span>
+        else <span class="cstat-no" title="statement not covered" >if (_cardID == 1) {</span>
+            // BIT CARD MEMBER
+<span class="cstat-no" title="statement not covered" >            return blackPrice;</span>
+        }
+        else <span class="cstat-no" title="statement not covered" >if (_cardID == 2) {</span>
+            // GOLD CARD MEMBER
+<span class="cstat-no" title="statement not covered" >            return goldPrice;</span>
+        }
+        else <span class="cstat-no" title="statement not covered" >if (_cardID == 3) {</span>
+            // BLACK CARD MEMBER
+<span class="cstat-no" title="statement not covered" >            return bitPrice;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        return 0;</span>
+    }
+&nbsp;
+    // the affilite mechansims has 4 levels (3 VIP WMC and 1 standard). 
+    // affiliates get a portion of the fees based on the member level. 
+    // there are 1000 VIP VMC MEMBER CARDS (id 1 - 1000) and INFINTITY STANDARD MEMBER CARDS (1001+)
+<span class="fstat-no" title="function not covered" >    function getAffiliateBasePoints(uint256 _tokenId) public pure returns (uint256) {</span>
+        // check affiliate id
+<span class="cstat-no" title="statement not covered" >        if (_tokenId == 0)</span>
+<span class="cstat-no" title="statement not covered" >            return 0;</span>
+        else <span class="cstat-no" title="statement not covered" >if (_tokenId &lt;= 100) {</span>
+            // BIT CARD MEMBER
+<span class="cstat-no" title="statement not covered" >            return 20;</span> // 20 %
+        }
+        else <span class="cstat-no" title="statement not covered" >if (_tokenId &lt;= 400) {</span>
+            // GOLD CARD MEMBER
+<span class="cstat-no" title="statement not covered" >            return 15;</span> // 15 %
+        }
+        else <span class="cstat-no" title="statement not covered" >if (_tokenId &lt;= 1000) {</span>
+            // BLACK CARD MEMBER
+<span class="cstat-no" title="statement not covered" >            return 10;</span> // 10 %
+        }
+        // WILD LANDS MEMBER CARD
+<span class="cstat-no" title="statement not covered" >        return 5;</span> // 5 %
+    }
+}</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Feb 11 2023 23:45:51 GMT+0100 (Central European Standard Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

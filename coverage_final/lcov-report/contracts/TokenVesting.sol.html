@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts\TokenVesting.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> TokenVesting.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">96.49% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>55/57</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">91.07% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>51/56</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>10/10</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">97.22% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>70/72</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-yes">42×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">31×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">30×</span>
+<span class="cline-any cline-yes">29×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">27×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+&nbsp;
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+&nbsp;
+contract TokenVesting is Ownable, ReentrancyGuard {
+    using SafeMath for uint256;
+    using SafeERC20 for ERC20;
+&nbsp;
+    event NewVest(address indexed _from, address indexed _to, uint256 _value);
+    event UnlockVest(address indexed _holder, uint256 _value);
+    event RevokeVest(address indexed _holder, uint256 _refund);
+&nbsp;
+    struct Vest {
+        uint256 value;
+        uint256 transferred;
+        bool revokable;
+        bool revoked;
+    }
+&nbsp;
+    address public crowdsaleAddress;
+    ERC20 public token;
+    uint256 public totalVesting;
+    uint256 public totalLimit;
+    uint256 public RELEASES = 3;
+    uint256 duration = 30 days; 
+    uint256 finishOfVest = RELEASES * duration;
+    mapping(address =&gt; Vest) public vests;
+    uint256 public start;
+    uint256 public finish;
+&nbsp;
+    modifier onlyCrowdsale() {
+        require(_msgSender() == crowdsaleAddress, "TokenVesting: Only crowdsale can call this function.");
+        _;
+    }
+&nbsp;
+    constructor(address _token) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(
+            _token != address(0),
+            "TokenVesting: invalid zero address for token provided"
+        );
+&nbsp;
+        token = ERC20(_token);
+        // presale limit
+        totalLimit = 1e6 * (10**token.decimals());
+    }
+&nbsp;
+    /**
+     * @notice Set crowdsale address.
+     * onlyOwner protected.
+     */
+    function setCrowdsaleAddress(address _crowdsaleAddress) public onlyOwner {
+        require(
+            _crowdsaleAddress != address(0),
+            "TokenVesting: invalid zero address for crowdsale"
+        );
+        crowdsaleAddress = _crowdsaleAddress;
+    }
+&nbsp;
+    /**
+     * @notice Add a new purchased _value of tokens.
+     * onlyCrowdsale protected.
+     */
+    function vest(
+        address _to,
+        uint256 _value,
+        bool _revokable
+    ) external onlyCrowdsale {
+        require(
+            _to != address(0),
+            "TokenVesting: invalid zero address for beneficiary!"
+        );
+        require(_value &gt; 0, "TokensVesting: invalid value for beneficiary!");
+        require(
+            totalVesting.add(_value) &lt;= totalLimit,
+            "TokenVesting: total value exeeds total limit!"
+        );
+        require(
+            !vests[_to].revoked,
+            "TokenVesting: Revoked addresses cannot take part"
+        );
+        
+&nbsp;
+        
+        if (vests[_to].value == 0) {
+            vests[_to].revokable = _revokable;
+            vests[_to].revoked = false;
+        }
+        vests[_to].value += _value;
+&nbsp;
+        totalVesting = totalVesting.add(_value);
+&nbsp;
+        emit NewVest(_msgSender(), _to, _value);
+    }
+&nbsp;
+    /**
+     * @notice Revoke added vest.
+     * Not possible for vests added by crowdsale.
+     * onlyOwner protected.
+     */
+    function revoke(address _holder) public onlyOwner {
+        Vest storage vested = vests[_holder];
+&nbsp;
+        require(vested.revokable, "TokenVesting: vested can not get revoked!");
+        require(!vested.revoked, "TokenVesting: holder already revoked!");
+&nbsp;
+        uint256 refund = vested.value.sub(vested.transferred);
+&nbsp;
+        totalVesting = totalVesting.sub(refund);
+        vested.revoked = true;
+        vested.value = 0;
+        token.safeTransfer(_msgSender(), refund);
+&nbsp;
+        emit RevokeVest(_holder, refund);
+    }
+&nbsp;
+    /**
+     * @notice Start vesting period.
+     * Only crowdsale. Will be called once the sale is completed.
+     * onlyCrowdsale protected.
+     */
+    function startVesting(uint256 _start) public onlyCrowdsale {
+        require(finish == 0, "TokenVesting: already started!");
+        start = _start;
+        finish = _start.add(finishOfVest);
+    }
+&nbsp;
+    /**
+     * @notice Calculate amount of already vested tokens.
+     * Can also return the amount of unlocked vested tokens.
+     * For external use only.
+     */
+    function vestedTokens(address _holder, bool unlocked)
+        external
+        view
+        returns (uint256)
+    {
+        if (start == 0) {
+            return 0;
+        }
+&nbsp;
+        Vest memory vested = vests[_holder];
+        if (vested.value == 0) {
+            return 0;
+        }
+        uint256 vestedAmount = calculateVestedTokens(vested);
+        uint256 transferable = vestedAmount.sub(vested.transferred);
+        if (unlocked)
+            return transferable;
+&nbsp;
+        return vestedAmount;
+    }
+&nbsp;
+    /**
+     * @notice Calculate amount of already vested tokens.
+     * Return full _vested.value if vesting period is finished.
+     * For internal use only.
+     */
+    function calculateVestedTokens(Vest memory _vested)
+        private
+        view
+        returns (uint256)
+    {
+        if (block.timestamp &gt;= finish) {
+            return _vested.value;
+        }
+&nbsp;
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (start &gt; block.timestamp)
+<span class="cstat-no" title="statement not covered" >            return 0;</span>
+        // 40% are initially unlocked right away
+        uint256 initalUnlock = 2;
+        uint256 timePassedAfterStart = block.timestamp.sub(start);
+        // Consider initial unlock
+        uint256 availableReleases = timePassedAfterStart.div(duration) + initalUnlock;
+        // RELEASES = 3 -&gt; 5 releases in total
+        uint256 tokensPerRelease = _vested.value.div(RELEASES + initalUnlock);
+&nbsp;
+        return availableReleases.mul(tokensPerRelease);
+    }
+&nbsp;
+    /**
+     * @notice Countdown to be displayed on frontend. 
+     * Returns next vesting timestamp if nothing is transferrable, else 0 (transferrable amount is unlocked).
+     */
+    function countdown(address _holder) external view returns (uint256){
+        if (block.timestamp &gt;= finish) {
+            return 0;
+        }
+        Vest storage vested = vests[_holder];
+        // check vested amount, if greater 0, vesting is still unlocked
+        uint256 vestedAmount = calculateVestedTokens(vested);
+        uint256 transferable = vestedAmount.sub(vested.transferred);
+        if (transferable &gt; 0) {
+            return 0;
+        }
+        // compute available releases and passed time
+        uint256 timePassedAfterStart = block.timestamp.sub(start);
+        uint256 availableReleases = timePassedAfterStart.div(duration);
+        // return unlock timestamp in unix time
+        return start.add(duration.mul(availableReleases + 1));
+    }
+&nbsp;
+    /**
+     * @notice Claim vested tokens. 
+     * Returns if nothing to vest or nothing is unlocked. 
+     * nonReentrant protected.
+     */
+    function unlockVestedTokens() external <span class="missing-if-branch" title="else path not taken" >E</span>nonReentrant {
+        require(start != 0, "vesting: not started yet");
+        Vest storage vested = vests[_msgSender()];
+        require(vested.value != 0, "vesting: no tokens to vest");
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(!vested.revoked, "vesting: revoked");
+&nbsp;
+        uint256 vestedAmount = calculateVestedTokens(vested);
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (vestedAmount == 0) {
+<span class="cstat-no" title="statement not covered" >            return;</span>
+        }
+&nbsp;
+        uint256 transferable = vestedAmount.sub(vested.transferred);
+        if (transferable == 0) {
+            return;
+        }
+&nbsp;
+        vested.transferred = vested.transferred.add(transferable);
+        totalVesting = totalVesting.sub(transferable);
+        token.safeTransfer(_msgSender(), transferable);
+&nbsp;
+        emit UnlockVest(_msgSender(), transferable);
+    }
+}</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Feb 12 2023 17:11:29 GMT+0100 (Central European Standard Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

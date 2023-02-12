@@ -129,7 +129,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
     /// SECION MODIFIERS
 
     /**
-     * @notice Validate if pool exists
+     * @dev Validate if pool exists
      */
     modifier validatePool(uint256 _pid) {
         require(_pid < poolInfo.length, "validatePool: pool exists?");
@@ -141,7 +141,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Check that no pool is added twice.
+     * @dev Check that no pool is added twice.
      */
     modifier nonDuplicated(IERC20 _lpToken) {
         require(poolExistence[_lpToken] == false, "add: existing pool");
@@ -149,7 +149,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Check if membership is required and if so, check if msg.sender has membership (see isMember function).
+     * @dev Check if membership is required and if so, check if msg.sender has membership (see isMember function).
      */
     modifier requireMembership(uint256 _pid) {
         // either affiliate code or member card required
@@ -160,11 +160,20 @@ contract BitMaster is Ownable, ReentrancyGuard {
     /// SECION POOL AND MINE DATA
 
     /** 
-     * @notice Add a new lp to the pool. Can only be called by the owner.
+     * @dev Add a new lp to the pool. Can only be called by the owner.
      * It will be automatically checked if pool is duplicate.
      * Fee: Max fee 10% = fee base points <= 1000 (MAX_PERCENT = 1e4).
      * _lockTimer is measured in unix time.
      * onlyOwner protected.
+     * @param _allocPoint allocation points
+     * @param _token erc20 token address to be stakable
+     * @param _lockTimer lock timer in seconds
+     * @param _depositFeeBP deposit fee base points
+     * @param _burnDepositFeeBP burn deposit fee base points
+     * @param _withdrawFeeBP withdraw fee base points
+     * @param _burnWithdrawFeeBP burn withdraw fee base points
+     * @param _withUpdate true if pools should be updated before change
+     * @param _requireMembership is user membership required for staking?
      */
     function add(uint256 _allocPoint, IERC20 _token, uint256 _lockTimer, uint16 _depositFeeBP, uint16 _burnDepositFeeBP, uint16 _withdrawFeeBP, uint16 _burnWithdrawFeeBP, bool _withUpdate, bool _requireMembership) public onlyOwner nonDuplicated(_token) {
         require(_depositFeeBP <= MAX_PERCENT.div(10), "add: invalid deposit fee basis points"); // max 10%
@@ -199,10 +208,19 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /** 
-     * @notice Update the given pool's bit allocation point. Can only be called by the owner.
+     * @dev Update the given pool's bit allocation point. Can only be called by the owner.
      * Fee: Max fee 10% = fee base points <= 1000 (MAX_PERCENT = 1e4).
      * _lockTimer is measured in blocks.
      * onlyOwner protected.
+     * @param _pid pool id
+     * @param _allocPoint allocation points
+     * @param _lockTimer lock timer in seconds
+     * @param _depositFeeBP deposit fee base points
+     * @param _burnDepositFeeBP burn deposit fee base points
+     * @param _withdrawFeeBP withdraw fee base points
+     * @param _burnWithdrawFeeBP burn withdraw fee base points
+     * @param _withUpdate true if pool should be updated before change
+     * @param _requireMembership is user membership required for staking?
      */
     function set(uint256 _pid, uint256 _allocPoint, uint256 _lockTimer, uint16 _depositFeeBP, uint16 _burnDepositFeeBP, uint16 _withdrawFeeBP, uint16 _burnWithdrawFeeBP, bool _withUpdate, bool _requireMembership) public onlyOwner validatePool(_pid) {
         require(_depositFeeBP <= MAX_PERCENT.div(10), "set: invalid deposit fee basis points"); // max 10%
@@ -228,7 +246,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
         emit EmitSet(_pid, _allocPoint, _lockTimer, _depositFeeBP, _burnDepositFeeBP, _withdrawFeeBP, _burnWithdrawFeeBP, _requireMembership);
     }
     /**
-     * @notice Update reward variables for all pools. Be careful of gas spending! (external)
+     * @dev Update reward variables for all pools. Be careful of gas spending! (external)
      * nonReentrant protected.
      */
     function massUpdatePools() external nonReentrant {
@@ -236,7 +254,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Update reward variables for all pools. Be careful of gas spending!
+     * @dev Update reward variables for all pools. Be careful of gas spending!
      */
     function _massUpdatePools() internal {
         uint256 length = poolInfo.length;
@@ -246,7 +264,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Update multiplier of staking pool (_pid=0).
+     * @dev Update multiplier of staking pool (_pid=0).
      */
     function updateStakingPool() internal {
         uint256 length = poolInfo.length;
@@ -263,7 +281,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Return reward multiplier based on _from and _to block number.
+     * @dev Return reward multiplier based on _from and _to block number.
      */
     function getMultiplier(uint256 _from, uint256 _to) public view returns (uint256) {
         if (paused)
@@ -272,8 +290,11 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Apply having every 365 * UNITS_PER_DAY blocks (approx 1 year).
+     * @dev Apply having every 365 * UNITS_PER_DAY blocks (approx 1 year).
      * Given _amount is divided by 2 ** i where i = number of passed years (>= 0).
+     * @param _amount amount before halfing
+     * @param testcounter counter to check for next halfing
+     * @return final amount
      */
     function applyHalfing(uint256 _amount, uint256 testcounter) public view returns (uint256) {
         // start block not reached -> no reward
@@ -288,14 +309,15 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
     
     /**
-     * @notice Minting info per block based on halfing and pause state.
+     * @dev Minting info per block based on halfing and pause state.
+     * @return current btg per block
      */
     function mintingInfo() external view returns(uint256) {
 		return applyHalfing(bitPerBlock.mul(getMultiplier(0,1)), 0);
     }    
     
     /**
-     * @notice Update pool (external)
+     * @dev Update pool (external)
      * nonReentrant protected.
      */
     function updatePool(uint256 _pid) external nonReentrant {
@@ -303,7 +325,8 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Update pool (internal).
+     * @dev Update pool (internal).
+     * @param _pid pool id
      */
     function _updatePool(uint256 _pid) internal validatePool(_pid) {
         PoolInfo storage pool = poolInfo[_pid];
@@ -333,7 +356,10 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Returns pending bits for given pool _pid.
+     * @dev Returns pending bits for given pool _pid.
+     * @param _pid pool id
+     * @param _user user address
+     * @return pending btg to be collected
      */
     function pendingBit(uint256 _pid, address _user) external view returns (uint256) {
         // get pool info in storage
@@ -352,7 +378,10 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
     
     /**
-     * @notice Remaining locked time in seconds for given _pid and _user.
+     * @dev Remaining locked time in seconds for given _pid and _user.
+     * @param _pid pool id
+     * @param _user user address
+     * @return seconds until unlock (0 if unlocked)
      */
     function timeToUnlock(uint256 _pid, address _user) public view returns (uint256) {
         UserInfo storage user = userInfo[_pid][_user];
@@ -367,22 +396,26 @@ contract BitMaster is Ownable, ReentrancyGuard {
     /// SECTION AFFILIATE
 
     /**
-     * @notice check if _user is member.
+     * @dev check if _user is member.
      * Meber means: _user has either an affiliate code set (see setCode function), owns or has owned a wildlands member card.
      * or is a whitelisted address, e.g., a partner contract.
+     * @param _user user address
+     * @return true if user is member (if wmc card is sold, users can still withdraw)
      */
     function isMember(address _user) public view returns(bool) {
         // either be an affiliator or an affiliatee
-        // affiliators who sold their member card, stay members
-        return affiliatee[_user] != 0x0 || wildlandcard.getCodeByAddress(_user) != 0x0 || isWhiteListed[_user];
+        // affiliators who sold their member card, can withdraw
+        return affiliatee[_user] != 0x0 || wildlandcard.balanceOf(_user) > 0 || isWhiteListed[_user];
     }
 
     /**
-     * @notice Get affiliate base points for a given _user.
+     * @dev Get affiliate base points for a given _user.
      * The affilite mechansims has 4 levels (3 vip and 1 standard). 
      * Affiliates get a portion of the fees based on the member level. 
      * There are 1000 VIP MEMBER CARDS (id 1 - 1000) and INFINTITY STANDARD MEMBER CARDS (1001+).
      * affiliatee[_user] is the affiliate code that _user used to be a member (see setCode function).
+     * @param _user user address
+     * @return affiliate base points of affiliatee
      */
     function getAffiliateBasePoints(address _user) public view returns (uint256) {
         // get affiliate id
@@ -407,10 +440,11 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Set affiliate code
+     * @dev Set affiliate code
      * The affiliate code of msg.sender is stored in affiliatee[msg.sender]. 
      * Affiliate fees are to the current token owner that is linked to the provided _code.
      * nonReentrant protected.
+     * @param _code affiliate code
      */
     function setCode(bytes4 _code) public nonReentrant {
         require(affiliatee[msg.sender] == 0x0, "setCode: Affiliate code already set");
@@ -420,10 +454,13 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Process fee, burn fee and affiliate fees.
+     * @dev Process fee, burn fee and affiliate fees.
      * If burn fee is lower than total fee, an affiliate fee is computed if token_id > 0.
      * Affiliate fees are sent to the CURRENT token owner.
      * Difference of _amount_fee - (_burn_fee + affiliateFee) is sent to treasury.
+     * @param _pid pool id
+     * @param _amount_fee full fee amount
+     * @param _burn_fee burn fee amount
      */
     function handleFee(uint256 _pid, uint256 _amount_fee, uint256 _burn_fee) internal {
         PoolInfo storage pool = poolInfo[_pid];
@@ -453,9 +490,11 @@ contract BitMaster is Ownable, ReentrancyGuard {
     /// USER ACTIONS
 
     /**
-     * @notice Depost token _amount in pool _pid
+     * @dev Depost token _amount in pool _pid
      * Checks if membership is required and validates given pool id _pid.
      * nonReentrant protected.
+     * @param _pid pool id
+     * @param _amount amount to stake
      */
     function deposit(uint256 _pid, uint256 _amount) external validatePool(_pid) nonReentrant requireMembership(_pid) {
         PoolInfo storage pool = poolInfo[_pid];
@@ -499,10 +538,12 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Withdraw token _amount from pool _pid
+     * @dev Withdraw token _amount from pool _pid
      * Membership is not required, i.e., user can always withdraw their token regardless of membership mechanism.
      * Validates given pool id _pid.
      * nonReentrant protected.
+     * @param _pid pool id
+     * @param _amount amount to unstake
      */
     function withdraw(uint256 _pid, uint256 _amount) external validatePool(_pid) nonReentrant {
         PoolInfo storage pool = poolInfo[_pid];
@@ -533,11 +574,12 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Withdraw without caring about rewards. EMERGENCY ONLY.
+     * @dev Withdraw without caring about rewards. EMERGENCY ONLY.
      * Locked timer needs to be 0.
      * Simplified fee processing (fee deducted and sent to treasury). No affiliate processing for simplicity.
      * Validates given pool id _pid.
      * nonReentrant protected.
+     * @param _pid pool id
      */
     function emergencyWithdraw(uint256 _pid) public validatePool(_pid) nonReentrant {
         require(timeToUnlock(_pid, msg.sender) == 0, "withdraw: tokens are still locked.");
@@ -565,15 +607,18 @@ contract BitMaster is Ownable, ReentrancyGuard {
     /// SECTION HELPERS
 
     /**
-     * @notice Safe bit transfer function, just in case if rounding error causes pool to not have enough bits.
+     * @dev Safe bit transfer function, just in case if rounding error causes pool to not have enough bits.
+     * @param _to destination address
+     * @param _amount token amount to be transferred to address _to
      */
     function safeBitTransfer(address _to, uint256 _amount) internal {
         ram.safeBitTransfer(_to, _amount);
     }
 
     /**
-     * @notice Update treasury address by the previous tresaruy address.
+     * @dev Update treasury address by the previous tresaruy address.
      * Can only be called by current treasury address. 
+     * @param _treasuryaddr new treasury address
      */
     function tres(address _treasuryaddr) public {
         require(msg.sender == treasuryaddr, "treasury: wut?");
@@ -585,9 +630,10 @@ contract BitMaster is Ownable, ReentrancyGuard {
     /// SECTION ADMIN 
 
     /**
-     * @notice Set start block any time after deployment.
+     * @dev Set start block any time after deployment.
      * Can only be called once if startBlock == 0.
      * onlyOwner protected.
+     * @param _block start block of staking
      */
     function setStartblock(uint256 _block) public onlyOwner {
         require(
@@ -607,9 +653,11 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
     
     /**
-     * @notice Pause minting.
+     * @dev Pause minting.
      * Optional: all pools are updated before changing pause state.
      * onlyOwner protected.
+     * @param _paused paused?
+     * @param _withUpdate should pools be updated first?
      */
     function setPaused(bool _paused, bool _withUpdate) external onlyOwner {
         // only in case of emergency.
@@ -622,8 +670,9 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Whitelist addresse -> Makes _address a member. Useful for partner contracts.
+     * @dev Whitelist addresse -> Makes _address a member. Useful for partner contracts.
      * onlyOwner protected.
+     * @param _address address to be whitelisted
      */
     function whiteListAddress(address _address) external onlyOwner {
         // whitelist addresses as members, such as partner contracts    
@@ -633,8 +682,9 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Exclude address from fee -> Useful for partner contracts that cannot handle fees.
+     * @dev Exclude address from fee -> Useful for partner contracts that cannot handle fees.
      * onlyOwner protected.
+     * @param _address address to be excluded from fees
      */
     function excludeFromFees(address _address) external onlyOwner {
         // whitelist addresses as non-fee-payers, such as partner contracts  

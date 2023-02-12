@@ -83,6 +83,13 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         _;
     }
 
+    /**
+     * @param _token erc20 token address
+     * @param _treasury_1 first treasury address
+     * @param _treasury_2 second treasury address
+     * @param _memberCard erc721 member card
+     * @param _vestingContract address of vesting contract
+     */
     constructor(
         address _token,
         address payable _treasury_1,
@@ -119,8 +126,10 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Set white list address.
+     * @dev Set white list address.
      * onlyOwner protected.
+     * @param _grantees array of grantee addresses
+     * @param set are the _grantees to be whitelisted (true) or revoked (false)?
      */
     function setWhitelist(address[] calldata _grantees, bool set) public onlyOwner {
         // add addresses to whitelist
@@ -131,7 +140,7 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Allow users to secure one of the limited whitelist spots.
+     * @dev Allow users to secure one of the limited whitelist spots.
      * Cannot be called after presale has started.
      */
     function secureWhitelistSpot() external {
@@ -149,15 +158,18 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Return available whitelist spots.
+     * @dev Return available whitelist spots.
+     * @return amount of available white list spots
      */
     function getWhitelistSpots() external view returns (uint256) {
         return whiteListSpots;
     }
 
     /**
-     * @notice Set treasury addresses.
+     * @dev Set treasury addresses.
      * onlyOwner protected.
+     * @param _treasury_1 first treasury address
+     * @param _treasury_2 second treasury address
      */
     function setTreasury(address payable _treasury_1, address payable _treasury_2) public onlyOwner {
         require (_treasury_1 != address(0), "Crowdsale: invalid address 1");
@@ -166,7 +178,7 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         treasury_2 = _treasury_2;
     }
     /**
-     * @notice Set white list address.
+     * @dev Set white list address.
      * nonReentrant protected.
      * onlyAfterStart protected.
      * onlyWhenNotPaused protected.
@@ -271,7 +283,10 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Get ETH amount given a _tokenAmount and the respective _tokenAmountRate per ETH.
+     * @dev Get ETH amount given a _tokenAmount and the respective _tokenAmountRate per ETH.
+     * @param _tokenAmount amont of tokens to be purchased
+     * @param _tokenAmountRate amount of tokens per eth
+     * @return eth cost
      */
     function _getETHAmount(uint256 _tokenAmount, uint256 _tokenAmountRate)
         internal
@@ -283,7 +298,10 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Get token amount given a _value and the respective _tokenAmountRate per ETH.
+     * @dev Get token amount given a _value and the respective _tokenAmountRate per ETH.
+     * @param _value eth value usable for purchase
+     * @param _tokenAmountRate amount of tokens per eth
+     * @return amount of tokens to be purchased
      */
     function _getTokensAmount(uint256 _value, uint256 _tokenAmountRate)
         internal
@@ -295,7 +313,7 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Close crowedsale.
+     * @dev Close crowedsale.
      * onlyOwner protected.
      */
     function closeCrowdsale() public onlyOwner {
@@ -305,7 +323,7 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Pause crowedsale.
+     * @dev Pause crowedsale.
      * onlyOwner protected.
      */
     function togglePauseCrowdsale() public onlyOwner {
@@ -313,8 +331,9 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Start crowedsale.
+     * @dev Start crowedsale.
      * onlyOwner protected.
+     * @param _time unix time stamp
      */
     function startCrowdSale(uint256 _time) public onlyOwner{
         require(startCrowdsaleTime == 0, "Crowdsale: already set");
@@ -327,8 +346,9 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Start 2nd round.
+     * @dev Start 2nd round.
      * onlyOwner protected.
+     * @param _time unix time stamp
      */
     function startSecondRound(uint256 _time) public onlyOwner {
         require(startSecondRoundTime == 0, "Crowdsale: already set");
@@ -341,8 +361,9 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
     }
 
    /**
-     * @notice Start 3rd round.
+     * @dev Start 3rd round.
      * onlyOwner protected.
+     * @param _time unix time stamp
      */
     function startThirdRound(uint256 _time) public onlyOwner {
         require(startThirdRoundTime == 0, "Crowdsale: already set");
@@ -354,24 +375,33 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         emit SetTime("3rd", _time);
     }
 
+    /**
+     * @dev Has 2nd round of presale started?
+     * @return true if 2nd round has started, else false
+     */
     function has2ndRoundStarted() external view returns (bool) {
         return block.timestamp >= startSecondRoundTime && startSecondRoundTime > 0;
     }
 
+    /**
+     * @dev Has 3rd round of presale started?
+     * @return true if 3rd round has started, else false
+     */
     function has3rdRoundStarted() external view returns (bool) {
         return block.timestamp >= startThirdRoundTime && startThirdRoundTime > 0;
     }
 
    /**
-     * @notice Deposit amount of token into the presale contract.
+     * @dev Deposit amount of token into the presale contract.
      * onlyOwner protected.
+     * @param _amount amount of tokens to be deposited
      */
-    function deposit(uint256 amount) public onlyOwner {
-        token.safeTransferFrom(_msgSender(), address(this), amount);
+    function deposit(uint256 _amount) public onlyOwner {
+        token.safeTransferFrom(_msgSender(), address(this), _amount);
     }
 
    /**
-     * @notice Transfer remaining tokens if presale is closed earlier.
+     * @dev Transfer remaining tokens if presale is closed earlier.
      * onlyOwner protected.
      */
     function withdraw() public whenIcoCompleted onlyOwner {
@@ -379,7 +409,7 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         token.safeTransfer(_msgSender(), balance);
     }
    /**
-     * @notice Withdraw any eth left in contract.
+     * @dev Withdraw any eth left in contract.
      * onlyOwner protected.
      */
     function withdrawETH() public whenIcoCompleted onlyOwner {

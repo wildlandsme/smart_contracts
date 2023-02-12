@@ -1,0 +1,3671 @@
+<html><head><style>body {
+   color: black;
+}
+</style></head><body><h1 id="solidity-api">Solidity API</h1>
+<h2 id="bitmaster">BitMaster</h2>
+<h3 id="userinfo">UserInfo</h3>
+<pre><code class="lang-solidity"><span class="hljs-attribute">struct</span> UserInfo {
+  <span class="hljs-attribute">uint256</span> amount;
+  <span class="hljs-attribute">uint256</span> rewardDebt;
+  <span class="hljs-attribute">uint256</span> lockedAt;
+}
+</code></pre>
+<h3 id="poolinfo">PoolInfo</h3>
+<pre><code class="lang-solidity"><span class="hljs-attribute">struct</span> PoolInfo {
+  <span class="hljs-attribute">contract</span> IERC20 stakeToken;
+  <span class="hljs-attribute">uint256</span> allocPoint;
+  <span class="hljs-attribute">uint256</span> <span class="hljs-literal">last</span>RewardBlock;
+  <span class="hljs-attribute">uint256</span> accBitsPerShare;
+  <span class="hljs-attribute">uint256</span> lockTimer;
+  <span class="hljs-attribute">uint16</span> depositFeeBP;
+  <span class="hljs-attribute">uint16</span> burnDepositFeeBP;
+  <span class="hljs-attribute">uint16</span> withdrawFeeBP;
+  <span class="hljs-attribute">uint16</span> burnWithdrawFeeBP;
+  <span class="hljs-attribute">bool</span> requireMembership;
+}
+</code></pre>
+<h3 id="bit">bit</h3>
+<pre><code class="lang-solidity">contract BitGold <span class="hljs-built_in">bit</span>
+</code></pre>
+<h3 id="ram">ram</h3>
+<pre><code class="lang-solidity"><span class="hljs-symbol">contract</span> <span class="hljs-keyword">BitRAM </span>ram
+</code></pre>
+<h3 id="max_percent">MAX_PERCENT</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt32</span> MAX_PERCE<span class="hljs-symbol">NT</span>
+</code></pre>
+<h3 id="decimals_token">DECIMALS_TOKEN</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> DECIMALS_TOKE<span class="hljs-symbol">N</span>
+</code></pre>
+<h3 id="decimals_share_reward">DECIMALS_SHARE_REWARD</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> DECIMALS_SHARE_REWARD
+</code></pre>
+<h3 id="dead_address">DEAD_ADDRESS</h3>
+<pre><code class="lang-solidity"><span class="hljs-selector-tag">address</span> DEAD_ADDRESS
+</code></pre>
+<h3 id="treasuryaddr">treasuryaddr</h3>
+<pre><code class="lang-solidity"><span class="hljs-selector-tag">address</span> treasuryaddr
+</code></pre>
+<h3 id="units_per_day">UNITS_PER_DAY</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> U<span class="hljs-symbol">NITS_PER_DAY</span>
+</code></pre>
+<h3 id="bitperblock">bitPerBlock</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> bitPerBlock
+</code></pre>
+<h3 id="poolinfo">poolInfo</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">struct </span><span class="hljs-keyword">BitMaster.PoolInfo[] </span>poolInfo
+</code></pre>
+<h3 id="userinfo">userInfo</h3>
+<pre><code class="lang-solidity">mapping(<span class="hljs-function"><span class="hljs-params">uint256</span> =&gt;</span> mapping(<span class="hljs-function"><span class="hljs-params">address</span> =&gt;</span> struct BitMaster.UserInfo)) userInfo
+</code></pre>
+<h3 id="totalallocpoint">totalAllocPoint</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> totalAllocPoi<span class="hljs-symbol">nt</span>
+</code></pre>
+<h3 id="startblock">startBlock</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> startBlock
+</code></pre>
+<h3 id="poolexistence">poolExistence</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-title">mapping</span><span class="hljs-params">(contract IERC20 =&gt; bool)</span></span> poolExistence
+</code></pre>
+<h3 id="paused">paused</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">bool</span> paused
+</code></pre>
+<h3 id="affiliatee">affiliatee</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-title">mapping</span><span class="hljs-params">(address =&gt; bytes4)</span></span> affiliatee
+</code></pre>
+<h3 id="wildlandcard">wildlandcard</h3>
+<pre><code class="lang-solidity"><span class="hljs-attribute">contract IWildlandCards wildlandcard</span>
+</code></pre>
+<h3 id="iswhitelisted">isWhiteListed</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-title">mapping</span><span class="hljs-params">(address =&gt; bool)</span></span> isWhiteListed
+</code></pre>
+<h3 id="isexcludedfromfees">IsExcludedFromFees</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-title">mapping</span><span class="hljs-params">(address =&gt; bool)</span></span> IsExcludedFromFees
+</code></pre>
+<h3 id="emitdeposit">EmitDeposit</h3>
+<pre><code class="lang-solidity">event EmitDeposit(<span class="hljs-name">address</span> user, uint256 pid, uint256 amount, uint256 lockedFor)
+</code></pre>
+<h3 id="emitwithdraw">EmitWithdraw</h3>
+<pre><code class="lang-solidity">event EmitWithdraw(<span class="hljs-name">address</span> user, uint256 pid, uint256 amount)
+</code></pre>
+<h3 id="emitemergencywithdraw">EmitEmergencyWithdraw</h3>
+<pre><code class="lang-solidity">event EmitEmergencyWithdraw(<span class="hljs-name">address</span> user, uint256 pid, uint256 amount)
+</code></pre>
+<h3 id="emitset">EmitSet</h3>
+<pre><code class="lang-solidity">event EmitSet(uint256 pid, uint256 allocPoint, uint256 lockTimer, <span class="hljs-keyword">uint16</span> depositFeeBP, <span class="hljs-keyword">uint16</span> burnDepositFeeBP, <span class="hljs-keyword">uint16</span> withdrawFeeBP, <span class="hljs-keyword">uint16</span> burnWithdrawFeeBP, <span class="hljs-keyword">bool</span> isMember)
+</code></pre>
+<h3 id="emitadd">EmitAdd</h3>
+<pre><code class="lang-solidity">event EmitAdd(address token, uint256 allocPoint, uint256 lockTimer, <span class="hljs-keyword">uint16</span> depositFeeBP, <span class="hljs-keyword">uint16</span> burnDepositFeeBP, <span class="hljs-keyword">uint16</span> withdrawFeeBP, <span class="hljs-keyword">uint16</span> burnWithdrawFeeBP, <span class="hljs-keyword">bool</span> isMember)
+</code></pre>
+<h3 id="emittreasurychanged">EmitTreasuryChanged</h3>
+<pre><code class="lang-solidity">event EmitTreasuryChanged(<span class="hljs-name">address</span> _new)
+</code></pre>
+<h3 id="codefailed">CodeFailed</h3>
+<pre><code class="lang-solidity">event CodeFailed(<span class="hljs-name">uint256</span> tokenId)
+</code></pre>
+<h3 id="codesuccess">CodeSuccess</h3>
+<pre><code class="lang-solidity"><span class="hljs-symbol">event</span> CodeSuccess(<span class="hljs-keyword">bytes4 </span><span class="hljs-meta">code</span>, uint256 tokenId)
+</code></pre>
+<h3 id="codeset">CodeSet</h3>
+<pre><code class="lang-solidity"><span class="hljs-symbol">event</span> CodeSet(<span class="hljs-keyword">address </span>user, <span class="hljs-keyword">bytes4 </span><span class="hljs-meta">code</span>)
+</code></pre>
+<h3 id="setstartblock">SetStartblock</h3>
+<pre><code class="lang-solidity">event SetStartblock(<span class="hljs-name">uint256</span> startBlock)
+</code></pre>
+<h3 id="excludedfromfees">ExcludedFromFees</h3>
+<pre><code class="lang-solidity">event ExcludedFromFees(<span class="hljs-name">address</span> user)
+</code></pre>
+<h3 id="whitelisted">WhiteListed</h3>
+<pre><code class="lang-solidity">event WhiteListed(<span class="hljs-name">address</span> user)
+</code></pre>
+<h3 id="setpaused">SetPaused</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">event</span> <span class="hljs-title">SetPaused</span>(<span class="hljs-params"><span class="hljs-keyword">bool</span> paused</span>)</span>
+</code></pre>
+<h3 id="constructor">constructor</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">constructor</span><span class="hljs-params">(contract BitGold _bit, contract BitRAM _ram, contract IWildlandCards _wildlandcard, address _treasuryaddr)</span> <span class="hljs-title">public</span></span>
+</code></pre>
+<h3 id="validatepool">validatePool</h3>
+<pre><code class="lang-solidity">modifier validatePool(<span class="hljs-name">uint256</span> _pid)
+</code></pre>
+<p><em>Validate if pool exists</em></p>
+<h3 id="poollength">poolLength</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">poolLength</span><span class="hljs-params">()</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<h3 id="nonduplicated">nonDuplicated</h3>
+<pre><code class="lang-solidity">modifier nonDuplicated(<span class="hljs-name">contract</span> IERC20 _lpToken)
+</code></pre>
+<p><em>Check that no pool is added twice.</em></p>
+<h3 id="requiremembership">requireMembership</h3>
+<pre><code class="lang-solidity">modifier requireMembership(<span class="hljs-name">uint256</span> _pid)
+</code></pre>
+<p><em>Check if membership is required and if so, check if msg.sender has membership (see isMember function).</em></p>
+<h3 id="add">add</h3>
+<pre><code class="lang-solidity">function add(uint256 _allocPoint, contract IERC20 _token, uint256 _lockTimer, <span class="hljs-keyword">uint16</span> _depositFeeBP, <span class="hljs-keyword">uint16</span> _burnDepositFeeBP, <span class="hljs-keyword">uint16</span> _withdrawFeeBP, <span class="hljs-keyword">uint16</span> _burnWithdrawFeeBP, <span class="hljs-keyword">bool</span> _withUpdate, <span class="hljs-keyword">bool</span> _requireMembership) <span class="hljs-keyword">public</span>
+</code></pre>
+<p>_Add a new lp to the pool. Can only be called by the owner.
+It will be automatically checked if pool is duplicate.
+Fee: Max fee 10% = fee base points &lt;= 1000 (MAX_PERCENT = 1e4).
+<em>lockTimer is measured in unix time.
+onlyOwner protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_allocPoint</td>
+<td>uint256</td>
+<td>allocation points</td>
+</tr>
+<tr>
+<td>_token</td>
+<td>contract IERC20</td>
+<td>erc20 token address to be stakable</td>
+</tr>
+<tr>
+<td>_lockTimer</td>
+<td>uint256</td>
+<td>lock timer in seconds</td>
+</tr>
+<tr>
+<td>_depositFeeBP</td>
+<td>uint16</td>
+<td>deposit fee base points</td>
+</tr>
+<tr>
+<td>_burnDepositFeeBP</td>
+<td>uint16</td>
+<td>burn deposit fee base points</td>
+</tr>
+<tr>
+<td>_withdrawFeeBP</td>
+<td>uint16</td>
+<td>withdraw fee base points</td>
+</tr>
+<tr>
+<td>_burnWithdrawFeeBP</td>
+<td>uint16</td>
+<td>burn withdraw fee base points</td>
+</tr>
+<tr>
+<td>_withUpdate</td>
+<td>bool</td>
+<td>true if pools should be updated before change</td>
+</tr>
+<tr>
+<td>_requireMembership</td>
+<td>bool</td>
+<td>is user membership required for staking?</td>
+</tr>
+</tbody>
+</table>
+<h3 id="set">set</h3>
+<pre><code class="lang-solidity">function <span class="hljs-keyword">set</span>(uint256 _pid, uint256 _allocPoint, uint256 _lockTimer, <span class="hljs-keyword">uint16</span> _depositFeeBP, <span class="hljs-keyword">uint16</span> _burnDepositFeeBP, <span class="hljs-keyword">uint16</span> _withdrawFeeBP, <span class="hljs-keyword">uint16</span> _burnWithdrawFeeBP, <span class="hljs-keyword">bool</span> _withUpdate, <span class="hljs-keyword">bool</span> _requireMembership) <span class="hljs-keyword">public</span>
+</code></pre>
+<p>_Update the given pool&#39;s bit allocation point. Can only be called by the owner.
+Fee: Max fee 10% = fee base points &lt;= 1000 (MAX_PERCENT = 1e4).
+<em>lockTimer is measured in blocks.
+onlyOwner protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_pid</td>
+<td>uint256</td>
+<td>pool id</td>
+</tr>
+<tr>
+<td>_allocPoint</td>
+<td>uint256</td>
+<td>allocation points</td>
+</tr>
+<tr>
+<td>_lockTimer</td>
+<td>uint256</td>
+<td>lock timer in seconds</td>
+</tr>
+<tr>
+<td>_depositFeeBP</td>
+<td>uint16</td>
+<td>deposit fee base points</td>
+</tr>
+<tr>
+<td>_burnDepositFeeBP</td>
+<td>uint16</td>
+<td>burn deposit fee base points</td>
+</tr>
+<tr>
+<td>_withdrawFeeBP</td>
+<td>uint16</td>
+<td>withdraw fee base points</td>
+</tr>
+<tr>
+<td>_burnWithdrawFeeBP</td>
+<td>uint16</td>
+<td>burn withdraw fee base points</td>
+</tr>
+<tr>
+<td>_withUpdate</td>
+<td>bool</td>
+<td>true if pool should be updated before change</td>
+</tr>
+<tr>
+<td>_requireMembership</td>
+<td>bool</td>
+<td>is user membership required for staking?</td>
+</tr>
+</tbody>
+</table>
+<h3 id="massupdatepools">massUpdatePools</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> massUpdatePools() <span class="hljs-keyword">external</span>
+</code></pre>
+<p><em>Update reward variables for all pools. Be careful of gas spending! (external)
+nonReentrant protected.</em></p>
+<h3 id="_massupdatepools">_massUpdatePools</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_massUpdatePools</span><span class="hljs-params">()</span></span> internal
+</code></pre>
+<p><em>Update reward variables for all pools. Be careful of gas spending!</em></p>
+<h3 id="updatestakingpool">updateStakingPool</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updateStakingPool</span><span class="hljs-params">()</span></span> internal
+</code></pre>
+<p>_Update multiplier of staking pool (<em>pid=0).</em></p>
+<h3 id="getmultiplier">getMultiplier</h3>
+<pre><code class="lang-solidity">function getMultiplier(<span class="hljs-name">uint256</span> _from, uint256 _to) public view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p>_Return reward multiplier based on _from and <em>to block number.</em></p>
+<h3 id="applyhalfing">applyHalfing</h3>
+<pre><code class="lang-solidity">function applyHalfing(<span class="hljs-name">uint256</span> _amount, uint256 testcounter) public view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p>_Apply having every 365 <em> UNITS_PER_DAY blocks (approx 1 year).
+Given _amount is divided by 2 *</em> i where i = number of passed years (&gt;= 0)._</p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_amount</td>
+<td>uint256</td>
+<td>amount before halfing</td>
+</tr>
+<tr>
+<td>testcounter</td>
+<td>uint256</td>
+<td>counter to check for next halfing</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>uint256</td>
+<td>final amount</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mintinginfo">mintingInfo</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mintingInfo</span><span class="hljs-params">()</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p><em>Minting info per block based on halfing and pause state.</em></p>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>uint256</td>
+<td>current btg per block</td>
+</tr>
+</tbody>
+</table>
+<h3 id="updatepool">updatePool</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> updatePool(uint256 _pid) <span class="hljs-keyword">external</span>
+</code></pre>
+<p><em>Update pool (external)
+nonReentrant protected.</em></p>
+<h3 id="_updatepool">_updatePool</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_updatePool</span><span class="hljs-params">(uint256 _pid)</span></span> internal
+</code></pre>
+<p><em>Update pool (internal).</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_pid</td>
+<td>uint256</td>
+<td>pool id</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pendingbit">pendingBit</h3>
+<pre><code class="lang-solidity">function pendingBit(<span class="hljs-name">uint256</span> _pid, address _user) external view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p>_Returns pending bits for given pool <em>pid.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_pid</td>
+<td>uint256</td>
+<td>pool id</td>
+</tr>
+<tr>
+<td>_user</td>
+<td>address</td>
+<td>user address</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>uint256</td>
+<td>pending btg to be collected</td>
+</tr>
+</tbody>
+</table>
+<h3 id="timetounlock">timeToUnlock</h3>
+<pre><code class="lang-solidity">function timeToUnlock(<span class="hljs-name">uint256</span> _pid, address _user) public view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p>_Remaining locked time in seconds for given _pid and <em>user.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_pid</td>
+<td>uint256</td>
+<td>pool id</td>
+</tr>
+<tr>
+<td>_user</td>
+<td>address</td>
+<td>user address</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>uint256</td>
+<td>seconds until unlock (0 if unlocked)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ismember">isMember</h3>
+<pre><code class="lang-solidity">function isMember(<span class="hljs-name">address</span> _user) public view returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p>_check if _user is member.
+Meber means: <em>user has either an affiliate code set (see setCode function), owns or has owned a wildlands member card.
+or is a whitelisted address, e.g., a partner contract.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_user</td>
+<td>address</td>
+<td>user address</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>bool</td>
+<td>true if user is member (if wmc card is sold, users can still withdraw)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="getaffiliatebasepoints">getAffiliateBasePoints</h3>
+<pre><code class="lang-solidity">function getAffiliateBasePoints(<span class="hljs-name">address</span> _user) public view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p>_Get affiliate base points for a given _user.
+The affilite mechansims has 4 levels (3 vip and 1 standard). 
+Affiliates get a portion of the fees based on the member level. 
+There are 1000 VIP MEMBER CARDS (id 1 - 1000) and INFINTITY STANDARD MEMBER CARDS (1001+).
+affiliatee[_user] is the affiliate code that <em>user used to be a member (see setCode function).</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_user</td>
+<td>address</td>
+<td>user address</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>uint256</td>
+<td>affiliate base points of affiliatee</td>
+</tr>
+</tbody>
+</table>
+<h3 id="setcode">setCode</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> setCode(bytes4 _code) <span class="hljs-keyword">public</span>
+</code></pre>
+<p>_Set affiliate code
+The affiliate code of msg.sender is stored in affiliatee[msg.sender]. 
+Affiliate fees are to the current token owner that is linked to the provided <em>code.
+nonReentrant protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_code</td>
+<td>bytes4</td>
+<td>affiliate code</td>
+</tr>
+</tbody>
+</table>
+<h3 id="handlefee">handleFee</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleFee</span><span class="hljs-params">(uint256 _pid, uint256 _amount_fee, uint256 _burn_fee)</span></span> internal
+</code></pre>
+<p>_Process fee, burn fee and affiliate fees.
+If burn fee is lower than total fee, an affiliate fee is computed if token_id &gt; 0.
+Affiliate fees are sent to the CURRENT token owner.
+Difference of _amount_fee - (_burn<em>fee + affiliateFee) is sent to treasury.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_pid</td>
+<td>uint256</td>
+<td>pool id</td>
+</tr>
+<tr>
+<td>_amount_fee</td>
+<td>uint256</td>
+<td>full fee amount</td>
+</tr>
+<tr>
+<td>_burn_fee</td>
+<td>uint256</td>
+<td>burn fee amount</td>
+</tr>
+</tbody>
+</table>
+<h3 id="deposit">deposit</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> deposit(uint256 _pid, uint256 _amount) <span class="hljs-keyword">external</span>
+</code></pre>
+<p>_Depost token _amount in pool _pid
+Checks if membership is required and validates given pool id <em>pid.
+nonReentrant protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_pid</td>
+<td>uint256</td>
+<td>pool id</td>
+</tr>
+<tr>
+<td>_amount</td>
+<td>uint256</td>
+<td>amount to stake</td>
+</tr>
+</tbody>
+</table>
+<h3 id="withdraw">withdraw</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> withdraw(uint256 _pid, uint256 _amount) <span class="hljs-keyword">external</span>
+</code></pre>
+<p>_Withdraw token _amount from pool _pid
+Membership is not required, i.e., user can always withdraw their token regardless of membership mechanism.
+Validates given pool id <em>pid.
+nonReentrant protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_pid</td>
+<td>uint256</td>
+<td>pool id</td>
+</tr>
+<tr>
+<td>_amount</td>
+<td>uint256</td>
+<td>amount to unstake</td>
+</tr>
+</tbody>
+</table>
+<h3 id="emergencywithdraw">emergencyWithdraw</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> emergencyWithdraw(uint256 _pid) <span class="hljs-keyword">public</span>
+</code></pre>
+<p>_Withdraw without caring about rewards. EMERGENCY ONLY.
+Locked timer needs to be 0.
+Simplified fee processing (fee deducted and sent to treasury). No affiliate processing for simplicity.
+Validates given pool id <em>pid.
+nonReentrant protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_pid</td>
+<td>uint256</td>
+<td>pool id</td>
+</tr>
+</tbody>
+</table>
+<h3 id="safebittransfer">safeBitTransfer</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">safeBitTransfer</span><span class="hljs-params">(address _to, uint256 _amount)</span></span> internal
+</code></pre>
+<p><em>Safe bit transfer function, just in case if rounding error causes pool to not have enough bits.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_to</td>
+<td>address</td>
+<td>destination address</td>
+</tr>
+<tr>
+<td>_amount</td>
+<td>uint256</td>
+<td>token amount to be transferred to address _to</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tres">tres</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> tres(address _treasuryaddr) <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Update treasury address by the previous tresaruy address.
+Can only be called by current treasury address.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_treasuryaddr</td>
+<td>address</td>
+<td>new treasury address</td>
+</tr>
+</tbody>
+</table>
+<h3 id="setstartblock">setStartblock</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> setStartblock(uint256 _block) <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Set start block any time after deployment.
+Can only be called once if startBlock == 0.
+onlyOwner protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_block</td>
+<td>uint256</td>
+<td>start block of staking</td>
+</tr>
+</tbody>
+</table>
+<h3 id="setpaused">setPaused</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">function</span> setPaused(<span class="hljs-built_in">bool</span> _paused, <span class="hljs-built_in">bool</span> _withUpdate) <span class="hljs-keyword">external</span>
+</code></pre>
+<p><em>Pause minting.
+Optional: all pools are updated before changing pause state.
+onlyOwner protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_paused</td>
+<td>bool</td>
+<td>paused?</td>
+</tr>
+<tr>
+<td>_withUpdate</td>
+<td>bool</td>
+<td>should pools be updated first?</td>
+</tr>
+</tbody>
+</table>
+<h3 id="whitelistaddress">whiteListAddress</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> whiteListAddress(address _address) <span class="hljs-keyword">external</span>
+</code></pre>
+<p>_Whitelist addresse -&gt; Makes <em>address a member. Useful for partner contracts.
+onlyOwner protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_address</td>
+<td>address</td>
+<td>address to be whitelisted</td>
+</tr>
+</tbody>
+</table>
+<h3 id="excludefromfees">excludeFromFees</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> excludeFromFees(address _address) <span class="hljs-keyword">external</span>
+</code></pre>
+<p><em>Exclude address from fee -&gt; Useful for partner contracts that cannot handle fees.
+onlyOwner protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_address</td>
+<td>address</td>
+<td>address to be excluded from fees</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bitgold">BitGold</h2>
+<h3 id="emitmint">EmitMint</h3>
+<pre><code class="lang-solidity">event EmitMint(<span class="hljs-name">address</span> to, uint256 amount)
+</code></pre>
+<h3 id="constructor">constructor</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">constructor</span><span class="hljs-params">(address treasury)</span> <span class="hljs-title">public</span></span>
+</code></pre>
+<h3 id="mint">mint</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> mint(address _to, uint256 _amount) <span class="hljs-keyword">public</span>
+</code></pre>
+<p>_Creates <code>_amount</code> token to <code>_to</code>. Must only be called by the owner (Mine Master)._</p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_to</td>
+<td>address</td>
+<td>destination address</td>
+</tr>
+<tr>
+<td>_amount</td>
+<td>uint256</td>
+<td>token amount to be minted to address _to</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bitram">BitRAM</h2>
+<h3 id="token">token</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">contract</span> ERC20 <span class="hljs-keyword">token</span>
+</code></pre>
+<h3 id="constructor">constructor</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">constructor</span><span class="hljs-params">(contract ERC20 _token)</span> <span class="hljs-title">public</span></span>
+</code></pre>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_token</td>
+<td>contract ERC20</td>
+<td>erc20 token address</td>
+</tr>
+</tbody>
+</table>
+<h3 id="safebittransfer">safeBitTransfer</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> safeBitTransfer(address _to, uint256 _amount) <span class="hljs-keyword">external</span>
+</code></pre>
+<p><em>Safe token transfer function, just in case if rounding error</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_to</td>
+<td>address</td>
+<td>destination address</td>
+</tr>
+<tr>
+<td>_amount</td>
+<td>uint256</td>
+<td>token amount to be transferred to address _to</td>
+</tr>
+</tbody>
+</table>
+<h2 id="crowdsale">Crowdsale</h2>
+<h3 id="token">token</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">contract</span> ERC20 <span class="hljs-keyword">token</span>
+</code></pre>
+<h3 id="membercard">memberCard</h3>
+<pre><code class="lang-solidity"><span class="hljs-built_in">contract</span> IERC721 memberCard
+</code></pre>
+<h3 id="vestingcontract">vestingContract</h3>
+<pre><code class="lang-solidity"><span class="hljs-attribute">contract TokenVesting vestingContract</span>
+</code></pre>
+<h3 id="treasury_1">treasury_1</h3>
+<pre><code class="lang-solidity"><span class="hljs-selector-tag">address</span> payable treasury_1
+</code></pre>
+<h3 id="treasury_2">treasury_2</h3>
+<pre><code class="lang-solidity"><span class="hljs-selector-tag">address</span> payable treasury_2
+</code></pre>
+<h3 id="tokenamountrateone">tokenAmountRateOne</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> toke<span class="hljs-symbol">nAmountRateOne</span>
+</code></pre>
+<h3 id="tokenamountratetwo">tokenAmountRateTwo</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> toke<span class="hljs-symbol">nAmountRateTwo</span>
+</code></pre>
+<h3 id="tokenamountratethree">tokenAmountRateThree</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> toke<span class="hljs-symbol">nAmountRateThree</span>
+</code></pre>
+<h3 id="tokensraised">tokensRaised</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> toke<span class="hljs-symbol">nsRaised</span>
+</code></pre>
+<h3 id="limitphaseone">limitPhaseOne</h3>
+<pre><code class="lang-solidity">uint256 <span class="hljs-built_in">limit</span>PhaseOne
+</code></pre>
+<h3 id="limitphasetwo">limitPhaseTwo</h3>
+<pre><code class="lang-solidity">uint256 <span class="hljs-built_in">limit</span>PhaseTwo
+</code></pre>
+<h3 id="limitphasethree">limitPhaseThree</h3>
+<pre><code class="lang-solidity">uint256 <span class="hljs-built_in">limit</span>PhaseThree
+</code></pre>
+<h3 id="minimumbuyamount">minimumBuyAmount</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> mi<span class="hljs-symbol">nimumBuyAmount</span>
+</code></pre>
+<h3 id="isicocompleted">isIcoCompleted</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">bool</span> isIcoCompleted
+</code></pre>
+<h3 id="hasicopaused">hasIcoPaused</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">bool</span> hasIcoPaused
+</code></pre>
+<h3 id="isicofirstroundcompleted">isIcoFirstRoundCompleted</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">bool</span> isIcoFirstRoundCompleted
+</code></pre>
+<h3 id="isicosecondroundcompleted">isIcoSecondRoundCompleted</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">bool</span> isIcoSecondRoundCompleted
+</code></pre>
+<h3 id="startcrowdsaletime">startCrowdsaleTime</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> startCrowdsaleTime
+</code></pre>
+<h3 id="startsecondroundtime">startSecondRoundTime</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> startSeco<span class="hljs-symbol">ndRoundTime</span>
+</code></pre>
+<h3 id="startthirdroundtime">startThirdRoundTime</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> startThirdRou<span class="hljs-symbol">ndTime</span>
+</code></pre>
+<h3 id="whitelistspots">whiteListSpots</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> whiteListSpots
+</code></pre>
+<h3 id="whitelisted">whiteListed</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-title">mapping</span><span class="hljs-params">(address =&gt; bool)</span></span> whiteListed
+</code></pre>
+<h3 id="tokenbuy">TokenBuy</h3>
+<pre><code class="lang-solidity"><span class="hljs-symbol">event</span> TokenBuy(<span class="hljs-keyword">address </span><span class="hljs-keyword">buyer, </span>uint256 value, uint256 amount)
+</code></pre>
+<h3 id="whitelist">Whitelist</h3>
+<pre><code class="lang-solidity">event Whitelist(<span class="hljs-name">address</span> whitelisted)
+</code></pre>
+<h3 id="close">Close</h3>
+<pre><code class="lang-solidity">event <span class="hljs-keyword">Close</span>()
+</code></pre>
+<h3 id="settime">SetTime</h3>
+<pre><code class="lang-solidity">event SetTime(<span class="hljs-built_in">string</span> <span class="hljs-built_in">round</span>, uint256 timestamp)
+</code></pre>
+<h3 id="whenicocompleted">whenIcoCompleted</h3>
+<pre><code class="lang-solidity">modifier <span class="hljs-keyword">when</span>IcoCompleted()
+</code></pre>
+<h3 id="onlyafterstart">onlyAfterStart</h3>
+<pre><code class="lang-solidity"><span class="hljs-selector-tag">modifier</span> <span class="hljs-selector-tag">onlyAfterStart</span>()
+</code></pre>
+<h3 id="onlywhennotpaused">onlyWhenNotPaused</h3>
+<pre><code class="lang-solidity"><span class="hljs-selector-tag">modifier</span> <span class="hljs-selector-tag">onlyWhenNotPaused</span>()
+</code></pre>
+<h3 id="onlywhennotcompleted">onlyWhenNotCompleted</h3>
+<pre><code class="lang-solidity"><span class="hljs-selector-tag">modifier</span> <span class="hljs-selector-tag">onlyWhenNotCompleted</span>()
+</code></pre>
+<h3 id="constructor">constructor</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">constructor</span><span class="hljs-params">(address _token, address payable _treasury_1, address payable _treasury_2, address _memberCard, address _vestingContract)</span> <span class="hljs-title">public</span></span>
+</code></pre>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_token</td>
+<td>address</td>
+<td>erc20 token address</td>
+</tr>
+<tr>
+<td>_treasury_1</td>
+<td>address payable</td>
+<td>first treasury address</td>
+</tr>
+<tr>
+<td>_treasury_2</td>
+<td>address payable</td>
+<td>second treasury address</td>
+</tr>
+<tr>
+<td>_memberCard</td>
+<td>address</td>
+<td>erc721 member card</td>
+</tr>
+<tr>
+<td>_vestingContract</td>
+<td>address</td>
+<td>address of vesting contract</td>
+</tr>
+</tbody>
+</table>
+<h3 id="setwhitelist">setWhitelist</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setWhitelist</span></span>(address[] _grantees, bool <span class="hljs-keyword">set</span>) <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Set white list address.
+onlyOwner protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_grantees</td>
+<td>address[]</td>
+<td>array of grantee addresses</td>
+</tr>
+<tr>
+<td>set</td>
+<td>bool</td>
+<td>are the _grantees to be whitelisted (true) or revoked (false)?</td>
+</tr>
+</tbody>
+</table>
+<h3 id="securewhitelistspot">secureWhitelistSpot</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> secureWhitelistSpot() <span class="hljs-keyword">external</span>
+</code></pre>
+<p><em>Allow users to secure one of the limited whitelist spots.
+Cannot be called after presale has started.</em></p>
+<h3 id="getwhitelistspots">getWhitelistSpots</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getWhitelistSpots</span><span class="hljs-params">()</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p><em>Return available whitelist spots.</em></p>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>uint256</td>
+<td>amount of available white list spots</td>
+</tr>
+</tbody>
+</table>
+<h3 id="settreasury">setTreasury</h3>
+<pre><code class="lang-solidity">function setTreasury(<span class="hljs-selector-tag">address</span> payable _treasury_1, <span class="hljs-selector-tag">address</span> payable _treasury_2) public
+</code></pre>
+<p><em>Set treasury addresses.
+onlyOwner protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_treasury_1</td>
+<td>address payable</td>
+<td>first treasury address</td>
+</tr>
+<tr>
+<td>_treasury_2</td>
+<td>address payable</td>
+<td>second treasury address</td>
+</tr>
+</tbody>
+</table>
+<h3 id="buynative">buyNative</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> buyNative() <span class="hljs-keyword">public</span> payable
+</code></pre>
+<p><em>Set white list address.
+nonReentrant protected.
+onlyAfterStart protected.
+onlyWhenNotPaused protected.
+onlyWhenNotCompleted protected.</em></p>
+<h3 id="_getethamount">_getETHAmount</h3>
+<pre><code class="lang-solidity">function _getETHAmount(<span class="hljs-name">uint256</span> _tokenAmount, uint256 _tokenAmountRate) internal pure returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p>_Get ETH amount given a _tokenAmount and the respective <em>tokenAmountRate per ETH.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_tokenAmount</td>
+<td>uint256</td>
+<td>amont of tokens to be purchased</td>
+</tr>
+<tr>
+<td>_tokenAmountRate</td>
+<td>uint256</td>
+<td>amount of tokens per eth</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>uint256</td>
+<td>eth cost</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_gettokensamount">_getTokensAmount</h3>
+<pre><code class="lang-solidity">function _getTokensAmount(<span class="hljs-name">uint256</span> _value, uint256 _tokenAmountRate) internal pure returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p>_Get token amount given a _value and the respective <em>tokenAmountRate per ETH.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_value</td>
+<td>uint256</td>
+<td>eth value usable for purchase</td>
+</tr>
+<tr>
+<td>_tokenAmountRate</td>
+<td>uint256</td>
+<td>amount of tokens per eth</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>uint256</td>
+<td>amount of tokens to be purchased</td>
+</tr>
+</tbody>
+</table>
+<h3 id="closecrowdsale">closeCrowdsale</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> closeCrowdsale() <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Close crowedsale.
+onlyOwner protected.</em></p>
+<h3 id="togglepausecrowdsale">togglePauseCrowdsale</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> togglePauseCrowdsale() <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Pause crowedsale.
+onlyOwner protected.</em></p>
+<h3 id="startcrowdsale">startCrowdSale</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> startCrowdSale(uint256 _time) <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Start crowedsale.
+onlyOwner protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_time</td>
+<td>uint256</td>
+<td>unix time stamp</td>
+</tr>
+</tbody>
+</table>
+<h3 id="startsecondround">startSecondRound</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> startSecondRound(uint256 _time) <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Start 2nd round.
+onlyOwner protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_time</td>
+<td>uint256</td>
+<td>unix time stamp</td>
+</tr>
+</tbody>
+</table>
+<h3 id="startthirdround">startThirdRound</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> startThirdRound(uint256 _time) <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Start 3rd round.
+onlyOwner protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_time</td>
+<td>uint256</td>
+<td>unix time stamp</td>
+</tr>
+</tbody>
+</table>
+<h3 id="has2ndroundstarted">has2ndRoundStarted</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">has2ndRoundStarted</span><span class="hljs-params">()</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(bool)</span></span>
+</code></pre>
+<p><em>Has 2nd round of presale started?</em></p>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>bool</td>
+<td>true if 2nd round has started, else false</td>
+</tr>
+</tbody>
+</table>
+<h3 id="has3rdroundstarted">has3rdRoundStarted</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">has3rdRoundStarted</span><span class="hljs-params">()</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(bool)</span></span>
+</code></pre>
+<p><em>Has 3rd round of presale started?</em></p>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>bool</td>
+<td>true if 3rd round has started, else false</td>
+</tr>
+</tbody>
+</table>
+<h3 id="deposit">deposit</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> deposit(uint256 _amount) <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Deposit amount of token into the presale contract.
+onlyOwner protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_amount</td>
+<td>uint256</td>
+<td>amount of tokens to be deposited</td>
+</tr>
+</tbody>
+</table>
+<h3 id="withdraw">withdraw</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> withdraw() <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Transfer remaining tokens if presale is closed earlier.
+onlyOwner protected.</em></p>
+<h3 id="withdraweth">withdrawETH</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> withdrawETH() <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Withdraw any eth left in contract.
+onlyOwner protected.</em></p>
+<h2 id="iwildlandcards">IWildlandCards</h2>
+<h3 id="mint">mint</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> mint(address _to, uint256 _cardId) <span class="hljs-keyword">external</span>
+</code></pre>
+<h3 id="iscardavailable">isCardAvailable</h3>
+<pre><code class="lang-solidity">function isCardAvailable(<span class="hljs-name">uint256</span> cardId) external view returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<h3 id="exists">exists</h3>
+<pre><code class="lang-solidity">function exists(<span class="hljs-name">uint256</span> _tokenId) external view returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<h3 id="existscode">existsCode</h3>
+<pre><code class="lang-solidity">function existsCode(<span class="hljs-name">bytes4</span> _code) external view returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<h3 id="gettokenidbycode">getTokenIdByCode</h3>
+<pre><code class="lang-solidity">function getTokenIdByCode(<span class="hljs-name">bytes4</span> _code) external view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<h3 id="getcodebyaddress">getCodeByAddress</h3>
+<pre><code class="lang-solidity">function getCodeByAddress(<span class="hljs-name">address</span> _address) external view returns (<span class="hljs-name">bytes4</span>)
+</code></pre>
+<h3 id="cardindex">cardIndex</h3>
+<pre><code class="lang-solidity">function cardIndex(<span class="hljs-name">uint256</span> cardId) external view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<h2 id="tokenvesting">TokenVesting</h2>
+<h3 id="newvest">NewVest</h3>
+<pre><code class="lang-solidity">event NewVest(<span class="hljs-selector-tag">address</span> _from, <span class="hljs-selector-tag">address</span> _to, uint256 _value)
+</code></pre>
+<h3 id="unlockvest">UnlockVest</h3>
+<pre><code class="lang-solidity">event UnlockVest(<span class="hljs-built_in">address</span> _holder, uint256 _<span class="hljs-built_in">value</span>)
+</code></pre>
+<h3 id="revokevest">RevokeVest</h3>
+<pre><code class="lang-solidity">event RevokeVest(<span class="hljs-name">address</span> _holder, uint256 _refund)
+</code></pre>
+<h3 id="vest">Vest</h3>
+<pre><code class="lang-solidity">struct Vest {
+  uint256 value<span class="hljs-comment">;</span>
+  uint256 transferred<span class="hljs-comment">;</span>
+  <span class="hljs-keyword">bool </span>revokable<span class="hljs-comment">;</span>
+  <span class="hljs-keyword">bool </span>revoked<span class="hljs-comment">;</span>
+}
+</code></pre>
+<h3 id="crowdsaleaddress">crowdsaleAddress</h3>
+<pre><code class="lang-solidity"><span class="hljs-selector-tag">address</span> crowdsaleAddress
+</code></pre>
+<h3 id="token">token</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">contract</span> ERC20 <span class="hljs-keyword">token</span>
+</code></pre>
+<h3 id="totalvesting">totalVesting</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> totalVesti<span class="hljs-symbol">ng</span>
+</code></pre>
+<h3 id="totallimit">totalLimit</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> totalLimit
+</code></pre>
+<h3 id="releases">RELEASES</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> RELEASES
+</code></pre>
+<h3 id="duration">duration</h3>
+<pre><code class="lang-solidity">uint256 <span class="hljs-built_in">duration</span>
+</code></pre>
+<h3 id="finishofvest">finishOfVest</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> fi<span class="hljs-symbol">nishOfVest</span>
+</code></pre>
+<h3 id="vests">vests</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-title">mapping</span><span class="hljs-params">(address =&gt; struct TokenVesting.Vest)</span></span> vests
+</code></pre>
+<h3 id="start">start</h3>
+<pre><code class="lang-solidity">uint256 <span class="hljs-literal">start</span>
+</code></pre>
+<h3 id="finish">finish</h3>
+<pre><code class="lang-solidity">ui<span class="hljs-symbol">nt256</span> fi<span class="hljs-symbol">nish</span>
+</code></pre>
+<h3 id="onlycrowdsale">onlyCrowdsale</h3>
+<pre><code class="lang-solidity"><span class="hljs-selector-tag">modifier</span> <span class="hljs-selector-tag">onlyCrowdsale</span>()
+</code></pre>
+<h3 id="constructor">constructor</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">constructor</span><span class="hljs-params">(address _token)</span> <span class="hljs-title">public</span></span>
+</code></pre>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_token</td>
+<td>address</td>
+<td>erc20 token address</td>
+</tr>
+</tbody>
+</table>
+<h3 id="setcrowdsaleaddress">setCrowdsaleAddress</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> setCrowdsaleAddress(address _crowdsaleAddress) <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Set crowdsale address.
+onlyOwner protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_crowdsaleAddress</td>
+<td>address</td>
+<td>address of crowdsale contract</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vest">vest</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> vest(address _to, uint256 _value, bool _revokable) <span class="hljs-keyword">external</span>
+</code></pre>
+<p>_Add a new purchased <em>value of tokens.
+onlyCrowdsale protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_to</td>
+<td>address</td>
+<td>vesting address</td>
+</tr>
+<tr>
+<td>_value</td>
+<td>uint256</td>
+<td>amount to be vested</td>
+</tr>
+<tr>
+<td>_revokable</td>
+<td>bool</td>
+<td>can vest be revoked? Not possible for sale contract vests</td>
+</tr>
+</tbody>
+</table>
+<h3 id="revoke">revoke</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> revoke(address _holder) <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Revoke added vest.
+Not possible for vests added by crowdsale.
+onlyOwner protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_holder</td>
+<td>address</td>
+<td>address to be revoked from vesting.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="startvesting">startVesting</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> startVesting(uint256 _start) <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Start vesting period.
+Only crowdsale. Will be called once the sale is completed.
+onlyCrowdsale protected.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_start</td>
+<td>uint256</td>
+<td>start time of vesting</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vestedtokens">vestedTokens</h3>
+<pre><code class="lang-solidity">function vestedTokens(<span class="hljs-name">address</span> _holder, bool _unlocked) external view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p><em>Calculate amount of already vested tokens.
+Can also return the amount of unlocked vested tokens.
+For external use only.</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_holder</td>
+<td>address</td>
+<td>user address</td>
+</tr>
+<tr>
+<td>_unlocked</td>
+<td>bool</td>
+<td>full vested amount or only the unlocked amount?</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>uint256</td>
+<td>total amount of vested tokens including (unlocked == false) or excluding (unlocked == true) claimed ones</td>
+</tr>
+</tbody>
+</table>
+<h3 id="countdown">countdown</h3>
+<pre><code class="lang-solidity">function countdown(<span class="hljs-name">address</span> _holder) external view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p><em>Countdown to be displayed on frontend. 
+Returns next vesting timestamp if nothing is transferrable, else 0 (transferrable amount is unlocked).</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_holder</td>
+<td>address</td>
+<td>user address</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>uint256</td>
+<td>0 if unlocked, else timestamp when unlocked</td>
+</tr>
+</tbody>
+</table>
+<h3 id="unlockvestedtokens">unlockVestedTokens</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> unlockVestedTokens() <span class="hljs-keyword">external</span>
+</code></pre>
+<p><em>Claim vested tokens. 
+Returns if nothing to vest or nothing is unlocked. 
+nonReentrant protected.</em></p>
+<h2 id="wildlandsmembercards">WildlandsMemberCards</h2>
+<p>@title Wildlands&#39; Member Cards
+ Copyright @ Wildlands
+ App: <a href="https://wildlands.me">https://wildlands.me</a></p>
+<h3 id="minter_role">MINTER_ROLE</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">bytes32 </span>MINTER_ROLE
+</code></pre>
+<h3 id="islocked">isLocked</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">bool</span> isLocked
+</code></pre>
+<h3 id="baseuri">baseURI</h3>
+<pre><code class="lang-solidity"><span class="hljs-built_in">string</span> baseURI
+</code></pre>
+<h3 id="bitid">bitId</h3>
+<pre><code class="lang-solidity"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Counters</span>.<span class="hljs-title">Counter</span> <span class="hljs-title">bitId</span></span>
+</code></pre>
+<h3 id="goldid">goldId</h3>
+<pre><code class="lang-solidity"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Counters</span>.<span class="hljs-title">Counter</span> <span class="hljs-title">goldId</span></span>
+</code></pre>
+<h3 id="blackid">blackId</h3>
+<pre><code class="lang-solidity"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Counters</span>.<span class="hljs-title">Counter</span> <span class="hljs-title">blackId</span></span>
+</code></pre>
+<h3 id="standardid">standardId</h3>
+<pre><code class="lang-solidity"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Counters</span>.<span class="hljs-title">Counter</span> <span class="hljs-title">standardId</span></span>
+</code></pre>
+<h3 id="affiliator2code">affiliator2Code</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-title">mapping</span><span class="hljs-params">(address =&gt; bytes4)</span></span> affiliator2Code
+</code></pre>
+<h3 id="code2tokenid">code2TokenId</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-title">mapping</span><span class="hljs-params">(bytes4 =&gt; uint256)</span></span> code2TokenId
+</code></pre>
+<h3 id="lock">Lock</h3>
+<pre><code class="lang-solidity">event <span class="hljs-keyword">Lock</span>()
+</code></pre>
+<h3 id="nonfungibletokenrecovery">NonFungibleTokenRecovery</h3>
+<pre><code class="lang-solidity">event NonFungibleTokenRecovery(<span class="hljs-name">address</span> token, uint256 tokenId)
+</code></pre>
+<h3 id="tokenrecovery">TokenRecovery</h3>
+<pre><code class="lang-solidity">event TokenRecovery(<span class="hljs-name">address</span> token, uint256 amount)
+</code></pre>
+<h3 id="codefailed">CodeFailed</h3>
+<pre><code class="lang-solidity">event CodeFailed(<span class="hljs-name">uint256</span> tokenId)
+</code></pre>
+<h3 id="codesuccess">CodeSuccess</h3>
+<pre><code class="lang-solidity"><span class="hljs-symbol">event</span> CodeSuccess(<span class="hljs-keyword">bytes4 </span><span class="hljs-meta">code</span>, uint256 tokenId)
+</code></pre>
+<h3 id="constructor">constructor</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">constructor</span><span class="hljs-params">()</span> <span class="hljs-title">public</span></span>
+</code></pre>
+<h3 id="lock">lock</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> lock() <span class="hljs-keyword">external</span>
+</code></pre>
+<p><em>Allows the owner to lock the contract
+Callable by owner</em></p>
+<h3 id="iscardavailable">isCardAvailable</h3>
+<pre><code class="lang-solidity">function isCardAvailable(<span class="hljs-name">uint256</span> cardId) public view returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p><em>Check if a card id is still available for minting (1-3 are limited, 0 infite)</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cardId</td>
+<td>uint256</td>
+<td>card id to be checked</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>bool</td>
+<td>true if card is available, else false</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cardindex">cardIndex</h3>
+<pre><code class="lang-solidity">function cardIndex(<span class="hljs-name">uint256</span> cardId) external view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p><em>Get current card index (next mintable card) for given card id</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cardId</td>
+<td>uint256</td>
+<td>card id</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>uint256</td>
+<td>current card index</td>
+</tr>
+</tbody>
+</table>
+<h3 id="exists">exists</h3>
+<pre><code class="lang-solidity">function exists(<span class="hljs-name">uint256</span> _tokenId) external view returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p>_Check if <em>tokenId exists (i.e., was minted)</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_tokenId</td>
+<td>uint256</td>
+<td>id of token</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>bool</td>
+<td>true if _tokenId exits</td>
+</tr>
+</tbody>
+</table>
+<h3 id="existscode">existsCode</h3>
+<pre><code class="lang-solidity">function existsCode(<span class="hljs-name">bytes4</span> _code) external view returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p>_Check if given _code exists (i.e., if <em>code is linked to any token</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_code</td>
+<td>bytes4</td>
+<td>code to be checked</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>bool</td>
+<td>true if token id is not 0 (token ids start from 1)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="gettokenidbycode">getTokenIdByCode</h3>
+<pre><code class="lang-solidity">function getTokenIdByCode(<span class="hljs-name">bytes4</span> _code) external view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p><em>Get linked token id</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_code</td>
+<td>bytes4</td>
+<td>code</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>uint256</td>
+<td>0 if no token is linked, else token id</td>
+</tr>
+</tbody>
+</table>
+<h3 id="getcodebyaddress">getCodeByAddress</h3>
+<pre><code class="lang-solidity">function getCodeByAddress(<span class="hljs-name">address</span> _address) external view returns (<span class="hljs-name">bytes4</span>)
+</code></pre>
+<p><em>Get latest code of given address</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_address</td>
+<td>address</td>
+<td>user address</td>
+</tr>
+</tbody>
+</table>
+<h4 id="return-values">Return Values</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0]</td>
+<td>bytes4</td>
+<td>0x00000000 if no code exists, else code</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mint">mint</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> mint(address _to, uint256 _cardId) <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Allows the owner to mint a token to a specific address
+Callable by owner</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_to</td>
+<td>address</td>
+<td></td>
+</tr>
+<tr>
+<td>_cardId</td>
+<td>uint256</td>
+</tr>
+</tbody>
+</table>
+<h3 id="generatecode">generateCode</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> generateCode(uint256 _tokenId) <span class="hljs-keyword">external</span>
+</code></pre>
+<p><em>code generator function for affiliate link</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_tokenId</td>
+<td>uint256</td>
+<td>token id that the generated code is to be linked to</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_generatecode">_generateCode</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_generateCode</span><span class="hljs-params">(address _for, uint256 _tokenId)</span></span> internal
+</code></pre>
+<p><em>code generator function for affiliate link</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_for</td>
+<td>address</td>
+<td>user address that this code is assigned to</td>
+</tr>
+<tr>
+<td>_tokenId</td>
+<td>uint256</td>
+<td>token id that the generated code is to be linked to</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recovernonfungibletoken">recoverNonFungibleToken</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> recoverNonFungibleToken(address _token, uint256 _tokenId) <span class="hljs-keyword">external</span>
+</code></pre>
+<p><em>Allows the owner to recover non-fungible tokens sent to the contract by mistake
+Callable by owner</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_token</td>
+<td>address</td>
+<td>NFT token address</td>
+</tr>
+<tr>
+<td>_tokenId</td>
+<td>uint256</td>
+<td>tokenId</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recovertoken">recoverToken</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> recoverToken(address _token) <span class="hljs-keyword">external</span>
+</code></pre>
+<p><em>Allows the owner to recover tokens sent to the contract by mistake
+Callable by owner</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_token</td>
+<td>address</td>
+<td>token address</td>
+</tr>
+</tbody>
+</table>
+<h3 id="setbaseuri">setBaseURI</h3>
+<pre><code class="lang-solidity"><span class="hljs-built_in">function</span> setBaseURI(<span class="hljs-built_in">string</span> _uri) <span class="hljs-keyword">public</span>
+</code></pre>
+<p><em>Allows the owner to set the base URI to be used for all token IDs
+Callable by owner</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_uri</td>
+<td>string</td>
+<td>base URI</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tokenuri">tokenURI</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tokenURI</span><span class="hljs-params">(uint256 tokenId)</span> <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>Returns the Uniform Resource Identifier (URI) for a token ID</em></p>
+<h4 id="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tokenId</td>
+<td>uint256</td>
+<td>token ID</td>
+</tr>
+</tbody>
+</table>
+<h3 id="supportsinterface">supportsInterface</h3>
+<pre><code class="lang-solidity">function supportsInterface(<span class="hljs-name">bytes4</span> interfaceId) public view virtual returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<h2 id="accesscontrol">AccessControl</h2>
+<p>_Contract module that allows children to implement role-based access
+control mechanisms. This is a lightweight version that doesn&#39;t allow enumerating role
+members except through off-chain means by accessing the contract event logs. Some
+applications may benefit from on-chain enumerability, for those cases see
+{AccessControlEnumerable}.</p>
+<p>Roles are referred to by their <code>bytes32</code> identifier. These should be exposed
+in the external API and be unique. The best way to achieve this is by
+using <code>public constant</code> hash digests:</p>
+<pre><code><span class="hljs-keyword">bytes32 </span>public constant MY_ROLE = keccak256(<span class="hljs-string">"MY_ROLE"</span>)<span class="hljs-comment">;</span>
+</code></pre><p>Roles can be used to represent a set of permissions. To restrict access to a
+function call, use {hasRole}:</p>
+<pre><code><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params"></span>) <span class="hljs-title">public</span> </span>{
+    <span class="hljs-built_in">require</span>(hasRole(MY_ROLE, msg.sender));
+    ...
+}
+</code></pre><p>Roles can be granted and revoked dynamically via the {grantRole} and
+{revokeRole} functions. Each role has an associated admin role, and only
+accounts that have a role&#39;s admin role can call {grantRole} and {revokeRole}.</p>
+<p>By default, the admin role for all roles is <code>DEFAULT_ADMIN_ROLE</code>, which means
+that only accounts with this role will be able to grant or revoke other
+roles. More complex role relationships can be created by using
+{_setRoleAdmin}.</p>
+<p>WARNING: The <code>DEFAULT_ADMIN_ROLE</code> is also its own admin: it has permission to
+grant and revoke this role. Extra precautions should be taken to secure
+accounts that have been granted it._</p>
+<h3 id="roledata">RoleData</h3>
+<pre><code class="lang-solidity">struct RoleData {
+  mapping(<span class="hljs-keyword">address </span>=&gt; <span class="hljs-keyword">bool) </span>members<span class="hljs-comment">;</span>
+  <span class="hljs-keyword">bytes32 </span>adminRole<span class="hljs-comment">;</span>
+}
+</code></pre>
+<h3 id="default_admin_role">DEFAULT_ADMIN_ROLE</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">bytes32 </span>DEFAULT_ADMIN_ROLE
+</code></pre>
+<h3 id="onlyrole">onlyRole</h3>
+<pre><code class="lang-solidity">modifier onlyRole(<span class="hljs-name">bytes32</span> role)
+</code></pre>
+<p>_Modifier that checks that an account has a specific role. Reverts
+with a standardized message including the required role.</p>
+<p>The format of the revert reason is given by the following regular expression:</p>
+<p> /^AccessControl: account (0x[0-9a-f]{40}) is missing role (0x[0-9a-f]{64})$/</p>
+<p>_Available since v4.1.__</p>
+<h3 id="supportsinterface">supportsInterface</h3>
+<pre><code class="lang-solidity">function supportsInterface(<span class="hljs-name">bytes4</span> interfaceId) public view virtual returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p><em>See {IERC165-supportsInterface}.</em></p>
+<h3 id="hasrole">hasRole</h3>
+<pre><code class="lang-solidity">function hasRole(<span class="hljs-name">bytes32</span> role, address account) public view virtual returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p><em>Returns <code>true</code> if <code>account</code> has been granted <code>role</code>.</em></p>
+<h3 id="_checkrole">_checkRole</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_checkRole</span><span class="hljs-params">(bytes32 role)</span></span> internal view virtual
+</code></pre>
+<p>_Revert with a standard message if <code>_msgSender()</code> is missing <code>role</code>.
+Overriding this function changes the behavior of the {onlyRole} modifier.</p>
+<p>Format of the revert message is described in {_checkRole}.</p>
+<p>_Available since v4.6.__</p>
+<h3 id="_checkrole">_checkRole</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_checkRole</span><span class="hljs-params">(bytes32 role, address account)</span></span> internal view virtual
+</code></pre>
+<p>_Revert with a standard message if <code>account</code> is missing <code>role</code>.</p>
+<p>The format of the revert reason is given by the following regular expression:</p>
+<p> /^AccessControl: account (0x[0-9a-f]{40}) is missing role (0x[0-9a-f]{64})$/_</p>
+<h3 id="getroleadmin">getRoleAdmin</h3>
+<pre><code class="lang-solidity">function getRoleAdmin(<span class="hljs-name">bytes32</span> role) public view virtual returns (<span class="hljs-name">bytes32</span>)
+</code></pre>
+<p>_Returns the admin role that controls <code>role</code>. See {grantRole} and
+{revokeRole}.</p>
+<p>To change a role&#39;s admin, use {<em>setRoleAdmin}.</em></p>
+<h3 id="grantrole">grantRole</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> grantRole(bytes32 role, address account) <span class="hljs-keyword">public</span> virtual
+</code></pre>
+<p>_Grants <code>role</code> to <code>account</code>.</p>
+<p>If <code>account</code> had not been already granted <code>role</code>, emits a {RoleGranted}
+event.</p>
+<p>Requirements:</p>
+<ul>
+<li>the caller must have <code>role</code>&#39;s admin role.</li>
+</ul>
+<p>May emit a {RoleGranted} event._</p>
+<h3 id="revokerole">revokeRole</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> revokeRole(bytes32 role, address account) <span class="hljs-keyword">public</span> virtual
+</code></pre>
+<p>_Revokes <code>role</code> from <code>account</code>.</p>
+<p>If <code>account</code> had been granted <code>role</code>, emits a {RoleRevoked} event.</p>
+<p>Requirements:</p>
+<ul>
+<li>the caller must have <code>role</code>&#39;s admin role.</li>
+</ul>
+<p>May emit a {RoleRevoked} event._</p>
+<h3 id="renouncerole">renounceRole</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> renounceRole(bytes32 role, address account) <span class="hljs-keyword">public</span> virtual
+</code></pre>
+<p>_Revokes <code>role</code> from the calling account.</p>
+<p>Roles are often managed via {grantRole} and {revokeRole}: this function&#39;s
+purpose is to provide a mechanism for accounts to lose their privileges
+if they are compromised (such as when a trusted device is misplaced).</p>
+<p>If the calling account had been revoked <code>role</code>, emits a {RoleRevoked}
+event.</p>
+<p>Requirements:</p>
+<ul>
+<li>the caller must be <code>account</code>.</li>
+</ul>
+<p>May emit a {RoleRevoked} event._</p>
+<h3 id="_setuprole">_setupRole</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_setupRole</span><span class="hljs-params">(bytes32 role, address account)</span></span> internal virtual
+</code></pre>
+<p>_Grants <code>role</code> to <code>account</code>.</p>
+<p>If <code>account</code> had not been already granted <code>role</code>, emits a {RoleGranted}
+event. Note that unlike {grantRole}, this function doesn&#39;t perform any
+checks on the calling account.</p>
+<p>May emit a {RoleGranted} event.</p>
+<h1 id="-warning-">[WARNING]</h1>
+<p>This function should only be called from the constructor when setting
+up the initial roles for the system.</p>
+<p>Using this function in any other way is effectively circumventing the admin</p>
+<h1 id="system-imposed-by-accesscontrol-">system imposed by {AccessControl}.</h1>
+<p>NOTE: This function is deprecated in favor of {<em>grantRole}.</em></p>
+<h3 id="_setroleadmin">_setRoleAdmin</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_setRoleAdmin</span><span class="hljs-params">(bytes32 role, bytes32 adminRole)</span></span> internal virtual
+</code></pre>
+<p>_Sets <code>adminRole</code> as <code>role</code>&#39;s admin role.</p>
+<p>Emits a {RoleAdminChanged} event._</p>
+<h3 id="_grantrole">_grantRole</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_grantRole</span><span class="hljs-params">(bytes32 role, address account)</span></span> internal virtual
+</code></pre>
+<p>_Grants <code>role</code> to <code>account</code>.</p>
+<p>Internal function without access restriction.</p>
+<p>May emit a {RoleGranted} event._</p>
+<h3 id="_revokerole">_revokeRole</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_revokeRole</span><span class="hljs-params">(bytes32 role, address account)</span></span> internal virtual
+</code></pre>
+<p>_Revokes <code>role</code> from <code>account</code>.</p>
+<p>Internal function without access restriction.</p>
+<p>May emit a {RoleRevoked} event._</p>
+<h2 id="accesscontrolenumerable">AccessControlEnumerable</h2>
+<p><em>Extension of {AccessControl} that allows enumerating the members of each role.</em></p>
+<h3 id="supportsinterface">supportsInterface</h3>
+<pre><code class="lang-solidity">function supportsInterface(<span class="hljs-name">bytes4</span> interfaceId) public view virtual returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p><em>See {IERC165-supportsInterface}.</em></p>
+<h3 id="getrolemember">getRoleMember</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getRoleMember</span><span class="hljs-params">(bytes32 role, uint256 <span class="hljs-keyword">index</span>)</span> <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(address)</span></span>
+</code></pre>
+<p>_Returns one of the accounts that have <code>role</code>. <code>index</code> must be a
+value between 0 and {getRoleMemberCount}, non-inclusive.</p>
+<p>Role bearers are not sorted in any particular way, and their ordering may
+change at any point.</p>
+<p>WARNING: When using {getRoleMember} and {getRoleMemberCount}, make sure
+you perform all queries on the same block. See the following
+<a href="https://forum.openzeppelin.com/t/iterating-over-elements-on-enumerableset-in-openzeppelin-contracts/2296[forum">https://forum.openzeppelin.com/t/iterating-over-elements-on-enumerableset-in-openzeppelin-contracts/2296[forum</a> post]
+for more information._</p>
+<h3 id="getrolemembercount">getRoleMemberCount</h3>
+<pre><code class="lang-solidity">function getRoleMemberCount(<span class="hljs-name">bytes32</span> role) public view virtual returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p><em>Returns the number of accounts that have <code>role</code>. Can be used
+together with {getRoleMember} to enumerate all bearers of a role.</em></p>
+<h3 id="_grantrole">_grantRole</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_grantRole</span><span class="hljs-params">(bytes32 role, address account)</span></span> internal virtual
+</code></pre>
+<p>_Overload {<em>grantRole} to track enumerable memberships</em></p>
+<h3 id="_revokerole">_revokeRole</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_revokeRole</span><span class="hljs-params">(bytes32 role, address account)</span></span> internal virtual
+</code></pre>
+<p>_Overload {<em>revokeRole} to track enumerable memberships</em></p>
+<h2 id="iaccesscontrol">IAccessControl</h2>
+<p><em>External interface of AccessControl declared to support ERC165 detection.</em></p>
+<h3 id="roleadminchanged">RoleAdminChanged</h3>
+<pre><code class="lang-solidity"><span class="hljs-symbol">event</span> RoleAdminChanged(<span class="hljs-keyword">bytes32 </span>role, <span class="hljs-keyword">bytes32 </span>previousAdminRole, <span class="hljs-keyword">bytes32 </span>newAdminRole)
+</code></pre>
+<p>_Emitted when <code>newAdminRole</code> is set as <code>role</code>&#39;s admin role, replacing <code>previousAdminRole</code></p>
+<p><code>DEFAULT_ADMIN_ROLE</code> is the starting admin for all roles, despite
+{RoleAdminChanged} not being emitted signaling this.</p>
+<p>_Available since v3.1.__</p>
+<h3 id="rolegranted">RoleGranted</h3>
+<pre><code class="lang-solidity">event RoleGranted(bytes32 role, <span class="hljs-selector-tag">address</span> account, <span class="hljs-selector-tag">address</span> sender)
+</code></pre>
+<p>_Emitted when <code>account</code> is granted <code>role</code>.</p>
+<p><code>sender</code> is the account that originated the contract call, an admin role
+bearer except when using {AccessControl-<em>setupRole}.</em></p>
+<h3 id="rolerevoked">RoleRevoked</h3>
+<pre><code class="lang-solidity">event RoleRevoked(bytes32 role, <span class="hljs-selector-tag">address</span> account, <span class="hljs-selector-tag">address</span> sender)
+</code></pre>
+<p>_Emitted when <code>account</code> is revoked <code>role</code>.</p>
+<p><code>sender</code> is the account that originated the contract call:</p>
+<ul>
+<li>if using <code>revokeRole</code>, it is the admin role bearer</li>
+<li>if using <code>renounceRole</code>, it is the role bearer (i.e. <code>account</code>)_</li>
+</ul>
+<h3 id="hasrole">hasRole</h3>
+<pre><code class="lang-solidity">function hasRole(<span class="hljs-name">bytes32</span> role, address account) external view returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p><em>Returns <code>true</code> if <code>account</code> has been granted <code>role</code>.</em></p>
+<h3 id="getroleadmin">getRoleAdmin</h3>
+<pre><code class="lang-solidity">function getRoleAdmin(<span class="hljs-name">bytes32</span> role) external view returns (<span class="hljs-name">bytes32</span>)
+</code></pre>
+<p>_Returns the admin role that controls <code>role</code>. See {grantRole} and
+{revokeRole}.</p>
+<p>To change a role&#39;s admin, use {AccessControl-<em>setRoleAdmin}.</em></p>
+<h3 id="grantrole">grantRole</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> grantRole(bytes32 role, address account) <span class="hljs-keyword">external</span>
+</code></pre>
+<p>_Grants <code>role</code> to <code>account</code>.</p>
+<p>If <code>account</code> had not been already granted <code>role</code>, emits a {RoleGranted}
+event.</p>
+<p>Requirements:</p>
+<ul>
+<li>the caller must have <code>role</code>&#39;s admin role._</li>
+</ul>
+<h3 id="revokerole">revokeRole</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> revokeRole(bytes32 role, address account) <span class="hljs-keyword">external</span>
+</code></pre>
+<p>_Revokes <code>role</code> from <code>account</code>.</p>
+<p>If <code>account</code> had been granted <code>role</code>, emits a {RoleRevoked} event.</p>
+<p>Requirements:</p>
+<ul>
+<li>the caller must have <code>role</code>&#39;s admin role._</li>
+</ul>
+<h3 id="renouncerole">renounceRole</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> renounceRole(bytes32 role, address account) <span class="hljs-keyword">external</span>
+</code></pre>
+<p>_Revokes <code>role</code> from the calling account.</p>
+<p>Roles are often managed via {grantRole} and {revokeRole}: this function&#39;s
+purpose is to provide a mechanism for accounts to lose their privileges
+if they are compromised (such as when a trusted device is misplaced).</p>
+<p>If the calling account had been granted <code>role</code>, emits a {RoleRevoked}
+event.</p>
+<p>Requirements:</p>
+<ul>
+<li>the caller must be <code>account</code>._</li>
+</ul>
+<h2 id="iaccesscontrolenumerable">IAccessControlEnumerable</h2>
+<p><em>External interface of AccessControlEnumerable declared to support ERC165 detection.</em></p>
+<h3 id="getrolemember">getRoleMember</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getRoleMember</span><span class="hljs-params">(bytes32 role, uint256 <span class="hljs-keyword">index</span>)</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(address)</span></span>
+</code></pre>
+<p>_Returns one of the accounts that have <code>role</code>. <code>index</code> must be a
+value between 0 and {getRoleMemberCount}, non-inclusive.</p>
+<p>Role bearers are not sorted in any particular way, and their ordering may
+change at any point.</p>
+<p>WARNING: When using {getRoleMember} and {getRoleMemberCount}, make sure
+you perform all queries on the same block. See the following
+<a href="https://forum.openzeppelin.com/t/iterating-over-elements-on-enumerableset-in-openzeppelin-contracts/2296[forum">https://forum.openzeppelin.com/t/iterating-over-elements-on-enumerableset-in-openzeppelin-contracts/2296[forum</a> post]
+for more information._</p>
+<h3 id="getrolemembercount">getRoleMemberCount</h3>
+<pre><code class="lang-solidity">function getRoleMemberCount(<span class="hljs-name">bytes32</span> role) external view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p><em>Returns the number of accounts that have <code>role</code>. Can be used
+together with {getRoleMember} to enumerate all bearers of a role.</em></p>
+<h2 id="ownable">Ownable</h2>
+<p>_Contract module which provides a basic access control mechanism, where
+there is an account (an owner) that can be granted exclusive access to
+specific functions.</p>
+<p>By default, the owner account will be the one that deploys the contract. This
+can later be changed with {transferOwnership}.</p>
+<p>This module is used through inheritance. It will make available the modifier
+<code>onlyOwner</code>, which can be applied to your functions to restrict their use to
+the owner._</p>
+<h3 id="ownershiptransferred">OwnershipTransferred</h3>
+<pre><code class="lang-solidity">event OwnershipTransferred(<span class="hljs-selector-tag">address</span> previousOwner, <span class="hljs-selector-tag">address</span> newOwner)
+</code></pre>
+<h3 id="constructor">constructor</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">constructor</span><span class="hljs-params">()</span> <span class="hljs-title">internal</span></span>
+</code></pre>
+<p><em>Initializes the contract setting the deployer as the initial owner.</em></p>
+<h3 id="onlyowner">onlyOwner</h3>
+<pre><code class="lang-solidity"><span class="hljs-selector-tag">modifier</span> <span class="hljs-selector-tag">onlyOwner</span>()
+</code></pre>
+<p><em>Throws if called by any account other than the owner.</em></p>
+<h3 id="owner">owner</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">owner</span><span class="hljs-params">()</span> <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(address)</span></span>
+</code></pre>
+<p><em>Returns the address of the current owner.</em></p>
+<h3 id="_checkowner">_checkOwner</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_checkOwner</span><span class="hljs-params">()</span></span> internal view virtual
+</code></pre>
+<p><em>Throws if the sender is not the owner.</em></p>
+<h3 id="renounceownership">renounceOwnership</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> renounceOwnership() <span class="hljs-keyword">public</span> virtual
+</code></pre>
+<p>_Leaves the contract without owner. It will not be possible to call
+<code>onlyOwner</code> functions anymore. Can only be called by the current owner.</p>
+<p>NOTE: Renouncing ownership will leave the contract without an owner,
+thereby removing any functionality that is only available to the owner._</p>
+<h3 id="transferownership">transferOwnership</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferOwnership</span></span>(address <span class="hljs-keyword">new</span><span class="hljs-type">Owner</span>) <span class="hljs-keyword">public</span> virtual
+</code></pre>
+<p><em>Transfers ownership of the contract to a new account (<code>newOwner</code>).
+Can only be called by the current owner.</em></p>
+<h3 id="_transferownership">_transferOwnership</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_transferOwnership</span><span class="hljs-params">(address newOwner)</span></span> internal virtual
+</code></pre>
+<p><em>Transfers ownership of the contract to a new account (<code>newOwner</code>).
+Internal function without access restriction.</em></p>
+<h2 id="reentrancyguard">ReentrancyGuard</h2>
+<p>_Contract module that helps prevent reentrant calls to a function.</p>
+<p>Inheriting from <code>ReentrancyGuard</code> will make the {nonReentrant} modifier
+available, which can be applied to functions to make sure there are no nested
+(reentrant) calls to them.</p>
+<p>Note that because there is a single <code>nonReentrant</code> guard, functions marked as
+<code>nonReentrant</code> may not call one another. This can be worked around by making
+those functions <code>private</code>, and then adding <code>external</code> <code>nonReentrant</code> entry
+points to them.</p>
+<p>TIP: If you would like to learn more about reentrancy and alternative ways
+to protect against it, check out our blog post
+<a href="https://blog.openzeppelin.com/reentrancy-after-istanbul/[Reentrancy">https://blog.openzeppelin.com/reentrancy-after-istanbul/[Reentrancy</a> After Istanbul]._</p>
+<h3 id="constructor">constructor</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">constructor</span><span class="hljs-params">()</span> <span class="hljs-title">internal</span></span>
+</code></pre>
+<h3 id="nonreentrant">nonReentrant</h3>
+<pre><code class="lang-solidity"><span class="hljs-selector-tag">modifier</span> <span class="hljs-selector-tag">nonReentrant</span>()
+</code></pre>
+<p><em>Prevents a contract from calling itself, directly or indirectly.
+Calling a <code>nonReentrant</code> function from another <code>nonReentrant</code>
+function is not supported. It is possible to prevent this from happening
+by making the <code>nonReentrant</code> function external, and making it call a
+<code>private</code> function that does the actual work.</em></p>
+<h2 id="erc20">ERC20</h2>
+<p>_Implementation of the {IERC20} interface.</p>
+<p>This implementation is agnostic to the way tokens are created. This means
+that a supply mechanism has to be added in a derived contract using {_mint}.
+For a generic mechanism see {ERC20PresetMinterPauser}.</p>
+<p>TIP: For a detailed writeup see our guide
+<a href="https://forum.openzeppelin.com/t/how-to-implement-erc20-supply-mechanisms/226[How">https://forum.openzeppelin.com/t/how-to-implement-erc20-supply-mechanisms/226[How</a>
+to implement supply mechanisms].</p>
+<p>We have followed general OpenZeppelin Contracts guidelines: functions revert
+instead returning <code>false</code> on failure. This behavior is nonetheless
+conventional and does not conflict with the expectations of ERC20
+applications.</p>
+<p>Additionally, an {Approval} event is emitted on calls to {transferFrom}.
+This allows applications to reconstruct the allowance for all accounts just
+by listening to said events. Other implementations of the EIP may not emit
+these events, as it isn&#39;t required by the specification.</p>
+<p>Finally, the non-standard {decreaseAllowance} and {increaseAllowance}
+functions have been added to mitigate the well-known issues around setting
+allowances. See {IERC20-approve}._</p>
+<h3 id="constructor">constructor</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">constructor</span><span class="hljs-params">(<span class="hljs-keyword">string</span> name_, <span class="hljs-keyword">string</span> symbol_)</span> <span class="hljs-title">public</span></span>
+</code></pre>
+<p>_Sets the values for {name} and {symbol}.</p>
+<p>The default value of {decimals} is 18. To select a different value for
+{decimals} you should overload it.</p>
+<p>All two of these values are immutable: they can only be set once during
+construction._</p>
+<h3 id="name">name</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>Returns the name of the token.</em></p>
+<h3 id="symbol">symbol</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">symbol</span><span class="hljs-params">()</span> <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>Returns the symbol of the token, usually a shorter version of the
+name.</em></p>
+<h3 id="decimals">decimals</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decimals</span><span class="hljs-params">()</span> <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint8)</span></span>
+</code></pre>
+<p>_Returns the number of decimals used to get its user representation.
+For example, if <code>decimals</code> equals <code>2</code>, a balance of <code>505</code> tokens should
+be displayed to a user as <code>5.05</code> (<code>505 / 10 ** 2</code>).</p>
+<p>Tokens usually opt for a value of 18, imitating the relationship between
+Ether and Wei. This is the value {ERC20} uses, unless this function is
+overridden;</p>
+<p>NOTE: This information is only used for <em>display</em> purposes: it in
+no way affects any of the arithmetic of the contract, including
+{IERC20-balanceOf} and {IERC20-transfer}._</p>
+<h3 id="totalsupply">totalSupply</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">totalSupply</span><span class="hljs-params">()</span> <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p><em>See {IERC20-totalSupply}.</em></p>
+<h3 id="balanceof">balanceOf</h3>
+<pre><code class="lang-solidity">function balanceOf(<span class="hljs-name">address</span> account) public view virtual returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p><em>See {IERC20-balanceOf}.</em></p>
+<h3 id="transfer">transfer</h3>
+<pre><code class="lang-solidity">function <span class="hljs-built_in">transfer</span>(address to, uint256 amount) <span class="hljs-keyword">public</span> <span class="hljs-keyword">virtual</span> returns (<span class="hljs-keyword">bool</span>)
+</code></pre>
+<p>_See {IERC20-transfer}.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>to</code> cannot be the zero address.</li>
+<li>the caller must have a balance of at least <code>amount</code>._</li>
+</ul>
+<h3 id="allowance">allowance</h3>
+<pre><code class="lang-solidity">function allowance(<span class="hljs-name">address</span> owner, address spender) public view virtual returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p><em>See {IERC20-allowance}.</em></p>
+<h3 id="approve">approve</h3>
+<pre><code class="lang-solidity">function approve(<span class="hljs-name">address</span> spender, uint256 amount) public virtual returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p>_See {IERC20-approve}.</p>
+<p>NOTE: If <code>amount</code> is the maximum <code>uint256</code>, the allowance is not updated on
+<code>transferFrom</code>. This is semantically equivalent to an infinite approval.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>spender</code> cannot be the zero address._</li>
+</ul>
+<h3 id="transferfrom">transferFrom</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferFrom</span><span class="hljs-params">(address <span class="hljs-keyword">from</span>, address <span class="hljs-keyword">to</span>, uint256 amount)</span> <span class="hljs-title">public</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(bool)</span></span>
+</code></pre>
+<p>_See {IERC20-transferFrom}.</p>
+<p>Emits an {Approval} event indicating the updated allowance. This is not
+required by the EIP. See the note at the beginning of {ERC20}.</p>
+<p>NOTE: Does not update the allowance if the current allowance
+is the maximum <code>uint256</code>.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>from</code> and <code>to</code> cannot be the zero address.</li>
+<li><code>from</code> must have a balance of at least <code>amount</code>.</li>
+<li>the caller must have allowance for <code>from</code>&#39;s tokens of at least
+<code>amount</code>._</li>
+</ul>
+<h3 id="increaseallowance">increaseAllowance</h3>
+<pre><code class="lang-solidity">function increaseAllowance(<span class="hljs-name">address</span> spender, uint256 addedValue) public virtual returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p>_Atomically increases the allowance granted to <code>spender</code> by the caller.</p>
+<p>This is an alternative to {approve} that can be used as a mitigation for
+problems described in {IERC20-approve}.</p>
+<p>Emits an {Approval} event indicating the updated allowance.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>spender</code> cannot be the zero address._</li>
+</ul>
+<h3 id="decreaseallowance">decreaseAllowance</h3>
+<pre><code class="lang-solidity">function decreaseAllowance(<span class="hljs-name">address</span> spender, uint256 subtractedValue) public virtual returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p>_Atomically decreases the allowance granted to <code>spender</code> by the caller.</p>
+<p>This is an alternative to {approve} that can be used as a mitigation for
+problems described in {IERC20-approve}.</p>
+<p>Emits an {Approval} event indicating the updated allowance.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>spender</code> cannot be the zero address.</li>
+<li><code>spender</code> must have allowance for the caller of at least
+<code>subtractedValue</code>._</li>
+</ul>
+<h3 id="_transfer">_transfer</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> _<span class="hljs-title">transfer</span><span class="hljs-params">(address <span class="hljs-keyword">from</span>, address <span class="hljs-keyword">to</span>, uint256 amount)</span> <span class="hljs-title">internal</span> <span class="hljs-title">virtual</span></span>
+</code></pre>
+<p>_Moves <code>amount</code> of tokens from <code>from</code> to <code>to</code>.</p>
+<p>This internal function is equivalent to {transfer}, and can be used to
+e.g. implement automatic token fees, slashing mechanisms, etc.</p>
+<p>Emits a {Transfer} event.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>from</code> cannot be the zero address.</li>
+<li><code>to</code> cannot be the zero address.</li>
+<li><code>from</code> must have a balance of at least <code>amount</code>._</li>
+</ul>
+<h3 id="_mint">_mint</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_mint</span><span class="hljs-params">(address account, uint256 amount)</span></span> internal virtual
+</code></pre>
+<p>_Creates <code>amount</code> tokens and assigns them to <code>account</code>, increasing
+the total supply.</p>
+<p>Emits a {Transfer} event with <code>from</code> set to the zero address.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>account</code> cannot be the zero address._</li>
+</ul>
+<h3 id="_burn">_burn</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_burn</span><span class="hljs-params">(address account, uint256 amount)</span></span> internal virtual
+</code></pre>
+<p>_Destroys <code>amount</code> tokens from <code>account</code>, reducing the
+total supply.</p>
+<p>Emits a {Transfer} event with <code>to</code> set to the zero address.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>account</code> cannot be the zero address.</li>
+<li><code>account</code> must have at least <code>amount</code> tokens._</li>
+</ul>
+<h3 id="_approve">_approve</h3>
+<pre><code class="lang-solidity">function _approve(<span class="hljs-selector-tag">address</span> owner, <span class="hljs-selector-tag">address</span> spender, uint256 amount) internal virtual
+</code></pre>
+<p>_Sets <code>amount</code> as the allowance of <code>spender</code> over the <code>owner</code> s tokens.</p>
+<p>This internal function is equivalent to <code>approve</code>, and can be used to
+e.g. set automatic allowances for certain subsystems, etc.</p>
+<p>Emits an {Approval} event.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>owner</code> cannot be the zero address.</li>
+<li><code>spender</code> cannot be the zero address._</li>
+</ul>
+<h3 id="_spendallowance">_spendAllowance</h3>
+<pre><code class="lang-solidity">function _spendAllowance(<span class="hljs-selector-tag">address</span> owner, <span class="hljs-selector-tag">address</span> spender, uint256 amount) internal virtual
+</code></pre>
+<p>_Updates <code>owner</code> s allowance for <code>spender</code> based on spent <code>amount</code>.</p>
+<p>Does not update the allowance amount in case of infinite allowance.
+Revert if not enough allowance is available.</p>
+<p>Might emit an {Approval} event._</p>
+<h3 id="_beforetokentransfer">_beforeTokenTransfer</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> _<span class="hljs-title">beforeTokenTransfer</span><span class="hljs-params">(address <span class="hljs-keyword">from</span>, address <span class="hljs-keyword">to</span>, uint256 amount)</span> <span class="hljs-title">internal</span> <span class="hljs-title">virtual</span></span>
+</code></pre>
+<p>_Hook that is called before any transfer of tokens. This includes
+minting and burning.</p>
+<p>Calling conditions:</p>
+<ul>
+<li>when <code>from</code> and <code>to</code> are both non-zero, <code>amount</code> of <code>from</code>&#39;s tokens
+will be transferred to <code>to</code>.</li>
+<li>when <code>from</code> is zero, <code>amount</code> tokens will be minted for <code>to</code>.</li>
+<li>when <code>to</code> is zero, <code>amount</code> of <code>from</code>&#39;s tokens will be burned.</li>
+<li><code>from</code> and <code>to</code> are never both zero.</li>
+</ul>
+<p>To learn more about hooks, head to xref:ROOT:extending-contracts.adoc#using-hooks[Using Hooks]._</p>
+<h3 id="_aftertokentransfer">_afterTokenTransfer</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> _<span class="hljs-title">afterTokenTransfer</span><span class="hljs-params">(address <span class="hljs-keyword">from</span>, address <span class="hljs-keyword">to</span>, uint256 amount)</span> <span class="hljs-title">internal</span> <span class="hljs-title">virtual</span></span>
+</code></pre>
+<p>_Hook that is called after any transfer of tokens. This includes
+minting and burning.</p>
+<p>Calling conditions:</p>
+<ul>
+<li>when <code>from</code> and <code>to</code> are both non-zero, <code>amount</code> of <code>from</code>&#39;s tokens
+has been transferred to <code>to</code>.</li>
+<li>when <code>from</code> is zero, <code>amount</code> tokens have been minted for <code>to</code>.</li>
+<li>when <code>to</code> is zero, <code>amount</code> of <code>from</code>&#39;s tokens have been burned.</li>
+<li><code>from</code> and <code>to</code> are never both zero.</li>
+</ul>
+<p>To learn more about hooks, head to xref:ROOT:extending-contracts.adoc#using-hooks[Using Hooks]._</p>
+<h2 id="ierc20">IERC20</h2>
+<p><em>Interface of the ERC20 standard as defined in the EIP.</em></p>
+<h3 id="transfer">Transfer</h3>
+<pre><code class="lang-solidity">event Transfer(<span class="hljs-selector-tag">address</span> from, <span class="hljs-selector-tag">address</span> to, uint256 value)
+</code></pre>
+<p>_Emitted when <code>value</code> tokens are moved from one account (<code>from</code>) to
+another (<code>to</code>).</p>
+<p>Note that <code>value</code> may be zero._</p>
+<h3 id="approval">Approval</h3>
+<pre><code class="lang-solidity">event Approval(<span class="hljs-selector-tag">address</span> owner, <span class="hljs-selector-tag">address</span> spender, uint256 value)
+</code></pre>
+<p><em>Emitted when the allowance of a <code>spender</code> for an <code>owner</code> is set by
+a call to {approve}. <code>value</code> is the new allowance.</em></p>
+<h3 id="totalsupply">totalSupply</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">totalSupply</span><span class="hljs-params">()</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p><em>Returns the amount of tokens in existence.</em></p>
+<h3 id="balanceof">balanceOf</h3>
+<pre><code class="lang-solidity">function balanceOf(<span class="hljs-name">address</span> account) external view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p><em>Returns the amount of tokens owned by <code>account</code>.</em></p>
+<h3 id="transfer">transfer</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transfer</span><span class="hljs-params">(address <span class="hljs-keyword">to</span>, uint256 amount)</span> <span class="hljs-title">external</span> <span class="hljs-title">returns</span> <span class="hljs-params">(bool)</span></span>
+</code></pre>
+<p>_Moves <code>amount</code> tokens from the caller&#39;s account to <code>to</code>.</p>
+<p>Returns a boolean value indicating whether the operation succeeded.</p>
+<p>Emits a {Transfer} event._</p>
+<h3 id="allowance">allowance</h3>
+<pre><code class="lang-solidity">function allowance(<span class="hljs-name">address</span> owner, address spender) external view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p>_Returns the remaining number of tokens that <code>spender</code> will be
+allowed to spend on behalf of <code>owner</code> through {transferFrom}. This is
+zero by default.</p>
+<p>This value changes when {approve} or {transferFrom} are called._</p>
+<h3 id="approve">approve</h3>
+<pre><code class="lang-solidity">function approve(<span class="hljs-name">address</span> spender, uint256 amount) external returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p>_Sets <code>amount</code> as the allowance of <code>spender</code> over the caller&#39;s tokens.</p>
+<p>Returns a boolean value indicating whether the operation succeeded.</p>
+<p>IMPORTANT: Beware that changing an allowance with this method brings the risk
+that someone may use both the old and the new allowance by unfortunate
+transaction ordering. One possible solution to mitigate this race
+condition is to first reduce the spender&#39;s allowance to 0 and set the
+desired value afterwards:
+<a href="https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729">https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729</a></p>
+<p>Emits an {Approval} event._</p>
+<h3 id="transferfrom">transferFrom</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferFrom</span><span class="hljs-params">(address <span class="hljs-keyword">from</span>, address <span class="hljs-keyword">to</span>, uint256 amount)</span> <span class="hljs-title">external</span> <span class="hljs-title">returns</span> <span class="hljs-params">(bool)</span></span>
+</code></pre>
+<p>_Moves <code>amount</code> tokens from <code>from</code> to <code>to</code> using the
+allowance mechanism. <code>amount</code> is then deducted from the caller&#39;s
+allowance.</p>
+<p>Returns a boolean value indicating whether the operation succeeded.</p>
+<p>Emits a {Transfer} event._</p>
+<h2 id="ierc20metadata">IERC20Metadata</h2>
+<p>_Interface for the optional metadata functions from the ERC20 standard.</p>
+<p>_Available since v4.1.__</p>
+<h3 id="name">name</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>Returns the name of the token.</em></p>
+<h3 id="symbol">symbol</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">symbol</span><span class="hljs-params">()</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>Returns the symbol of the token.</em></p>
+<h3 id="decimals">decimals</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decimals</span><span class="hljs-params">()</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint8)</span></span>
+</code></pre>
+<p><em>Returns the decimals places of the token.</em></p>
+<h2 id="ierc20permit">IERC20Permit</h2>
+<p>_Interface of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
+<a href="https://eips.ethereum.org/EIPS/eip-2612[EIP-2612">https://eips.ethereum.org/EIPS/eip-2612[EIP-2612</a>].</p>
+<p>Adds the {permit} method, which can be used to change an account&#39;s ERC20 allowance (see {IERC20-allowance}) by
+presenting a message signed by the account. By not relying on {IERC20-approve}, the token holder account doesn&#39;t
+need to send a transaction, and thus is not required to hold Ether at all._</p>
+<h3 id="permit">permit</h3>
+<pre><code class="lang-solidity"><span class="hljs-symbol">function</span> permit(<span class="hljs-keyword">address </span>owner, <span class="hljs-keyword">address </span>spender, uint256 value, uint256 deadline, uint8 v, <span class="hljs-keyword">bytes32 </span>r, <span class="hljs-keyword">bytes32 </span>s) external
+</code></pre>
+<p>_Sets <code>value</code> as the allowance of <code>spender</code> over <code>owner</code>&#39;s tokens,
+given <code>owner</code>&#39;s signed approval.</p>
+<p>IMPORTANT: The same issues {IERC20-approve} has related to transaction
+ordering also apply here.</p>
+<p>Emits an {Approval} event.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>spender</code> cannot be the zero address.</li>
+<li><code>deadline</code> must be a timestamp in the future.</li>
+<li><code>v</code>, <code>r</code> and <code>s</code> must be a valid <code>secp256k1</code> signature from <code>owner</code>
+over the EIP712-formatted function arguments.</li>
+<li>the signature must use <code>owner</code>&#39;s current nonce (see {nonces}).</li>
+</ul>
+<p>For more information on the signature format, see the
+<a href="https://eips.ethereum.org/EIPS/eip-2612#specification[relevant">https://eips.ethereum.org/EIPS/eip-2612#specification[relevant</a> EIP
+section]._</p>
+<h3 id="nonces">nonces</h3>
+<pre><code class="lang-solidity">function nonces(<span class="hljs-name">address</span> owner) external view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p>_Returns the current nonce for <code>owner</code>. This value must be
+included whenever a signature is generated for {permit}.</p>
+<p>Every successful call to {permit} increases <code>owner</code>&#39;s nonce by one. This
+prevents a signature from being used multiple times._</p>
+<h3 id="domain_separator">DOMAIN_SEPARATOR</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">DOMAIN_SEPARATOR</span><span class="hljs-params">()</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(bytes32)</span></span>
+</code></pre>
+<p><em>Returns the domain separator used in the encoding of the signature for {permit}, as defined by {EIP712}.</em></p>
+<h2 id="safeerc20">SafeERC20</h2>
+<p><em>Wrappers around ERC20 operations that throw on failure (when the token
+contract returns false). Tokens that return no value (and instead revert or
+throw on failure) are also supported, non-reverting calls are assumed to be
+successful.
+To use this library you can add a <code>using SafeERC20 for IERC20;</code> statement to your contract,
+which allows you to call the safe operations as <code>token.safeTransfer(...)</code>, etc.</em></p>
+<h3 id="safetransfer">safeTransfer</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">safeTransfer</span><span class="hljs-params">(contract IERC20 token, address <span class="hljs-keyword">to</span>, uint256 value)</span> <span class="hljs-title">internal</span></span>
+</code></pre>
+<h3 id="safetransferfrom">safeTransferFrom</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">safeTransferFrom</span><span class="hljs-params">(contract IERC20 token, address <span class="hljs-keyword">from</span>, address <span class="hljs-keyword">to</span>, uint256 value)</span> <span class="hljs-title">internal</span></span>
+</code></pre>
+<h3 id="safeapprove">safeApprove</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> safeApprove(contract IERC20 token, address spender, uint256 <span class="hljs-keyword">value</span>) internal
+</code></pre>
+<p>_Deprecated. This function has issues similar to the ones found in
+{IERC20-approve}, and its usage is discouraged.</p>
+<p>Whenever possible, use {safeIncreaseAllowance} and
+{safeDecreaseAllowance} instead._</p>
+<h3 id="safeincreaseallowance">safeIncreaseAllowance</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> safeIncreaseAllowance(contract IERC20 token, address spender, uint256 <span class="hljs-keyword">value</span>) internal
+</code></pre>
+<h3 id="safedecreaseallowance">safeDecreaseAllowance</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> safeDecreaseAllowance(contract IERC20 token, address spender, uint256 <span class="hljs-keyword">value</span>) internal
+</code></pre>
+<h3 id="safepermit">safePermit</h3>
+<pre><code class="lang-solidity"><span class="hljs-symbol">function</span> safePermit(contract IERC20Permit token, <span class="hljs-keyword">address </span>owner, <span class="hljs-keyword">address </span>spender, uint256 value, uint256 deadline, uint8 v, <span class="hljs-keyword">bytes32 </span>r, <span class="hljs-keyword">bytes32 </span>s) internal
+</code></pre>
+<h2 id="erc721">ERC721</h2>
+<p><em>Implementation of <a href="https://eips.ethereum.org/EIPS/eip-721[ERC721">https://eips.ethereum.org/EIPS/eip-721[ERC721</a>] Non-Fungible Token Standard, including
+the Metadata extension, but not including the Enumerable extension, which is available separately as
+{ERC721Enumerable}.</em></p>
+<h3 id="constructor">constructor</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">constructor</span><span class="hljs-params">(<span class="hljs-keyword">string</span> name_, <span class="hljs-keyword">string</span> symbol_)</span> <span class="hljs-title">public</span></span>
+</code></pre>
+<p><em>Initializes the contract by setting a <code>name</code> and a <code>symbol</code> to the token collection.</em></p>
+<h3 id="supportsinterface">supportsInterface</h3>
+<pre><code class="lang-solidity">function supportsInterface(<span class="hljs-name">bytes4</span> interfaceId) public view virtual returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p><em>See {IERC165-supportsInterface}.</em></p>
+<h3 id="balanceof">balanceOf</h3>
+<pre><code class="lang-solidity">function balanceOf(<span class="hljs-name">address</span> owner) public view virtual returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p><em>See {IERC721-balanceOf}.</em></p>
+<h3 id="ownerof">ownerOf</h3>
+<pre><code class="lang-solidity">function ownerOf(<span class="hljs-name">uint256</span> tokenId) public view virtual returns (<span class="hljs-name">address</span>)
+</code></pre>
+<p><em>See {IERC721-ownerOf}.</em></p>
+<h3 id="name">name</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>See {IERC721Metadata-name}.</em></p>
+<h3 id="symbol">symbol</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">symbol</span><span class="hljs-params">()</span> <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>See {IERC721Metadata-symbol}.</em></p>
+<h3 id="tokenuri">tokenURI</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tokenURI</span><span class="hljs-params">(uint256 tokenId)</span> <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>See {IERC721Metadata-tokenURI}.</em></p>
+<h3 id="_baseuri">_baseURI</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> _<span class="hljs-title">baseURI</span><span class="hljs-params">()</span> <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>Base URI for computing {tokenURI}. If set, the resulting URI for each
+token will be the concatenation of the <code>baseURI</code> and the <code>tokenId</code>. Empty
+by default, can be overridden in child contracts.</em></p>
+<h3 id="approve">approve</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">approve</span>(</span>address <span class="hljs-keyword">to</span>, uint256 tokenId) <span class="hljs-keyword">public</span> virtual
+</code></pre>
+<p><em>See {IERC721-approve}.</em></p>
+<h3 id="getapproved">getApproved</h3>
+<pre><code class="lang-solidity">function getApproved(<span class="hljs-name">uint256</span> tokenId) public view virtual returns (<span class="hljs-name">address</span>)
+</code></pre>
+<p><em>See {IERC721-getApproved}.</em></p>
+<h3 id="setapprovalforall">setApprovalForAll</h3>
+<pre><code class="lang-solidity"><span class="hljs-function">function <span class="hljs-title">setApprovalForAll</span><span class="hljs-params">(address <span class="hljs-keyword">operator</span>, <span class="hljs-keyword">bool</span> approved)</span> <span class="hljs-keyword">public</span> <span class="hljs-keyword">virtual</span></span>
+</code></pre>
+<p><em>See {IERC721-setApprovalForAll}.</em></p>
+<h3 id="isapprovedforall">isApprovedForAll</h3>
+<pre><code class="lang-solidity"><span class="hljs-function">function <span class="hljs-title">isApprovedForAll</span><span class="hljs-params">(address owner, address <span class="hljs-keyword">operator</span>)</span> <span class="hljs-keyword">public</span> view <span class="hljs-keyword">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">bool</span>)</span></span>
+</code></pre>
+<p><em>See {IERC721-isApprovedForAll}.</em></p>
+<h3 id="transferfrom">transferFrom</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferFrom</span>(</span>address from, address <span class="hljs-keyword">to</span>, uint256 tokenId) <span class="hljs-keyword">public</span> virtual
+</code></pre>
+<p><em>See {IERC721-transferFrom}.</em></p>
+<h3 id="safetransferfrom">safeTransferFrom</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">safeTransferFrom</span>(</span>address from, address <span class="hljs-keyword">to</span>, uint256 tokenId) <span class="hljs-keyword">public</span> virtual
+</code></pre>
+<p><em>See {IERC721-safeTransferFrom}.</em></p>
+<h3 id="safetransferfrom">safeTransferFrom</h3>
+<pre><code class="lang-solidity"><span class="hljs-symbol">function</span> safeTransferFrom(<span class="hljs-keyword">address </span>from, <span class="hljs-keyword">address </span>to, uint256 tokenId, <span class="hljs-keyword">bytes </span><span class="hljs-meta">data</span>) public virtual
+</code></pre>
+<p><em>See {IERC721-safeTransferFrom}.</em></p>
+<h3 id="_safetransfer">_safeTransfer</h3>
+<pre><code class="lang-solidity"><span class="hljs-symbol">function</span> _safeTransfer(<span class="hljs-keyword">address </span>from, <span class="hljs-keyword">address </span>to, uint256 tokenId, <span class="hljs-keyword">bytes </span><span class="hljs-meta">data</span>) internal virtual
+</code></pre>
+<p>_Safely transfers <code>tokenId</code> token from <code>from</code> to <code>to</code>, checking first that contract recipients
+are aware of the ERC721 protocol to prevent tokens from being forever locked.</p>
+<p><code>data</code> is additional data, it has no specified format and it is sent in call to <code>to</code>.</p>
+<p>This internal function is equivalent to {safeTransferFrom}, and can be used to e.g.
+implement alternative mechanisms to perform token transfer, such as signature-based.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>from</code> cannot be the zero address.</li>
+<li><code>to</code> cannot be the zero address.</li>
+<li><code>tokenId</code> token must exist and be owned by <code>from</code>.</li>
+<li>If <code>to</code> refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.</li>
+</ul>
+<p>Emits a {Transfer} event._</p>
+<h3 id="_ownerof">_ownerOf</h3>
+<pre><code class="lang-solidity">function _ownerOf(<span class="hljs-name">uint256</span> tokenId) internal view virtual returns (<span class="hljs-name">address</span>)
+</code></pre>
+<p><em>Returns the owner of the <code>tokenId</code>. Does NOT revert if token doesn&#39;t exist</em></p>
+<h3 id="_exists">_exists</h3>
+<pre><code class="lang-solidity">function _exists(<span class="hljs-name">uint256</span> tokenId) internal view virtual returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p>_Returns whether <code>tokenId</code> exists.</p>
+<p>Tokens can be managed by their owner or approved accounts via {approve} or {setApprovalForAll}.</p>
+<p>Tokens start existing when they are minted (<code>_mint</code>),
+and stop existing when they are burned (<code>_burn</code>)._</p>
+<h3 id="_isapprovedorowner">_isApprovedOrOwner</h3>
+<pre><code class="lang-solidity">function _isApprovedOrOwner(<span class="hljs-name">address</span> spender, uint256 tokenId) internal view virtual returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p>_Returns whether <code>spender</code> is allowed to manage <code>tokenId</code>.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>tokenId</code> must exist._</li>
+</ul>
+<h3 id="_safemint">_safeMint</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> _<span class="hljs-title">safeMint</span><span class="hljs-params">(address <span class="hljs-keyword">to</span>, uint256 tokenId)</span> <span class="hljs-title">internal</span> <span class="hljs-title">virtual</span></span>
+</code></pre>
+<p>_Safely mints <code>tokenId</code> and transfers it to <code>to</code>.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>tokenId</code> must not exist.</li>
+<li>If <code>to</code> refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.</li>
+</ul>
+<p>Emits a {Transfer} event._</p>
+<h3 id="_safemint">_safeMint</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">function</span> _safeMint(address <span class="hljs-keyword">to</span>, uint256 tokenId, <span class="hljs-built_in">bytes</span> data) internal <span class="hljs-keyword">virtual</span>
+</code></pre>
+<p>_Same as {xref-ERC721-_safeMint-address-uint256-}[<code>_safeMint</code>], with an additional <code>data</code> parameter which is
+forwarded in {IERC721Receiver-onERC721Received} to contract recipients._</p>
+<h3 id="_mint">_mint</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> _<span class="hljs-title">mint</span><span class="hljs-params">(address <span class="hljs-keyword">to</span>, uint256 tokenId)</span> <span class="hljs-title">internal</span> <span class="hljs-title">virtual</span></span>
+</code></pre>
+<p>_Mints <code>tokenId</code> and transfers it to <code>to</code>.</p>
+<p>WARNING: Usage of this method is discouraged, use {_safeMint} whenever possible</p>
+<p>Requirements:</p>
+<ul>
+<li><code>tokenId</code> must not exist.</li>
+<li><code>to</code> cannot be the zero address.</li>
+</ul>
+<p>Emits a {Transfer} event._</p>
+<h3 id="_burn">_burn</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_burn</span><span class="hljs-params">(uint256 tokenId)</span></span> internal virtual
+</code></pre>
+<p>_Destroys <code>tokenId</code>.
+The approval is cleared when the token is burned.
+This is an internal function that does not check if the sender is authorized to operate on the token.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>tokenId</code> must exist.</li>
+</ul>
+<p>Emits a {Transfer} event._</p>
+<h3 id="_transfer">_transfer</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> _<span class="hljs-title">transfer</span><span class="hljs-params">(address <span class="hljs-keyword">from</span>, address <span class="hljs-keyword">to</span>, uint256 tokenId)</span> <span class="hljs-title">internal</span> <span class="hljs-title">virtual</span></span>
+</code></pre>
+<p>_Transfers <code>tokenId</code> from <code>from</code> to <code>to</code>.
+ As opposed to {transferFrom}, this imposes no restrictions on msg.sender.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>to</code> cannot be the zero address.</li>
+<li><code>tokenId</code> token must be owned by <code>from</code>.</li>
+</ul>
+<p>Emits a {Transfer} event._</p>
+<h3 id="_approve">_approve</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> _<span class="hljs-title">approve</span><span class="hljs-params">(address <span class="hljs-keyword">to</span>, uint256 tokenId)</span> <span class="hljs-title">internal</span> <span class="hljs-title">virtual</span></span>
+</code></pre>
+<p>_Approve <code>to</code> to operate on <code>tokenId</code></p>
+<p>Emits an {Approval} event._</p>
+<h3 id="_setapprovalforall">_setApprovalForAll</h3>
+<pre><code class="lang-solidity">function _setApprovalForAll(address owner, address <span class="hljs-keyword">operator</span>, <span class="hljs-keyword">bool</span> approved) <span class="hljs-keyword">internal</span> <span class="hljs-keyword">virtual</span>
+</code></pre>
+<p>_Approve <code>operator</code> to operate on all of <code>owner</code> tokens</p>
+<p>Emits an {ApprovalForAll} event._</p>
+<h3 id="_requireminted">_requireMinted</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_requireMinted</span><span class="hljs-params">(uint256 tokenId)</span></span> internal view virtual
+</code></pre>
+<p><em>Reverts if the <code>tokenId</code> has not been minted yet.</em></p>
+<h3 id="_beforetokentransfer">_beforeTokenTransfer</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> _<span class="hljs-title">beforeTokenTransfer</span><span class="hljs-params">(address <span class="hljs-keyword">from</span>, address <span class="hljs-keyword">to</span>, uint256, uint256 batchSize)</span> <span class="hljs-title">internal</span> <span class="hljs-title">virtual</span></span>
+</code></pre>
+<p>_Hook that is called before any token transfer. This includes minting and burning. If {ERC721Consecutive} is
+used, the hook may be called as part of a consecutive (batch) mint, as indicated by <code>batchSize</code> greater than 1.</p>
+<p>Calling conditions:</p>
+<ul>
+<li>When <code>from</code> and <code>to</code> are both non-zero, <code>from</code>&#39;s tokens will be transferred to <code>to</code>.</li>
+<li>When <code>from</code> is zero, the tokens will be minted for <code>to</code>.</li>
+<li>When <code>to</code> is zero, <code>from</code>&#39;s tokens will be burned.</li>
+<li><code>from</code> and <code>to</code> are never both zero.</li>
+<li><code>batchSize</code> is non-zero.</li>
+</ul>
+<p>To learn more about hooks, head to xref:ROOT:extending-contracts.adoc#using-hooks[Using Hooks]._</p>
+<h3 id="_aftertokentransfer">_afterTokenTransfer</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> _<span class="hljs-title">afterTokenTransfer</span><span class="hljs-params">(address <span class="hljs-keyword">from</span>, address <span class="hljs-keyword">to</span>, uint256 firstTokenId, uint256 batchSize)</span> <span class="hljs-title">internal</span> <span class="hljs-title">virtual</span></span>
+</code></pre>
+<p>_Hook that is called after any token transfer. This includes minting and burning. If {ERC721Consecutive} is
+used, the hook may be called as part of a consecutive (batch) mint, as indicated by <code>batchSize</code> greater than 1.</p>
+<p>Calling conditions:</p>
+<ul>
+<li>When <code>from</code> and <code>to</code> are both non-zero, <code>from</code>&#39;s tokens were transferred to <code>to</code>.</li>
+<li>When <code>from</code> is zero, the tokens were minted for <code>to</code>.</li>
+<li>When <code>to</code> is zero, <code>from</code>&#39;s tokens were burned.</li>
+<li><code>from</code> and <code>to</code> are never both zero.</li>
+<li><code>batchSize</code> is non-zero.</li>
+</ul>
+<p>To learn more about hooks, head to xref:ROOT:extending-contracts.adoc#using-hooks[Using Hooks]._</p>
+<h2 id="ierc721">IERC721</h2>
+<p><em>Required interface of an ERC721 compliant contract.</em></p>
+<h3 id="transfer">Transfer</h3>
+<pre><code class="lang-solidity">event Transfer(<span class="hljs-selector-tag">address</span> from, <span class="hljs-selector-tag">address</span> to, uint256 tokenId)
+</code></pre>
+<p><em>Emitted when <code>tokenId</code> token is transferred from <code>from</code> to <code>to</code>.</em></p>
+<h3 id="approval">Approval</h3>
+<pre><code class="lang-solidity">event Approval(<span class="hljs-selector-tag">address</span> owner, <span class="hljs-selector-tag">address</span> approved, uint256 tokenId)
+</code></pre>
+<p><em>Emitted when <code>owner</code> enables <code>approved</code> to manage the <code>tokenId</code> token.</em></p>
+<h3 id="approvalforall">ApprovalForAll</h3>
+<pre><code class="lang-solidity">event ApprovalForAll(<span class="hljs-selector-tag">address</span> owner, <span class="hljs-selector-tag">address</span> operator, bool approved)
+</code></pre>
+<p><em>Emitted when <code>owner</code> enables or disables (<code>approved</code>) <code>operator</code> to manage all of its assets.</em></p>
+<h3 id="balanceof">balanceOf</h3>
+<pre><code class="lang-solidity">function balanceOf(<span class="hljs-name">address</span> owner) external view returns (<span class="hljs-name">uint256</span> balance)
+</code></pre>
+<p><em>Returns the number of tokens in <code>owner</code>&#39;s account.</em></p>
+<h3 id="ownerof">ownerOf</h3>
+<pre><code class="lang-solidity">function ownerOf(<span class="hljs-name">uint256</span> tokenId) external view returns (<span class="hljs-name">address</span> owner)
+</code></pre>
+<p>_Returns the owner of the <code>tokenId</code> token.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>tokenId</code> must exist._</li>
+</ul>
+<h3 id="safetransferfrom">safeTransferFrom</h3>
+<pre><code class="lang-solidity"><span class="hljs-symbol">function</span> safeTransferFrom(<span class="hljs-keyword">address </span>from, <span class="hljs-keyword">address </span>to, uint256 tokenId, <span class="hljs-keyword">bytes </span><span class="hljs-meta">data</span>) external
+</code></pre>
+<p>_Safely transfers <code>tokenId</code> token from <code>from</code> to <code>to</code>.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>from</code> cannot be the zero address.</li>
+<li><code>to</code> cannot be the zero address.</li>
+<li><code>tokenId</code> token must exist and be owned by <code>from</code>.</li>
+<li>If the caller is not <code>from</code>, it must be approved to move this token by either {approve} or {setApprovalForAll}.</li>
+<li>If <code>to</code> refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.</li>
+</ul>
+<p>Emits a {Transfer} event._</p>
+<h3 id="safetransferfrom">safeTransferFrom</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">safeTransferFrom</span><span class="hljs-params">(address <span class="hljs-keyword">from</span>, address <span class="hljs-keyword">to</span>, uint256 tokenId)</span> <span class="hljs-title">external</span></span>
+</code></pre>
+<p>_Safely transfers <code>tokenId</code> token from <code>from</code> to <code>to</code>, checking first that contract recipients
+are aware of the ERC721 protocol to prevent tokens from being forever locked.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>from</code> cannot be the zero address.</li>
+<li><code>to</code> cannot be the zero address.</li>
+<li><code>tokenId</code> token must exist and be owned by <code>from</code>.</li>
+<li>If the caller is not <code>from</code>, it must have been allowed to move this token by either {approve} or {setApprovalForAll}.</li>
+<li>If <code>to</code> refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.</li>
+</ul>
+<p>Emits a {Transfer} event._</p>
+<h3 id="transferfrom">transferFrom</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transferFrom</span><span class="hljs-params">(address <span class="hljs-keyword">from</span>, address <span class="hljs-keyword">to</span>, uint256 tokenId)</span> <span class="hljs-title">external</span></span>
+</code></pre>
+<p>_Transfers <code>tokenId</code> token from <code>from</code> to <code>to</code>.</p>
+<p>WARNING: Note that the caller is responsible to confirm that the recipient is capable of receiving ERC721
+or else they may be permanently lost. Usage of {safeTransferFrom} prevents loss, though the caller must
+understand this adds an external call which potentially creates a reentrancy vulnerability.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>from</code> cannot be the zero address.</li>
+<li><code>to</code> cannot be the zero address.</li>
+<li><code>tokenId</code> token must be owned by <code>from</code>.</li>
+<li>If the caller is not <code>from</code>, it must be approved to move this token by either {approve} or {setApprovalForAll}.</li>
+</ul>
+<p>Emits a {Transfer} event._</p>
+<h3 id="approve">approve</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">approve</span><span class="hljs-params">(address <span class="hljs-keyword">to</span>, uint256 tokenId)</span> <span class="hljs-title">external</span></span>
+</code></pre>
+<p>_Gives permission to <code>to</code> to transfer <code>tokenId</code> token to another account.
+The approval is cleared when the token is transferred.</p>
+<p>Only a single account can be approved at a time, so approving the zero address clears previous approvals.</p>
+<p>Requirements:</p>
+<ul>
+<li>The caller must own the token or be an approved operator.</li>
+<li><code>tokenId</code> must exist.</li>
+</ul>
+<p>Emits an {Approval} event._</p>
+<h3 id="setapprovalforall">setApprovalForAll</h3>
+<pre><code class="lang-solidity">function setApprovalForAll(address <span class="hljs-keyword">operator</span>, <span class="hljs-built_in">bool</span> _approved) <span class="hljs-keyword">external</span>
+</code></pre>
+<p>_Approve or remove <code>operator</code> as an operator for the caller.
+Operators can call {transferFrom} or {safeTransferFrom} for any token owned by the caller.</p>
+<p>Requirements:</p>
+<ul>
+<li>The <code>operator</code> cannot be the caller.</li>
+</ul>
+<p>Emits an {ApprovalForAll} event._</p>
+<h3 id="getapproved">getApproved</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getApproved</span><span class="hljs-params">(uint256 tokenId)</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(address <span class="hljs-keyword">operator</span>)</span></span>
+</code></pre>
+<p>_Returns the account approved for <code>tokenId</code> token.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>tokenId</code> must exist._</li>
+</ul>
+<h3 id="isapprovedforall">isApprovedForAll</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isApprovedForAll</span><span class="hljs-params">(address owner, address <span class="hljs-keyword">operator</span>)</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(bool)</span></span>
+</code></pre>
+<p>_Returns if the <code>operator</code> is allowed to manage all of the assets of <code>owner</code>.</p>
+<p>See {setApprovalForAll}_</p>
+<h2 id="ierc721receiver">IERC721Receiver</h2>
+<p><em>Interface for any contract that wants to support safeTransfers
+from ERC721 asset contracts.</em></p>
+<h3 id="onerc721received">onERC721Received</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onERC721Received</span><span class="hljs-params">(address <span class="hljs-keyword">operator</span>, address <span class="hljs-keyword">from</span>, uint256 tokenId, bytes data)</span> <span class="hljs-title">external</span> <span class="hljs-title">returns</span> <span class="hljs-params">(bytes4)</span></span>
+</code></pre>
+<p>_Whenever an {IERC721} <code>tokenId</code> token is transferred to this contract via {IERC721-safeTransferFrom}
+by <code>operator</code> from <code>from</code>, this function is called.</p>
+<p>It must return its Solidity selector to confirm the token transfer.
+If any other value is returned or the interface is not implemented by the recipient, the transfer will be reverted.</p>
+<p>The selector can be obtained in Solidity with <code>IERC721Receiver.onERC721Received.selector</code>._</p>
+<h2 id="erc721burnable">ERC721Burnable</h2>
+<p><em>ERC721 Token that can be burned (destroyed).</em></p>
+<h3 id="burn">burn</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> burn(uint256 tokenId) <span class="hljs-keyword">public</span> virtual
+</code></pre>
+<p>_Burns <code>tokenId</code>. See {ERC721-_burn}.</p>
+<p>Requirements:</p>
+<ul>
+<li>The caller must own <code>tokenId</code> or be an approved operator._</li>
+</ul>
+<h2 id="erc721enumerable">ERC721Enumerable</h2>
+<p><em>This implements an optional extension of {ERC721} defined in the EIP that adds
+enumerability of all the token ids in the contract as well as all token ids owned by each
+account.</em></p>
+<h3 id="supportsinterface">supportsInterface</h3>
+<pre><code class="lang-solidity">function supportsInterface(<span class="hljs-name">bytes4</span> interfaceId) public view virtual returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p><em>See {IERC165-supportsInterface}.</em></p>
+<h3 id="tokenofownerbyindex">tokenOfOwnerByIndex</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tokenOfOwnerByIndex</span><span class="hljs-params">(address owner, uint256 <span class="hljs-keyword">index</span>)</span> <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p><em>See {IERC721Enumerable-tokenOfOwnerByIndex}.</em></p>
+<h3 id="totalsupply">totalSupply</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">totalSupply</span><span class="hljs-params">()</span> <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p><em>See {IERC721Enumerable-totalSupply}.</em></p>
+<h3 id="tokenbyindex">tokenByIndex</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tokenByIndex</span><span class="hljs-params">(uint256 <span class="hljs-keyword">index</span>)</span> <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p><em>See {IERC721Enumerable-tokenByIndex}.</em></p>
+<h3 id="_beforetokentransfer">_beforeTokenTransfer</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> _<span class="hljs-title">beforeTokenTransfer</span><span class="hljs-params">(address <span class="hljs-keyword">from</span>, address <span class="hljs-keyword">to</span>, uint256 firstTokenId, uint256 batchSize)</span> <span class="hljs-title">internal</span> <span class="hljs-title">virtual</span></span>
+</code></pre>
+<p>_See {ERC721-<em>beforeTokenTransfer}.</em></p>
+<h2 id="ierc721enumerable">IERC721Enumerable</h2>
+<p><em>See <a href="https://eips.ethereum.org/EIPS/eip-721">https://eips.ethereum.org/EIPS/eip-721</a></em></p>
+<h3 id="totalsupply">totalSupply</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">totalSupply</span><span class="hljs-params">()</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p><em>Returns the total amount of tokens stored by the contract.</em></p>
+<h3 id="tokenofownerbyindex">tokenOfOwnerByIndex</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tokenOfOwnerByIndex</span><span class="hljs-params">(address owner, uint256 <span class="hljs-keyword">index</span>)</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p><em>Returns a token ID owned by <code>owner</code> at a given <code>index</code> of its token list.
+Use along with {balanceOf} to enumerate all of <code>owner</code>&#39;s tokens.</em></p>
+<h3 id="tokenbyindex">tokenByIndex</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tokenByIndex</span><span class="hljs-params">(uint256 <span class="hljs-keyword">index</span>)</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p><em>Returns a token ID at a given <code>index</code> of all the tokens stored by the contract.
+Use along with {totalSupply} to enumerate all tokens.</em></p>
+<h2 id="ierc721metadata">IERC721Metadata</h2>
+<p><em>See <a href="https://eips.ethereum.org/EIPS/eip-721">https://eips.ethereum.org/EIPS/eip-721</a></em></p>
+<h3 id="name">name</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>Returns the token collection name.</em></p>
+<h3 id="symbol">symbol</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">symbol</span><span class="hljs-params">()</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>Returns the token collection symbol.</em></p>
+<h3 id="tokenuri">tokenURI</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tokenURI</span><span class="hljs-params">(uint256 tokenId)</span> <span class="hljs-title">external</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>Returns the Uniform Resource Identifier (URI) for <code>tokenId</code> token.</em></p>
+<h2 id="address">Address</h2>
+<p><em>Collection of functions related to the address type</em></p>
+<h3 id="iscontract">isContract</h3>
+<pre><code class="lang-solidity">function isContract(<span class="hljs-name">address</span> account) internal view returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p>_Returns true if <code>account</code> is a contract.</p>
+<h1 id="-important-">[IMPORTANT]</h1>
+<p>It is unsafe to assume that an address for which this function returns
+false is an externally-owned account (EOA) and not a contract.</p>
+<p>Among others, <code>isContract</code> will return false for the following
+types of addresses:</p>
+<ul>
+<li>an externally-owned account</li>
+<li>a contract in construction</li>
+<li>an address where a contract will be created</li>
+<li><h1 id="an-address-where-a-contract-lived-but-was-destroyed">an address where a contract lived, but was destroyed</h1>
+</li>
+</ul>
+<h1 id="-important-">[IMPORTANT]</h1>
+<p>You shouldn&#39;t rely on <code>isContract</code> to protect against flash loan attacks!</p>
+<p>Preventing calls from contracts is highly discouraged. It breaks composability, breaks support for smart wallets
+like Gnosis Safe, and does not provide security since it can be circumvented by calling from a contract
+constructor.
+====_</p>
+<h3 id="sendvalue">sendValue</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sendValue</span><span class="hljs-params">(address payable recipient, uint256 amount)</span></span> internal
+</code></pre>
+<p>_Replacement for Solidity&#39;s <code>transfer</code>: sends <code>amount</code> wei to
+<code>recipient</code>, forwarding all available gas and reverting on errors.</p>
+<p><a href="https://eips.ethereum.org/EIPS/eip-1884[EIP1884">https://eips.ethereum.org/EIPS/eip-1884[EIP1884</a>] increases the gas cost
+of certain opcodes, possibly making contracts go over the 2300 gas limit
+imposed by <code>transfer</code>, making them unable to receive funds via
+<code>transfer</code>. {sendValue} removes this limitation.</p>
+<p><a href="https://diligence.consensys.net/posts/2019/09/stop-using-soliditys-transfer-now/[Learn">https://diligence.consensys.net/posts/2019/09/stop-using-soliditys-transfer-now/[Learn</a> more].</p>
+<p>IMPORTANT: because control is transferred to <code>recipient</code>, care must be
+taken to not create reentrancy vulnerabilities. Consider using
+{ReentrancyGuard} or the
+<a href="https://solidity.readthedocs.io/en/v0.5.11/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions">https://solidity.readthedocs.io/en/v0.5.11/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions</a> pattern]._</p>
+<h3 id="functioncall">functionCall</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> functionCall(address <span class="hljs-keyword">target</span>, bytes <span class="hljs-keyword">data</span>) internal returns (bytes)
+</code></pre>
+<p>_Performs a Solidity function call using a low level <code>call</code>. A
+plain <code>call</code> is an unsafe replacement for a function call: use this
+function instead.</p>
+<p>If <code>target</code> reverts with a revert reason, it is bubbled up by this
+function (like regular Solidity function calls).</p>
+<p>Returns the raw returned data. To convert to the expected return value,
+use <a href="https://solidity.readthedocs.io/en/latest/units-and-global-variables.html?highlight=abi.decode#abi-encoding-and-decoding-functions[`abi.decode`">https://solidity.readthedocs.io/en/latest/units-and-global-variables.html?highlight=abi.decode#abi-encoding-and-decoding-functions[`abi.decode`</a>].</p>
+<p>Requirements:</p>
+<ul>
+<li><code>target</code> must be a contract.</li>
+<li>calling <code>target</code> with <code>data</code> must not revert.</li>
+</ul>
+<p>_Available since v3.1.__</p>
+<h3 id="functioncall">functionCall</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-title">Call</span>(<span class="hljs-params">address target, bytes data, <span class="hljs-built_in">string</span> errorMessage</span>) <span class="hljs-title">internal</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes</span>)</span></span>
+</code></pre>
+<p>_Same as {xref-Address-functionCall-address-bytes-}[<code>functionCall</code>], but with
+<code>errorMessage</code> as a fallback revert reason when <code>target</code> reverts.</p>
+<p>_Available since v3.1.__</p>
+<h3 id="functioncallwithvalue">functionCallWithValue</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> functionCallWithValue(address <span class="hljs-keyword">target</span>, bytes <span class="hljs-keyword">data</span>, uint256 <span class="hljs-keyword">value</span>) internal returns (bytes)
+</code></pre>
+<p>_Same as {xref-Address-functionCall-address-bytes-}[<code>functionCall</code>],
+but also transferring <code>value</code> wei to <code>target</code>.</p>
+<p>Requirements:</p>
+<ul>
+<li>the calling contract must have an ETH balance of at least <code>value</code>.</li>
+<li>the called Solidity function must be <code>payable</code>.</li>
+</ul>
+<p>_Available since v3.1.__</p>
+<h3 id="functioncallwithvalue">functionCallWithValue</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> functionCallWithValue(address <span class="hljs-keyword">target</span>, bytes <span class="hljs-keyword">data</span>, uint256 <span class="hljs-keyword">value</span>, string errorMessage) internal returns (bytes)
+</code></pre>
+<p>_Same as {xref-Address-functionCallWithValue-address-bytes-uint256-}[<code>functionCallWithValue</code>], but
+with <code>errorMessage</code> as a fallback revert reason when <code>target</code> reverts.</p>
+<p>_Available since v3.1.__</p>
+<h3 id="functionstaticcall">functionStaticCall</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> functionStaticCall(address <span class="hljs-keyword">target</span>, bytes <span class="hljs-keyword">data</span>) internal view returns (bytes)
+</code></pre>
+<p>_Same as {xref-Address-functionCall-address-bytes-}[<code>functionCall</code>],
+but performing a static call.</p>
+<p>_Available since v3.3.__</p>
+<h3 id="functionstaticcall">functionStaticCall</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-title">StaticCall</span>(<span class="hljs-params">address target, bytes data, <span class="hljs-built_in">string</span> errorMessage</span>) <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes</span>)</span></span>
+</code></pre>
+<p>_Same as {xref-Address-functionCall-address-bytes-string-}[<code>functionCall</code>],
+but performing a static call.</p>
+<p>_Available since v3.3.__</p>
+<h3 id="functiondelegatecall">functionDelegateCall</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> functionDelegateCall(address <span class="hljs-keyword">target</span>, bytes <span class="hljs-keyword">data</span>) internal returns (bytes)
+</code></pre>
+<p>_Same as {xref-Address-functionCall-address-bytes-}[<code>functionCall</code>],
+but performing a delegate call.</p>
+<p>_Available since v3.4.__</p>
+<h3 id="functiondelegatecall">functionDelegateCall</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-title">DelegateCall</span>(<span class="hljs-params">address target, bytes data, <span class="hljs-built_in">string</span> errorMessage</span>) <span class="hljs-title">internal</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes</span>)</span></span>
+</code></pre>
+<p>_Same as {xref-Address-functionCall-address-bytes-string-}[<code>functionCall</code>],
+but performing a delegate call.</p>
+<p>_Available since v3.4.__</p>
+<h3 id="verifycallresultfromtarget">verifyCallResultFromTarget</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">function</span> verifyCallResultFromTarget(address target, <span class="hljs-built_in">bool</span> success, <span class="hljs-built_in">bytes</span> returndata, <span class="hljs-built_in">string</span> errorMessage) internal view returns (<span class="hljs-built_in">bytes</span>)
+</code></pre>
+<p>_Tool to verify that a low level call to smart-contract was successful, and revert (either by bubbling
+the revert reason or using the provided one) in case of unsuccessful call or if target was not a contract.</p>
+<p>_Available since v4.8.__</p>
+<h3 id="verifycallresult">verifyCallResult</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">function</span> verifyCallResult(<span class="hljs-built_in">bool</span> success, <span class="hljs-built_in">bytes</span> returndata, <span class="hljs-built_in">string</span> errorMessage) internal pure returns (<span class="hljs-built_in">bytes</span>)
+</code></pre>
+<p>_Tool to verify that a low level call was successful, and revert if it wasn&#39;t, either by bubbling the
+revert reason or using the provided one.</p>
+<p>_Available since v4.3.__</p>
+<h2 id="context">Context</h2>
+<p>_Provides information about the current execution context, including the
+sender of the transaction and its data. While these are generally available
+via msg.sender and msg.data, they should not be accessed in such a direct
+manner, since when dealing with meta-transactions the account sending and
+paying for execution may not be the actual sender (as far as an application
+is concerned).</p>
+<p>This contract is only required for intermediate, library-like contracts._</p>
+<h3 id="_msgsender">_msgSender</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_msgSender</span><span class="hljs-params">()</span> <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(address)</span></span>
+</code></pre>
+<h3 id="_msgdata">_msgData</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_msgData</span><span class="hljs-params">()</span> <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">returns</span> <span class="hljs-params">(bytes)</span></span>
+</code></pre>
+<h2 id="counters">Counters</h2>
+<p>_Provides counters that can only be incremented, decremented or reset. This can be used e.g. to track the number
+of elements in a mapping, issuing ERC721 ids, or counting request ids.</p>
+<p>Include with <code>using Counters for Counters.Counter;</code>_</p>
+<h3 id="counter">Counter</h3>
+<pre><code class="lang-solidity"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Counter</span> </span>{
+  uint256 _value;
+}
+</code></pre>
+<h3 id="current">current</h3>
+<pre><code class="lang-solidity">function current(<span class="hljs-name">struct</span> Counters.Counter counter) internal view returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<h3 id="increment">increment</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">function</span> increment(<span class="hljs-keyword">struct</span> Counters.Counter counter) <span class="hljs-keyword">internal</span>
+</code></pre>
+<h3 id="decrement">decrement</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">function</span> decrement(<span class="hljs-keyword">struct</span> Counters.Counter counter) <span class="hljs-keyword">internal</span>
+</code></pre>
+<h3 id="reset">reset</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">function</span> reset(<span class="hljs-keyword">struct</span> Counters.Counter counter) <span class="hljs-keyword">internal</span>
+</code></pre>
+<h2 id="strings">Strings</h2>
+<p><em>String operations.</em></p>
+<h3 id="tostring">toString</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">toString</span><span class="hljs-params">(uint256 value)</span> <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>Converts a <code>uint256</code> to its ASCII <code>string</code> decimal representation.</em></p>
+<h3 id="tohexstring">toHexString</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">toHexString</span><span class="hljs-params">(uint256 value)</span> <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>Converts a <code>uint256</code> to its ASCII <code>string</code> hexadecimal representation.</em></p>
+<h3 id="tohexstring">toHexString</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">toHexString</span><span class="hljs-params">(uint256 value, uint256 length)</span> <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>Converts a <code>uint256</code> to its ASCII <code>string</code> hexadecimal representation with fixed length.</em></p>
+<h3 id="tohexstring">toHexString</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">toHexString</span><span class="hljs-params">(address addr)</span> <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> <span class="hljs-params">(<span class="hljs-keyword">string</span>)</span></span>
+</code></pre>
+<p><em>Converts an <code>address</code> with fixed length of 20 bytes to its not checksummed ASCII <code>string</code> hexadecimal representation.</em></p>
+<h2 id="erc165">ERC165</h2>
+<p>_Implementation of the {IERC165} interface.</p>
+<p>Contracts that want to implement ERC165 should inherit from this contract and override {supportsInterface} to check
+for the additional interface id that will be supported. For example:</p>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">supportsInterface</span><span class="hljs-params">(bytes4 interfaceId)</span> <span class="hljs-title">public</span> <span class="hljs-title">view</span> <span class="hljs-title">virtual</span> <span class="hljs-title">override</span> <span class="hljs-title">returns</span> <span class="hljs-params">(bool)</span> </span>{
+    <span class="hljs-keyword">return</span> interfaceId == type(MyInterface).interfaceId || <span class="hljs-keyword">super</span>.supportsInterface(interfaceId);
+}
+</code></pre>
+<p>Alternatively, {ERC165Storage} provides an easier to use but more expensive implementation._</p>
+<h3 id="supportsinterface">supportsInterface</h3>
+<pre><code class="lang-solidity">function supportsInterface(<span class="hljs-name">bytes4</span> interfaceId) public view virtual returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p><em>See {IERC165-supportsInterface}.</em></p>
+<h2 id="ierc165">IERC165</h2>
+<p>_Interface of the ERC165 standard, as defined in the
+<a href="https://eips.ethereum.org/EIPS/eip-165[EIP">https://eips.ethereum.org/EIPS/eip-165[EIP</a>].</p>
+<p>Implementers can declare support of contract interfaces, which can then be
+queried by others ({ERC165Checker}).</p>
+<p>For an implementation, see {ERC165}._</p>
+<h3 id="supportsinterface">supportsInterface</h3>
+<pre><code class="lang-solidity">function supportsInterface(<span class="hljs-name">bytes4</span> interfaceId) external view returns (<span class="hljs-name">bool</span>)
+</code></pre>
+<p>_Returns true if this contract implements the interface defined by
+<code>interfaceId</code>. See the corresponding
+<a href="https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP">https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP</a> section]
+to learn more about how these ids are created.</p>
+<p>This function call must use less than 30 000 gas._</p>
+<h2 id="math">Math</h2>
+<p><em>Standard math utilities missing in the Solidity language.</em></p>
+<h3 id="rounding">Rounding</h3>
+<pre><code class="lang-solidity"><span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">Rounding</span> {</span>
+  Down,
+  Up,
+  Zero
+}
+</code></pre>
+<h3 id="max">max</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> <span class="hljs-built_in">max</span>(uint256 a, uint256 b) internal <span class="hljs-keyword">pure</span> returns (uint256)
+</code></pre>
+<p><em>Returns the largest of two numbers.</em></p>
+<h3 id="min">min</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> <span class="hljs-built_in">min</span>(uint256 a, uint256 b) internal <span class="hljs-keyword">pure</span> returns (uint256)
+</code></pre>
+<p><em>Returns the smallest of two numbers.</em></p>
+<h3 id="average">average</h3>
+<pre><code class="lang-solidity">function average(<span class="hljs-name">uint256</span> a, uint256 b) internal pure returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p><em>Returns the average of two numbers. The result is rounded towards
+zero.</em></p>
+<h3 id="ceildiv">ceilDiv</h3>
+<pre><code class="lang-solidity">function ceilDiv(<span class="hljs-name">uint256</span> a, uint256 b) internal pure returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p>_Returns the ceiling of the division of two numbers.</p>
+<p>This differs from standard division with <code>/</code> in that it rounds up instead
+of rounding down._</p>
+<h3 id="muldiv">mulDiv</h3>
+<pre><code class="lang-solidity">function mulDiv(<span class="hljs-name">uint256</span> x, uint256 y, uint256 denominator) internal pure returns (<span class="hljs-name">uint256</span> result)
+</code></pre>
+<p>Calculates floor(x * y / denominator) with full precision. Throws if result overflows a uint256 or denominator == 0</p>
+<p><em>Original credit to Remco Bloemen under MIT license (<a href="https://xn--2-umb.com/21/muldiv">https://xn--2-umb.com/21/muldiv</a>)
+with further edits by Uniswap Labs also under MIT license.</em></p>
+<h3 id="muldiv">mulDiv</h3>
+<pre><code class="lang-solidity">function mulDiv(uint256 x, uint256 y, uint256 denominator, <span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">Math</span>.<span class="hljs-title">Rounding</span> <span class="hljs-title">rounding</span>) <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-title">uint256</span>)</span>
+</code></pre>
+<p>Calculates x * y / denominator with full precision, following the selected rounding direction.</p>
+<h3 id="sqrt">sqrt</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> <span class="hljs-built_in">sqrt</span>(uint256 a) internal <span class="hljs-keyword">pure</span> returns (uint256)
+</code></pre>
+<p>_Returns the square root of a number. If the number is not a perfect square, the value is rounded down.</p>
+<p>Inspired by Henry S. Warren, Jr.&#39;s &quot;Hacker&#39;s Delight&quot; (Chapter 11)._</p>
+<h3 id="sqrt">sqrt</h3>
+<pre><code class="lang-solidity">function sqrt(uint256 a, <span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">Math</span>.<span class="hljs-title">Rounding</span> <span class="hljs-title">rounding</span>) <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-title">uint256</span>)</span>
+</code></pre>
+<p>Calculates sqrt(a), following the selected rounding direction.</p>
+<h3 id="log2">log2</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> log2(uint256 <span class="hljs-keyword">value</span>) internal <span class="hljs-keyword">pure</span> returns (uint256)
+</code></pre>
+<p><em>Return the log in base 2, rounded down, of a positive value.
+Returns 0 if given 0.</em></p>
+<h3 id="log2">log2</h3>
+<pre><code class="lang-solidity">function log2(uint256 value, <span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">Math</span>.<span class="hljs-title">Rounding</span> <span class="hljs-title">rounding</span>) <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-title">uint256</span>)</span>
+</code></pre>
+<p><em>Return the log in base 2, following the selected rounding direction, of a positive value.
+Returns 0 if given 0.</em></p>
+<h3 id="log10">log10</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> <span class="hljs-built_in">log10</span>(uint256 <span class="hljs-keyword">value</span>) internal <span class="hljs-keyword">pure</span> returns (uint256)
+</code></pre>
+<p><em>Return the log in base 10, rounded down, of a positive value.
+Returns 0 if given 0.</em></p>
+<h3 id="log10">log10</h3>
+<pre><code class="lang-solidity">function log10(uint256 value, <span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">Math</span>.<span class="hljs-title">Rounding</span> <span class="hljs-title">rounding</span>) <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-title">uint256</span>)</span>
+</code></pre>
+<p><em>Return the log in base 10, following the selected rounding direction, of a positive value.
+Returns 0 if given 0.</em></p>
+<h3 id="log256">log256</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> log256(uint256 <span class="hljs-keyword">value</span>) internal <span class="hljs-keyword">pure</span> returns (uint256)
+</code></pre>
+<p>_Return the log in base 256, rounded down, of a positive value.
+Returns 0 if given 0.</p>
+<p>Adding one to the result gives the number of pairs of hex symbols needed to represent <code>value</code> as a hex string._</p>
+<h3 id="log256">log256</h3>
+<pre><code class="lang-solidity">function log256(uint256 value, <span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">Math</span>.<span class="hljs-title">Rounding</span> <span class="hljs-title">rounding</span>) <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> (<span class="hljs-title">uint256</span>)</span>
+</code></pre>
+<p><em>Return the log in base 10, following the selected rounding direction, of a positive value.
+Returns 0 if given 0.</em></p>
+<h2 id="safemath">SafeMath</h2>
+<p>_Wrappers over Solidity&#39;s arithmetic operations.</p>
+<p>NOTE: <code>SafeMath</code> is generally not needed starting with Solidity 0.8, since the compiler
+now has built in overflow checking._</p>
+<h3 id="tryadd">tryAdd</h3>
+<pre><code class="lang-solidity">function tryAdd(<span class="hljs-name">uint256</span> a, uint256 b) internal pure returns (<span class="hljs-name">bool</span>, uint256)
+</code></pre>
+<p>_Returns the addition of two unsigned integers, with an overflow flag.</p>
+<p>_Available since v3.4.__</p>
+<h3 id="trysub">trySub</h3>
+<pre><code class="lang-solidity">function trySub(<span class="hljs-name">uint256</span> a, uint256 b) internal pure returns (<span class="hljs-name">bool</span>, uint256)
+</code></pre>
+<p>_Returns the subtraction of two unsigned integers, with an overflow flag.</p>
+<p>_Available since v3.4.__</p>
+<h3 id="trymul">tryMul</h3>
+<pre><code class="lang-solidity">function tryMul(<span class="hljs-name">uint256</span> a, uint256 b) internal pure returns (<span class="hljs-name">bool</span>, uint256)
+</code></pre>
+<p>_Returns the multiplication of two unsigned integers, with an overflow flag.</p>
+<p>_Available since v3.4.__</p>
+<h3 id="trydiv">tryDiv</h3>
+<pre><code class="lang-solidity">function tryDiv(<span class="hljs-name">uint256</span> a, uint256 b) internal pure returns (<span class="hljs-name">bool</span>, uint256)
+</code></pre>
+<p>_Returns the division of two unsigned integers, with a division by zero flag.</p>
+<p>_Available since v3.4.__</p>
+<h3 id="trymod">tryMod</h3>
+<pre><code class="lang-solidity">function tryMod(<span class="hljs-name">uint256</span> a, uint256 b) internal pure returns (<span class="hljs-name">bool</span>, uint256)
+</code></pre>
+<p>_Returns the remainder of dividing two unsigned integers, with a division by zero flag.</p>
+<p>_Available since v3.4.__</p>
+<h3 id="add">add</h3>
+<pre><code class="lang-solidity">function add(<span class="hljs-name">uint256</span> a, uint256 b) internal pure returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p>_Returns the addition of two unsigned integers, reverting on
+overflow.</p>
+<p>Counterpart to Solidity&#39;s <code>+</code> operator.</p>
+<p>Requirements:</p>
+<ul>
+<li>Addition cannot overflow._</li>
+</ul>
+<h3 id="sub">sub</h3>
+<pre><code class="lang-solidity">function sub(<span class="hljs-name">uint256</span> a, uint256 b) internal pure returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p>_Returns the subtraction of two unsigned integers, reverting on
+overflow (when the result is negative).</p>
+<p>Counterpart to Solidity&#39;s <code>-</code> operator.</p>
+<p>Requirements:</p>
+<ul>
+<li>Subtraction cannot overflow._</li>
+</ul>
+<h3 id="mul">mul</h3>
+<pre><code class="lang-solidity">function mul(<span class="hljs-name">uint256</span> a, uint256 b) internal pure returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p>_Returns the multiplication of two unsigned integers, reverting on
+overflow.</p>
+<p>Counterpart to Solidity&#39;s <code>*</code> operator.</p>
+<p>Requirements:</p>
+<ul>
+<li>Multiplication cannot overflow._</li>
+</ul>
+<h3 id="div">div</h3>
+<pre><code class="lang-solidity">function div(<span class="hljs-name">uint256</span> a, uint256 b) internal pure returns (<span class="hljs-name">uint256</span>)
+</code></pre>
+<p>_Returns the integer division of two unsigned integers, reverting on
+division by zero. The result is rounded towards zero.</p>
+<p>Counterpart to Solidity&#39;s <code>/</code> operator.</p>
+<p>Requirements:</p>
+<ul>
+<li>The divisor cannot be zero._</li>
+</ul>
+<h3 id="mod">mod</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span></span> <span class="hljs-built_in">mod</span>(uint256 a, uint256 b) internal <span class="hljs-keyword">pure</span> returns (uint256)
+</code></pre>
+<p>_Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
+reverting when dividing by zero.</p>
+<p>Counterpart to Solidity&#39;s <code>%</code> operator. This function uses a <code>revert</code>
+opcode (which leaves remaining gas untouched) while Solidity uses an
+invalid opcode to revert (consuming all remaining gas).</p>
+<p>Requirements:</p>
+<ul>
+<li>The divisor cannot be zero._</li>
+</ul>
+<h3 id="sub">sub</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sub</span><span class="hljs-params">(uint256 a, uint256 b, <span class="hljs-keyword">string</span> errorMessage)</span> <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p>_Returns the subtraction of two unsigned integers, reverting with custom message on
+overflow (when the result is negative).</p>
+<p>CAUTION: This function is deprecated because it requires allocating memory for the error
+message unnecessarily. For custom revert reasons use {trySub}.</p>
+<p>Counterpart to Solidity&#39;s <code>-</code> operator.</p>
+<p>Requirements:</p>
+<ul>
+<li>Subtraction cannot overflow._</li>
+</ul>
+<h3 id="div">div</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">div</span><span class="hljs-params">(uint256 a, uint256 b, <span class="hljs-keyword">string</span> errorMessage)</span> <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p>_Returns the integer division of two unsigned integers, reverting with custom message on
+division by zero. The result is rounded towards zero.</p>
+<p>Counterpart to Solidity&#39;s <code>/</code> operator. Note: this function uses a
+<code>revert</code> opcode (which leaves remaining gas untouched) while Solidity
+uses an invalid opcode to revert (consuming all remaining gas).</p>
+<p>Requirements:</p>
+<ul>
+<li>The divisor cannot be zero._</li>
+</ul>
+<h3 id="mod">mod</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mod</span><span class="hljs-params">(uint256 a, uint256 b, <span class="hljs-keyword">string</span> errorMessage)</span> <span class="hljs-title">internal</span> <span class="hljs-title">pure</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p>_Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
+reverting with custom message when dividing by zero.</p>
+<p>CAUTION: This function is deprecated because it requires allocating memory for the error
+message unnecessarily. For custom revert reasons use {tryMod}.</p>
+<p>Counterpart to Solidity&#39;s <code>%</code> operator. This function uses a <code>revert</code>
+opcode (which leaves remaining gas untouched) while Solidity uses an
+invalid opcode to revert (consuming all remaining gas).</p>
+<p>Requirements:</p>
+<ul>
+<li>The divisor cannot be zero._</li>
+</ul>
+<h2 id="enumerableset">EnumerableSet</h2>
+<p><em>Library for managing
+<a href="https://en.wikipedia.org/wiki/Set">https://en.wikipedia.org/wiki/Set</a></em>(abstract_data_type)[sets] of primitive
+types.</p>
+<p>Sets have the following properties:</p>
+<ul>
+<li>Elements are added, removed, and checked for existence in constant time
+(O(1)).</li>
+<li>Elements are enumerated in O(n). No guarantees are made on the ordering.</li>
+</ul>
+<pre><code>contract Example {
+    <span class="hljs-comment">// Add the library methods</span>
+    <span class="hljs-keyword">using</span> EnumerableSet <span class="hljs-keyword">for</span> EnumerableSet.AddressSet;
+
+    <span class="hljs-comment">// Declare a set state variable</span>
+    EnumerableSet.AddressSet <span class="hljs-keyword">private</span> mySet;
+}
+</code></pre><p>As of v3.3.0, sets of type <code>bytes32</code> (<code>Bytes32Set</code>), <code>address</code> (<code>AddressSet</code>)
+and <code>uint256</code> (<code>UintSet</code>) are supported.</p>
+<h1 id="-warning-">[WARNING]</h1>
+<p>Trying to delete such a structure from storage will likely result in data corruption, rendering the structure
+unusable.
+See <a href="https://github.com/ethereum/solidity/pull/11843[ethereum/solidity#11843">https://github.com/ethereum/solidity/pull/11843[ethereum/solidity#11843</a>] for more info.</p>
+<p>In order to clean an EnumerableSet, you can either remove all elements one by one or create a fresh instance using an
+array of EnumerableSet.
+====_</p>
+<h3 id="set">Set</h3>
+<pre><code class="lang-solidity">struct Set {
+  <span class="hljs-keyword">bytes32[] </span>_values<span class="hljs-comment">;</span>
+  mapping(<span class="hljs-keyword">bytes32 </span>=&gt; uint256) _indexes<span class="hljs-comment">;</span>
+}
+</code></pre>
+<h3 id="bytes32set">Bytes32Set</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">struct </span><span class="hljs-keyword">Bytes32Set </span>{
+  <span class="hljs-keyword">struct </span>EnumerableSet<span class="hljs-meta">.Set</span> _inner<span class="hljs-comment">;</span>
+}
+</code></pre>
+<h3 id="add">add</h3>
+<pre><code class="lang-solidity"><span class="hljs-function">function <span class="hljs-title">add</span>(<span class="hljs-params"><span class="hljs-keyword">struct</span> EnumerableSet.Bytes32Set <span class="hljs-keyword">set</span>, bytes32 <span class="hljs-keyword">value</span></span>) <span class="hljs-keyword">internal</span> <span class="hljs-title">returns</span> (<span class="hljs-params"><span class="hljs-keyword">bool</span></span>)</span>
+</code></pre>
+<p>_Add a value to a set. O(1).</p>
+<p>Returns true if the value was added to the set, that is if it was not
+already present._</p>
+<h3 id="remove">remove</h3>
+<pre><code class="lang-solidity"><span class="hljs-function">function <span class="hljs-title">remove</span>(<span class="hljs-params"><span class="hljs-keyword">struct</span> EnumerableSet.Bytes32Set <span class="hljs-keyword">set</span>, bytes32 <span class="hljs-keyword">value</span></span>) <span class="hljs-keyword">internal</span> <span class="hljs-title">returns</span> (<span class="hljs-params"><span class="hljs-keyword">bool</span></span>)</span>
+</code></pre>
+<p>_Removes a value from a set. O(1).</p>
+<p>Returns true if the value was removed from the set, that is if it was
+present._</p>
+<h3 id="contains">contains</h3>
+<pre><code class="lang-solidity"><span class="hljs-function">function <span class="hljs-title">contains</span>(<span class="hljs-params"><span class="hljs-keyword">struct</span> EnumerableSet.Bytes32Set <span class="hljs-keyword">set</span>, bytes32 <span class="hljs-keyword">value</span></span>) <span class="hljs-keyword">internal</span> view <span class="hljs-title">returns</span> (<span class="hljs-params"><span class="hljs-keyword">bool</span></span>)</span>
+</code></pre>
+<p><em>Returns true if the value is in the set. O(1).</em></p>
+<h3 id="length">length</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">length</span><span class="hljs-params">(struct EnumerableSet.Bytes32Set <span class="hljs-keyword">set</span>)</span> <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p><em>Returns the number of values in the set. O(1).</em></p>
+<h3 id="at">at</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">at</span><span class="hljs-params">(struct EnumerableSet.Bytes32Set <span class="hljs-keyword">set</span>, uint256 <span class="hljs-keyword">index</span>)</span> <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(bytes32)</span></span>
+</code></pre>
+<p>_Returns the value stored at position <code>index</code> in the set. O(1).</p>
+<p>Note that there are no guarantees on the ordering of values inside the
+array, and it may change when more values are added or removed.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>index</code> must be strictly less than {length}._</li>
+</ul>
+<h3 id="values">values</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">values</span><span class="hljs-params">(struct EnumerableSet.Bytes32Set <span class="hljs-keyword">set</span>)</span> <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(bytes32[])</span></span>
+</code></pre>
+<p>_Return the entire set in an array</p>
+<p>WARNING: This operation will copy the entire storage to memory, which can be quite expensive. This is designed
+to mostly be used by view accessors that are queried without any gas fees. Developers should keep in mind that
+this function has an unbounded cost, and using it as part of a state-changing function may render the function
+uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block._</p>
+<h3 id="addressset">AddressSet</h3>
+<pre><code class="lang-solidity"><span class="hljs-keyword">struct </span><span class="hljs-keyword">AddressSet </span>{
+  <span class="hljs-keyword">struct </span>EnumerableSet<span class="hljs-meta">.Set</span> _inner<span class="hljs-comment">;</span>
+}
+</code></pre>
+<h3 id="add">add</h3>
+<pre><code class="lang-solidity"><span class="hljs-function">function <span class="hljs-title">add</span>(<span class="hljs-params"><span class="hljs-keyword">struct</span> EnumerableSet.AddressSet <span class="hljs-keyword">set</span>, address <span class="hljs-keyword">value</span></span>) <span class="hljs-keyword">internal</span> <span class="hljs-title">returns</span> (<span class="hljs-params"><span class="hljs-keyword">bool</span></span>)</span>
+</code></pre>
+<p>_Add a value to a set. O(1).</p>
+<p>Returns true if the value was added to the set, that is if it was not
+already present._</p>
+<h3 id="remove">remove</h3>
+<pre><code class="lang-solidity"><span class="hljs-function">function <span class="hljs-title">remove</span>(<span class="hljs-params"><span class="hljs-keyword">struct</span> EnumerableSet.AddressSet <span class="hljs-keyword">set</span>, address <span class="hljs-keyword">value</span></span>) <span class="hljs-keyword">internal</span> <span class="hljs-title">returns</span> (<span class="hljs-params"><span class="hljs-keyword">bool</span></span>)</span>
+</code></pre>
+<p>_Removes a value from a set. O(1).</p>
+<p>Returns true if the value was removed from the set, that is if it was
+present._</p>
+<h3 id="contains">contains</h3>
+<pre><code class="lang-solidity"><span class="hljs-function">function <span class="hljs-title">contains</span>(<span class="hljs-params"><span class="hljs-keyword">struct</span> EnumerableSet.AddressSet <span class="hljs-keyword">set</span>, address <span class="hljs-keyword">value</span></span>) <span class="hljs-keyword">internal</span> view <span class="hljs-title">returns</span> (<span class="hljs-params"><span class="hljs-keyword">bool</span></span>)</span>
+</code></pre>
+<p><em>Returns true if the value is in the set. O(1).</em></p>
+<h3 id="length">length</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">length</span><span class="hljs-params">(struct EnumerableSet.AddressSet <span class="hljs-keyword">set</span>)</span> <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p><em>Returns the number of values in the set. O(1).</em></p>
+<h3 id="at">at</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">at</span><span class="hljs-params">(struct EnumerableSet.AddressSet <span class="hljs-keyword">set</span>, uint256 <span class="hljs-keyword">index</span>)</span> <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(address)</span></span>
+</code></pre>
+<p>_Returns the value stored at position <code>index</code> in the set. O(1).</p>
+<p>Note that there are no guarantees on the ordering of values inside the
+array, and it may change when more values are added or removed.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>index</code> must be strictly less than {length}._</li>
+</ul>
+<h3 id="values">values</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">values</span><span class="hljs-params">(struct EnumerableSet.AddressSet <span class="hljs-keyword">set</span>)</span> <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(address[])</span></span>
+</code></pre>
+<p>_Return the entire set in an array</p>
+<p>WARNING: This operation will copy the entire storage to memory, which can be quite expensive. This is designed
+to mostly be used by view accessors that are queried without any gas fees. Developers should keep in mind that
+this function has an unbounded cost, and using it as part of a state-changing function may render the function
+uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block._</p>
+<h3 id="uintset">UintSet</h3>
+<pre><code class="lang-solidity"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">UintSet</span> </span>{
+  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">EnumerableSet</span>.Set _inner;
+}</span>
+</code></pre>
+<h3 id="add">add</h3>
+<pre><code class="lang-solidity"><span class="hljs-function">function <span class="hljs-title">add</span>(<span class="hljs-params"><span class="hljs-keyword">struct</span> EnumerableSet.UintSet <span class="hljs-keyword">set</span>, uint256 <span class="hljs-keyword">value</span></span>) <span class="hljs-keyword">internal</span> <span class="hljs-title">returns</span> (<span class="hljs-params"><span class="hljs-keyword">bool</span></span>)</span>
+</code></pre>
+<p>_Add a value to a set. O(1).</p>
+<p>Returns true if the value was added to the set, that is if it was not
+already present._</p>
+<h3 id="remove">remove</h3>
+<pre><code class="lang-solidity"><span class="hljs-function">function <span class="hljs-title">remove</span>(<span class="hljs-params"><span class="hljs-keyword">struct</span> EnumerableSet.UintSet <span class="hljs-keyword">set</span>, uint256 <span class="hljs-keyword">value</span></span>) <span class="hljs-keyword">internal</span> <span class="hljs-title">returns</span> (<span class="hljs-params"><span class="hljs-keyword">bool</span></span>)</span>
+</code></pre>
+<p>_Removes a value from a set. O(1).</p>
+<p>Returns true if the value was removed from the set, that is if it was
+present._</p>
+<h3 id="contains">contains</h3>
+<pre><code class="lang-solidity"><span class="hljs-function">function <span class="hljs-title">contains</span>(<span class="hljs-params"><span class="hljs-keyword">struct</span> EnumerableSet.UintSet <span class="hljs-keyword">set</span>, uint256 <span class="hljs-keyword">value</span></span>) <span class="hljs-keyword">internal</span> view <span class="hljs-title">returns</span> (<span class="hljs-params"><span class="hljs-keyword">bool</span></span>)</span>
+</code></pre>
+<p><em>Returns true if the value is in the set. O(1).</em></p>
+<h3 id="length">length</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">length</span><span class="hljs-params">(struct EnumerableSet.UintSet <span class="hljs-keyword">set</span>)</span> <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p><em>Returns the number of values in the set. O(1).</em></p>
+<h3 id="at">at</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">at</span><span class="hljs-params">(struct EnumerableSet.UintSet <span class="hljs-keyword">set</span>, uint256 <span class="hljs-keyword">index</span>)</span> <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256)</span></span>
+</code></pre>
+<p>_Returns the value stored at position <code>index</code> in the set. O(1).</p>
+<p>Note that there are no guarantees on the ordering of values inside the
+array, and it may change when more values are added or removed.</p>
+<p>Requirements:</p>
+<ul>
+<li><code>index</code> must be strictly less than {length}._</li>
+</ul>
+<h3 id="values">values</h3>
+<pre><code class="lang-solidity"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">values</span><span class="hljs-params">(struct EnumerableSet.UintSet <span class="hljs-keyword">set</span>)</span> <span class="hljs-title">internal</span> <span class="hljs-title">view</span> <span class="hljs-title">returns</span> <span class="hljs-params">(uint256[])</span></span>
+</code></pre>
+<p>_Return the entire set in an array</p>
+<p>WARNING: This operation will copy the entire storage to memory, which can be quite expensive. This is designed
+to mostly be used by view accessors that are queried without any gas fees. Developers should keep in mind that
+this function has an unbounded cost, and using it as part of a state-changing function may render the function
+uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block._</p>
+</body></html>

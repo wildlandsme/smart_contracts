@@ -59,7 +59,7 @@ contract WildlandsMemberCards is ERC721Enumerable, AccessControlEnumerable, Owna
     }
 
     /**
-     * @notice Allows the owner to lock the contract
+     * @dev Allows the owner to lock the contract
      * @dev Callable by owner
      */
     function lock() external onlyOwner {
@@ -68,6 +68,11 @@ contract WildlandsMemberCards is ERC721Enumerable, AccessControlEnumerable, Owna
         emit Lock();
     }    
 
+    /**
+     * @dev Check if a card id is still available for minting (1-3 are limited, 0 infite)
+     * @param cardId card id to be checked
+     * @return true if card is available, else false
+     */
     function isCardAvailable(uint256 cardId) public view returns (bool) {
         if (cardId == 0)  
             return true; // 1001 - x
@@ -80,6 +85,11 @@ contract WildlandsMemberCards is ERC721Enumerable, AccessControlEnumerable, Owna
         return false;
     }
 
+    /**
+     * @dev Get current card index (next mintable card) for given card id
+     * @param cardId card id 
+     * @return current card index
+     */ 
     function cardIndex(uint256 cardId) external view returns (uint256) {
         if (cardId == 0)  
             return standardId.current(); 
@@ -92,28 +102,48 @@ contract WildlandsMemberCards is ERC721Enumerable, AccessControlEnumerable, Owna
         return 0;
     }
 
+    /**
+     * @dev Check if _tokenId exists (i.e., was minted)
+     * @param _tokenId id of token
+     * @return true if _tokenId exits
+     */
     function exists(uint256 _tokenId) external view returns (bool) {
         // does token id exist?
         return _exists(_tokenId);
     }
 
+    /**
+     * @dev Check if given _code exists (i.e., if _code is linked to any token
+     * @param _code code to be checked
+     * @return true if token id is not 0 (token ids start from 1)
+     */
     function existsCode(bytes4 _code) external view returns (bool) {
         // does code exist for any wildland card? -> valid code
         return code2TokenId[_code] != 0;
     }
 
+    /**
+     * @dev Get linked token id
+     * @param _code code
+     * @return 0 if no token is linked, else token id
+     */
     function getTokenIdByCode(bytes4 _code) external view returns (uint256) {
         // obtain token id for a given code to process affiliates
         return code2TokenId[_code];
     }
 
+    /**
+     * @dev Get latest code of given address
+     * @param _address user address
+     * @return 0x00000000 if no code exists, else code
+     */
     function getCodeByAddress(address _address) external view returns (bytes4) {
         // obtain code for given address
         return affiliator2Code[_address];
     }
 
     /**
-     * @notice Allows the owner to mint a token to a specific address
+     * @dev Allows the owner to mint a token to a specific address
      * @param _to: address to receive the token
      * @param _cardId: card id
      * @dev Callable by owner
@@ -147,14 +177,21 @@ contract WildlandsMemberCards is ERC721Enumerable, AccessControlEnumerable, Owna
         }
     }
 
-    // code generator function for affiliate link
-    // affiliators need to activate thir affiliation code
+    /**
+     * @dev code generator function for affiliate link
+     * @param _tokenId token id that the generated code is to be linked to
+     */
     function generateCode(uint256 _tokenId) external {
         require (_exists(_tokenId), "generateCode: Invalid token id for code generation");
         require (ownerOf(_tokenId) == msg.sender, "generateCode: Only owner of card can generate code");
         _generateCode(msg.sender, _tokenId);
     }
 
+    /**
+     * @dev code generator function for affiliate link
+     * @param _for user address that this code is assigned to
+     * @param _tokenId token id that the generated code is to be linked to
+     */
     function _generateCode(address _for, uint256 _tokenId) internal {
         bytes4 code = bytes4(keccak256(abi.encodePacked(block.timestamp, _tokenId)));
         if (code2TokenId[code] != 0 || code == 0x0) {
@@ -172,9 +209,9 @@ contract WildlandsMemberCards is ERC721Enumerable, AccessControlEnumerable, Owna
     }
 
     /**
-     * @notice Allows the owner to recover non-fungible tokens sent to the contract by mistake
-     * @param _token: NFT token address
-     * @param _tokenId: tokenId
+     * @dev Allows the owner to recover non-fungible tokens sent to the contract by mistake
+     * @param _token NFT token address
+     * @param _tokenId tokenId
      * @dev Callable by owner
      */
     function recoverNonFungibleToken(address _token, uint256 _tokenId) external onlyOwner {
@@ -184,8 +221,8 @@ contract WildlandsMemberCards is ERC721Enumerable, AccessControlEnumerable, Owna
     }
 
     /**
-     * @notice Allows the owner to recover tokens sent to the contract by mistake
-     * @param _token: token address
+     * @dev Allows the owner to recover tokens sent to the contract by mistake
+     * @param _token token address
      * @dev Callable by owner
      */
     function recoverToken(address _token) external onlyOwner {
@@ -198,8 +235,8 @@ contract WildlandsMemberCards is ERC721Enumerable, AccessControlEnumerable, Owna
     }
 
     /**
-     * @notice Allows the owner to set the base URI to be used for all token IDs
-     * @param _uri: base URI
+     * @dev Allows the owner to set the base URI to be used for all token IDs
+     * @param _uri base URI
      * @dev Callable by owner
      */
     function setBaseURI(string memory _uri) public onlyOwner {
@@ -208,11 +245,12 @@ contract WildlandsMemberCards is ERC721Enumerable, AccessControlEnumerable, Owna
     }
 
     /**
-     * @notice Returns a list of token IDs owned by `user` given a `cursor` and `size` of its token list
-     * @param user: address
-     * @param cursor: cursor
-     * @param size: size
+     * @dev Returns a list of token IDs owned by `user` given a `cursor` and `size` of its token list
+     * @param user address
+     * @param cursor cursor
+     * @param size size
      */
+    /*
     function tokensOfOwnerBySize(
         address user,
         uint256 cursor,
@@ -229,11 +267,11 @@ contract WildlandsMemberCards is ERC721Enumerable, AccessControlEnumerable, Owna
         }
 
         return (values, cursor + length);
-    }
+    }*/
 
     /**
-     * @notice Returns the Uniform Resource Identifier (URI) for a token ID
-     * @param tokenId: token ID
+     * @dev Returns the Uniform Resource Identifier (URI) for a token ID
+     * @param tokenId token ID
      */
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");

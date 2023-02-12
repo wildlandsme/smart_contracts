@@ -38,6 +38,9 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         _;
     }
 
+    /**
+     * @param _token erc20 token address
+     */
     constructor(address _token) {
         require(
             _token != address(0),
@@ -50,8 +53,9 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Set crowdsale address.
+     * @dev Set crowdsale address.
      * onlyOwner protected.
+     * @param _crowdsaleAddress address of crowdsale contract
      */
     function setCrowdsaleAddress(address _crowdsaleAddress) public onlyOwner {
         require(
@@ -62,8 +66,11 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Add a new purchased _value of tokens.
+     * @dev Add a new purchased _value of tokens.
      * onlyCrowdsale protected.
+     * @param _to vesting address
+     * @param _value amount to be vested
+     * @param _revokable can vest be revoked? Not possible for sale contract vests
      */
     function vest(
         address _to,
@@ -98,9 +105,10 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Revoke added vest.
+     * @dev Revoke added vest.
      * Not possible for vests added by crowdsale.
      * onlyOwner protected.
+     * @param _holder address to be revoked from vesting.
      */
     function revoke(address _holder) public onlyOwner {
         Vest storage vested = vests[_holder];
@@ -119,9 +127,10 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Start vesting period.
+     * @dev Start vesting period.
      * Only crowdsale. Will be called once the sale is completed.
      * onlyCrowdsale protected.
+     * @param _start start time of vesting
      */
     function startVesting(uint256 _start) public onlyCrowdsale {
         require(finish == 0, "TokenVesting: already started!");
@@ -130,11 +139,14 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Calculate amount of already vested tokens.
+     * @dev Calculate amount of already vested tokens.
      * Can also return the amount of unlocked vested tokens.
      * For external use only.
+     * @param _holder user address
+     * @param _unlocked full vested amount or only the unlocked amount?
+     * @return total amount of vested tokens including (unlocked == false) or excluding (unlocked == true) claimed ones 
      */
-    function vestedTokens(address _holder, bool unlocked)
+    function vestedTokens(address _holder, bool _unlocked)
         external
         view
         returns (uint256)
@@ -149,16 +161,18 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         }
         uint256 vestedAmount = calculateVestedTokens(vested);
         uint256 transferable = vestedAmount.sub(vested.transferred);
-        if (unlocked)
+        if (_unlocked)
             return transferable;
 
         return vestedAmount;
     }
 
     /**
-     * @notice Calculate amount of already vested tokens.
+     * @dev Calculate amount of already vested tokens.
      * Return full _vested.value if vesting period is finished.
      * For internal use only.
+     * @param _vested data struct containing vesting information
+     * @return total amount of vested tokens including claimed ones
      */
     function calculateVestedTokens(Vest memory _vested)
         private
@@ -183,8 +197,10 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Countdown to be displayed on frontend. 
+     * @dev Countdown to be displayed on frontend. 
      * Returns next vesting timestamp if nothing is transferrable, else 0 (transferrable amount is unlocked).
+     * @param _holder user address
+     * @return 0 if unlocked, else timestamp when unlocked
      */
     function countdown(address _holder) external view returns (uint256){
         if (block.timestamp >= finish) {
@@ -205,7 +221,7 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @notice Claim vested tokens. 
+     * @dev Claim vested tokens. 
      * Returns if nothing to vest or nothing is unlocked. 
      * nonReentrant protected.
      */

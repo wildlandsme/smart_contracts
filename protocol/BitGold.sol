@@ -19,7 +19,11 @@ contract BitGold is ERC20("Bitgold", "BTG"), Ownable {
         _mint(treasury, 145000 * 10 ** decimals());
     }
 
-        /// @notice Creates `_amount` token to `_to`. Must only be called by the owner (Mine Master).
+    /**
+     * @dev Creates `_amount` token to `_to`. Must only be called by the owner (Mine Master).
+     * @param _to destination address
+     * @param _amount token amount to be minted to address _to
+     */
     function  mint(address _to, uint256 _amount) public onlyOwner{
         _mint(_to, _amount);
         emit EmitMint(_to, _amount);

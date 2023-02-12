@@ -17,13 +17,20 @@ contract BitRAM is Ownable {
 
     ERC20 public immutable token;
 
+    /**
+     * @param _token erc20 token address
+     */
     constructor(
         ERC20 _token
     ) {
         token = _token;
     }
 
-    // Safe token transfer function, just in case if rounding error
+    /**
+     * @dev Safe token transfer function, just in case if rounding error
+     * @param _to destination address
+     * @param _amount token amount to be transferred to address _to
+     */
     function safeBitTransfer(address _to, uint256 _amount) external onlyOwner {
         uint256 bitBal = token.balanceOf(address(this));
         if (_amount > bitBal) {
