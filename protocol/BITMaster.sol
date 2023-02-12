@@ -404,8 +404,8 @@ contract BitMaster is Ownable, ReentrancyGuard {
      */
     function isMember(address _user) public view returns(bool) {
         // either be an affiliator or an affiliatee
-        // affiliators who sold their member card, can withdraw
-        return affiliatee[_user] != 0x0 || wildlandcard.balanceOf(_user) > 0 || isWhiteListed[_user];
+        // affiliators who sold their member card are still considered members
+        return affiliatee[_user] != 0x0 || wildlandcard.getCodeByAddress(_user) != 0x0 || isWhiteListed[_user];
     }
 
     /**
