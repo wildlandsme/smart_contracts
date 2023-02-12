@@ -51,27 +51,35 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
 
     event TokenBuy(address indexed buyer, uint256 value, uint256 amount);
     event Whitelist(address indexed whitelisted);
+    event Close();
+    event SetTime(string indexed round, uint256 timestamp);
 
     modifier whenIcoCompleted() {
-        require(isIcoCompleted);
+        require(
+            isIcoCompleted,
+            "Crowdsale: crowdsale not completed");
         _;
     }
 
     modifier onlyAfterStart() {
         require(
-            block.timestamp >= startCrowdsaleTime,
+            block.timestamp >= startCrowdsaleTime && startCrowdsaleTime != 0,
             "Crowdsale: crowdsale not started yet"
         );
         _;
     }
 
     modifier onlyWhenNotPaused() {
-        require(!hasIcoPaused, "Crowdsale: crowdsale has paused");
+        require(
+            !hasIcoPaused, 
+            "Crowdsale: crowdsale has paused");
         _;
     }
 
     modifier onlyWhenNotCompleted() {
-        require(!isIcoCompleted, "Crowdsale: crowdsale has completed");
+        require(
+            !isIcoCompleted, 
+            "Crowdsale: crowdsale has completed");
         _;
     }
 
@@ -110,14 +118,22 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         limitPhaseThree = 525 * 1e3 * (10**token.decimals()); // + 300k (525k)
     }
 
+    /**
+     * @notice Set white list address.
+     * onlyOwner protected.
+     */
     function setWhitelist(address[] calldata _grantees, bool set) public onlyOwner {
         // add addresses to whitelist
         for (uint i = 0; i < _grantees.length; i++) {
-            require(_grantees[i] != address(0));
+            require(_grantees[i] != address(0), "Crowdsale: Invalid address for grantee");
             whiteListed[_grantees[i]] = set;
         }
     }
 
+    /**
+     * @notice Allow users to secure one of the limited whitelist spots.
+     * Cannot be called after presale has started.
+     */
     function secureWhitelistSpot() external {
         require(
             block.timestamp < startCrowdsaleTime,
@@ -132,17 +148,30 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         emit Whitelist(msg.sender);
     }
 
+    /**
+     * @notice Return available whitelist spots.
+     */
     function getWhitelistSpots() external view returns (uint256) {
         return whiteListSpots;
     }
 
+    /**
+     * @notice Set treasury addresses.
+     * onlyOwner protected.
+     */
     function setTreasury(address payable _treasury_1, address payable _treasury_2) public onlyOwner {
         require (_treasury_1 != address(0), "Crowdsale: invalid address 1");
         require (_treasury_2 != address(0), "Crowdsale: invalid address 2");
         treasury_1 = _treasury_1;
         treasury_2 = _treasury_2;
     }
-
+    /**
+     * @notice Set white list address.
+     * nonReentrant protected.
+     * onlyAfterStart protected.
+     * onlyWhenNotPaused protected.
+     * onlyWhenNotCompleted protected.
+     */
     function buyNative() public payable nonReentrant onlyAfterStart onlyWhenNotPaused onlyWhenNotCompleted {
         require(
             tokensRaised < limitPhaseThree,
@@ -164,7 +193,7 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
                 (_amount >= minimumBuyAmount) ||
                     // safetey case to allow for lower purchase if limit is reached
                     (tokensToBuy >= (limitPhaseOne - tokensRaised)),
-                "Crowdsale: insufficient balance for buying."
+                "Crowdsale: minimum eth amount not sent."
             );
             if (tokensRaised + tokensToBuy > limitPhaseOne) {
                 // adjust tokensToBuy
@@ -185,7 +214,7 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
             require(
                 (_amount >= minimumBuyAmount) ||
                     (tokensToBuy >= (limitPhaseTwo - tokensRaised)),
-                "Crowdsale: insufficient balance for buying."
+                "Crowdsale: minimum eth amount not sent."
             );
             if (tokensRaised + tokensToBuy > limitPhaseTwo) {
                 // adjust tokensToBuy
@@ -203,7 +232,7 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
             require(
                 (_amount >= minimumBuyAmount) ||
                     (tokensToBuy >= (limitPhaseThree - tokensRaised)),
-                "Crowdsale: insufficient balance for buying."
+                "Crowdsale: minimum eth amount not sent."
             );
             if (tokensRaised + tokensToBuy > limitPhaseThree) {
                 // adjust tokensToBuy
@@ -241,6 +270,9 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         }
     }
 
+    /**
+     * @notice Get ETH amount given a _tokenAmount and the respective _tokenAmountRate per ETH.
+     */
     function _getETHAmount(uint256 _tokenAmount, uint256 _tokenAmountRate)
         internal
         pure
@@ -250,49 +282,76 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         return _tokenAmount.div(_tokenAmountRate);
     }
 
-    function _getTokensAmount(uint256 _amount, uint256 _tokenAmountRate)
+    /**
+     * @notice Get token amount given a _value and the respective _tokenAmountRate per ETH.
+     */
+    function _getTokensAmount(uint256 _value, uint256 _tokenAmountRate)
         internal
         pure
         returns (uint256)
     {
-        // tokens -> rate * amount
-        return _amount.mul(_tokenAmountRate);
+        // tokens -> rate * _value
+        return _value.mul(_tokenAmountRate);
     }
 
+    /**
+     * @notice Close crowedsale.
+     * onlyOwner protected.
+     */
     function closeCrowdsale() public onlyOwner {
         isIcoCompleted = true;
         vestingContract.startVesting(block.timestamp);
+        emit Close();
     }
 
+    /**
+     * @notice Pause crowedsale.
+     * onlyOwner protected.
+     */
     function togglePauseCrowdsale() public onlyOwner {
         hasIcoPaused = !hasIcoPaused;
     }
 
-    function startCrowdSale(uint256 _time) public onlyOwner {
-        require(_time >= 0, "Crowdsale: invalid time provided");
+    /**
+     * @notice Start crowedsale.
+     * onlyOwner protected.
+     */
+    function startCrowdSale(uint256 _time) public onlyOwner{
+        require(startCrowdsaleTime == 0, "Crowdsale: already set");
         require(
             _time >= block.timestamp,
             "Crowdsale: can not start in past"
         );
         startCrowdsaleTime = _time;
+        emit SetTime("1st", _time);
     }
 
+    /**
+     * @notice Start 2nd round.
+     * onlyOwner protected.
+     */
     function startSecondRound(uint256 _time) public onlyOwner {
-        require(_time >= 0, "Crowdsale: invalid time provided");
+        require(startSecondRoundTime == 0, "Crowdsale: already set");
         require(
             _time >= block.timestamp,
             "Crowdsale: can not start in past"
         );
         startSecondRoundTime = _time;
+        emit SetTime("2nd", _time);
     }
 
+   /**
+     * @notice Start 3rd round.
+     * onlyOwner protected.
+     */
     function startThirdRound(uint256 _time) public onlyOwner {
-        require(_time >= 0, "Crowdsale: invalid time provided");
+        require(startThirdRoundTime == 0, "Crowdsale: already set");
         require(
             _time >= block.timestamp,
             "Crowdsale: can not start in past"
         );
         startThirdRoundTime = _time;
+        emit SetTime("3rd", _time);
     }
 
     function has2ndRoundStarted() external view returns (bool) {
@@ -303,17 +362,26 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         return block.timestamp >= startThirdRoundTime && startThirdRoundTime > 0;
     }
 
+   /**
+     * @notice Deposit amount of token into the presale contract.
+     * onlyOwner protected.
+     */
     function deposit(uint256 amount) public onlyOwner {
         token.safeTransferFrom(_msgSender(), address(this), amount);
     }
 
-    // transfer remaining tokens if presale is closed earlier
+   /**
+     * @notice Transfer remaining tokens if presale is closed earlier.
+     * onlyOwner protected.
+     */
     function withdraw() public whenIcoCompleted onlyOwner {
         uint256 balance = token.balanceOf(address(this));
         token.safeTransfer(_msgSender(), balance);
     }
-
-    // withdraw any eth left in contract
+   /**
+     * @notice Withdraw any eth left in contract.
+     * onlyOwner protected.
+     */
     function withdrawETH() public whenIcoCompleted onlyOwner {
         (bool success, ) = payable(owner()).call{value: address(this).balance}(
             ""

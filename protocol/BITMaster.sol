@@ -93,6 +93,10 @@ contract BitMaster is Ownable, ReentrancyGuard {
     event CodeFailed(uint256 tokenId);
     event CodeSuccess(bytes4 code, uint256 tokenId);
     event CodeSet(address indexed user, bytes4 code);
+    event SetStartblock(uint256 startBlock);
+    event ExcludedFromFees(address user);
+    event WhiteListed(address user);
+    event SetPaused(bool paused);
 
     constructor(
         BitGold _bit,
@@ -121,16 +125,12 @@ contract BitMaster is Ownable, ReentrancyGuard {
         poolExistence[_bit] = true;
         totalAllocPoint = 1000;
     }
-    
-    fallback() external payable{
-    }
-    
-    receive() external payable{
-    }
 
     /// SECION MODIFIERS
 
-    // validate if pool exists
+    /**
+     * @notice Validate if pool exists
+     */
     modifier validatePool(uint256 _pid) {
         require(_pid < poolInfo.length, "validatePool: pool exists?");
         _;
@@ -140,11 +140,17 @@ contract BitMaster is Ownable, ReentrancyGuard {
         return poolInfo.length;
     }
 
+    /**
+     * @notice Check that no pool is added twice.
+     */
     modifier nonDuplicated(IERC20 _lpToken) {
         require(poolExistence[_lpToken] == false, "add: existing pool");
         _;
     }
 
+    /**
+     * @notice Check if membership is required and if so, check if msg.sender has membership (see isMember function).
+     */
     modifier requireMembership(uint256 _pid) {
         // either affiliate code or member card required
         require(!poolInfo[_pid].requireMembership || isMember(msg.sender), "restricted: affiliate code required.");
@@ -153,26 +159,30 @@ contract BitMaster is Ownable, ReentrancyGuard {
 
     /// SECION POOL AND MINE DATA
 
-    // Add a new lp to the pool. Can only be called by the owner.
-    // It will be automatically checked if pool is duplicate
-    // Deposit Fee: 100% = 10,000 (max fee 10% = factor 1000) // _lockTimer measured in unix time
-    function add(uint256 _allocPoint, IERC20 _lpToken, uint256 _lockTimer, uint16 _depositFeeBP, uint16 _burnDepositFeeBP, uint16 _withdrawFeeBP, uint16 _burnWithdrawFeeBP, bool _withUpdate, bool _requireMembership) public onlyOwner nonDuplicated(_lpToken) {
+    /** 
+     * @notice Add a new lp to the pool. Can only be called by the owner.
+     * It will be automatically checked if pool is duplicate.
+     * Fee: Max fee 10% = fee base points <= 1000 (MAX_PERCENT = 1e4).
+     * _lockTimer is measured in unix time.
+     * onlyOwner protected.
+     */
+    function add(uint256 _allocPoint, IERC20 _token, uint256 _lockTimer, uint16 _depositFeeBP, uint16 _burnDepositFeeBP, uint16 _withdrawFeeBP, uint16 _burnWithdrawFeeBP, bool _withUpdate, bool _requireMembership) public onlyOwner nonDuplicated(_token) {
         require(_depositFeeBP <= MAX_PERCENT.div(10), "add: invalid deposit fee basis points"); // max 10%
-        require(_burnDepositFeeBP <= _depositFeeBP, "add: invalid burn deposit fee fee basis points"); // max 100% of deposit fee
+        require(_burnDepositFeeBP <= _depositFeeBP, "add: invalid burn deposit fee basis points"); // max 100% of deposit fee
         require(_withdrawFeeBP <= MAX_PERCENT.div(10), "add: invalid withdraw fee basis points"); // max 10%
-        require(_burnWithdrawFeeBP <= _withdrawFeeBP, "add: invalid burn withdraw fee fee basis points"); // max 100% of withdraw fee
+        require(_burnWithdrawFeeBP <= _withdrawFeeBP, "add: invalid burn withdraw fee basis points"); // max 100% of withdraw fee
         require(_lockTimer <= 30 days, "add: invalid time locked. Max allowed is 30 days in seconds");
         if (_withUpdate) {
             _massUpdatePools();
         }
         // BEP20 interface check
-        _lpToken.balanceOf(address(this));
+        _token.balanceOf(address(this));
         // check lp token exist -> revert if you try to add same lp token twice
         uint256 lastRewardBlock = block.number > startBlock ? block.number : startBlock;
         totalAllocPoint = totalAllocPoint.add(_allocPoint);
         // add pool info
         poolInfo.push(PoolInfo({
-            stakeToken: _lpToken, // the lp token
+            stakeToken: _token, // the lp token
             allocPoint: _allocPoint, //allocation points for new farm. 
             lastRewardBlock: lastRewardBlock, // last block that got rewarded
             accBitsPerShare: 0, 
@@ -183,19 +193,25 @@ contract BitMaster is Ownable, ReentrancyGuard {
             burnWithdrawFeeBP: _burnWithdrawFeeBP,
             requireMembership: _requireMembership
         }));
-        poolExistence[_lpToken] = true;
+        poolExistence[_token] = true;
         updateStakingPool();
-        emit EmitAdd(address(_lpToken), _allocPoint, _lockTimer, _depositFeeBP, _burnDepositFeeBP, _withdrawFeeBP, _burnWithdrawFeeBP, _requireMembership);
+        emit EmitAdd(address(_token), _allocPoint, _lockTimer, _depositFeeBP, _burnDepositFeeBP, _withdrawFeeBP, _burnWithdrawFeeBP, _requireMembership);
     }
 
-    // Update the given pool's bit allocation point. Can only be called by the owner.
-    // Deposit Fee: 100% = 10,000 (max fee 10% = factor 1000 as anti whale feature option) // blocks_locked measured in blocks
-    function set(uint256 _pid, uint256 _allocPoint, uint256 _lockTimer, uint16 _depositFeeBP, uint16 _burnDepositFeeBP, uint16 _withdrawFeeBP, uint16 _burnWithdrawFeeBP, bool _requireMembership) public onlyOwner validatePool(_pid) {
+    /** 
+     * @notice Update the given pool's bit allocation point. Can only be called by the owner.
+     * Fee: Max fee 10% = fee base points <= 1000 (MAX_PERCENT = 1e4).
+     * _lockTimer is measured in blocks.
+     * onlyOwner protected.
+     */
+    function set(uint256 _pid, uint256 _allocPoint, uint256 _lockTimer, uint16 _depositFeeBP, uint16 _burnDepositFeeBP, uint16 _withdrawFeeBP, uint16 _burnWithdrawFeeBP, bool _withUpdate, bool _requireMembership) public onlyOwner validatePool(_pid) {
         require(_depositFeeBP <= MAX_PERCENT.div(10), "set: invalid deposit fee basis points"); // max 10%
-        require(_burnDepositFeeBP <= _depositFeeBP, "set: invalid burn deposit fee fee basis points"); // max 100% of deposit fee
+        require(_burnDepositFeeBP <= _depositFeeBP, "set: invalid burn deposit fee basis points"); // max 100% of deposit fee
         require(_withdrawFeeBP <= MAX_PERCENT.div(10), "set: invalid withdraw fee basis points"); // max 10%
         require(_burnWithdrawFeeBP <= _withdrawFeeBP, "set: invalid burn withdraw fee basis points"); // max 100% of withdraw fee
         require(_lockTimer <= 30 days, "set: invalid time locked. Max allowed is 30 days in seconds");
+        if (_withUpdate)
+            _updatePool(_pid);
         uint256 prevAllocPoint = poolInfo[_pid].allocPoint;
         // update values
         poolInfo[_pid].allocPoint = _allocPoint;
@@ -211,12 +227,17 @@ contract BitMaster is Ownable, ReentrancyGuard {
         }
         emit EmitSet(_pid, _allocPoint, _lockTimer, _depositFeeBP, _burnDepositFeeBP, _withdrawFeeBP, _burnWithdrawFeeBP, _requireMembership);
     }
-
+    /**
+     * @notice Update reward variables for all pools. Be careful of gas spending! (external)
+     * nonReentrant protected.
+     */
     function massUpdatePools() external nonReentrant {
         _massUpdatePools();
     }
 
-    // Update reward variables for all pools. Be careful of gas spending!
+    /**
+     * @notice Update reward variables for all pools. Be careful of gas spending!
+     */
     function _massUpdatePools() internal {
         uint256 length = poolInfo.length;
         for (uint256 pid = 0; pid < length; ++pid) {
@@ -224,6 +245,9 @@ contract BitMaster is Ownable, ReentrancyGuard {
         }
     }
 
+    /**
+     * @notice Update multiplier of staking pool (_pid=0).
+     */
     function updateStakingPool() internal {
         uint256 length = poolInfo.length;
         uint256 points = 0;
@@ -238,14 +262,19 @@ contract BitMaster is Ownable, ReentrancyGuard {
         }
     }
 
-    // Return reward multiplier over the given _from to _to block.
+    /**
+     * @notice Return reward multiplier based on _from and _to block number.
+     */
     function getMultiplier(uint256 _from, uint256 _to) public view returns (uint256) {
         if (paused)
             return 0;
         return _to.sub(_from);
     }
 
-    
+    /**
+     * @notice Apply having every 365 * UNITS_PER_DAY blocks (approx 1 year).
+     * Given _amount is divided by 2 ** i where i = number of passed years (>= 0).
+     */
     function applyHalfing(uint256 _amount, uint256 testcounter) public view returns (uint256) {
         // start block not reached -> no reward
         // start block not set -> no reward
@@ -253,21 +282,29 @@ contract BitMaster is Ownable, ReentrancyGuard {
             return 0;
         // current active block counter
         uint256 blocks = block.number.add(testcounter).sub(startBlock);
-        // halfing every 365 days
+        // halfing every 365 days (approx) -> every 365 * UNITS_PER_DAY blocks
         uint256 i = blocks.div(UNITS_PER_DAY.mul(365)); // 0 if less than 365 days have passed
         return _amount.div(2**i);
     }
     
+    /**
+     * @notice Minting info per block based on halfing and pause state.
+     */
     function mintingInfo() external view returns(uint256) {
-		// return applyHalfing(bitPerBlock.mul(getMultiplier(0,1)));
 		return applyHalfing(bitPerBlock.mul(getMultiplier(0,1)), 0);
     }    
     
+    /**
+     * @notice Update pool (external)
+     * nonReentrant protected.
+     */
     function updatePool(uint256 _pid) external nonReentrant {
         _updatePool(_pid);
     }
 
-    // Update reward variables of the given pool to be up-to-date.
+    /**
+     * @notice Update pool (internal).
+     */
     function _updatePool(uint256 _pid) internal validatePool(_pid) {
         PoolInfo storage pool = poolInfo[_pid];
         if (block.number <= pool.lastRewardBlock) {
@@ -295,7 +332,9 @@ contract BitMaster is Ownable, ReentrancyGuard {
         pool.lastRewardBlock = block.number;
     }
 
-    // View function to see pending bits on frontend for given pool _pid)
+    /**
+     * @notice Returns pending bits for given pool _pid.
+     */
     function pendingBit(uint256 _pid, address _user) external view returns (uint256) {
         // get pool info in storage
         PoolInfo storage pool = poolInfo[_pid];
@@ -312,6 +351,9 @@ contract BitMaster is Ownable, ReentrancyGuard {
         return user.amount.mul(accBitsPerShare).div(DECIMALS_SHARE_REWARD).sub(user.rewardDebt);
     }
     
+    /**
+     * @notice Remaining locked time in seconds for given _pid and _user.
+     */
     function timeToUnlock(uint256 _pid, address _user) public view returns (uint256) {
         UserInfo storage user = userInfo[_pid][_user];
         PoolInfo storage pool = poolInfo[_pid];
@@ -324,15 +366,24 @@ contract BitMaster is Ownable, ReentrancyGuard {
 
     /// SECTION AFFILIATE
 
+    /**
+     * @notice check if _user is member.
+     * Meber means: _user has either an affiliate code set (see setCode function), owns or has owned a wildlands member card.
+     * or is a whitelisted address, e.g., a partner contract.
+     */
     function isMember(address _user) public view returns(bool) {
         // either be an affiliator or an affiliatee
         // affiliators who sold their member card, stay members
         return affiliatee[_user] != 0x0 || wildlandcard.getCodeByAddress(_user) != 0x0 || isWhiteListed[_user];
     }
 
-    // the affilite mechansims has 4 levels (3 vip and 1 standard). 
-    // affiliates get a portion of the fees based on the member level. 
-    // there are 1000 VIP MEMBER CARDS (id 1 - 1000) and INFINTITY STANDARD MEMBER CARDS (1001+)
+    /**
+     * @notice Get affiliate base points for a given _user.
+     * The affilite mechansims has 4 levels (3 vip and 1 standard). 
+     * Affiliates get a portion of the fees based on the member level. 
+     * There are 1000 VIP MEMBER CARDS (id 1 - 1000) and INFINTITY STANDARD MEMBER CARDS (1001+).
+     * affiliatee[_user] is the affiliate code that _user used to be a member (see setCode function).
+     */
     function getAffiliateBasePoints(address _user) public view returns (uint256) {
         // get affiliate id
         uint256 tokenId = wildlandcard.getTokenIdByCode(affiliatee[_user]);
@@ -355,6 +406,12 @@ contract BitMaster is Ownable, ReentrancyGuard {
         return 5; // 5 %
     }
 
+    /**
+     * @notice Set affiliate code
+     * The affiliate code of msg.sender is stored in affiliatee[msg.sender]. 
+     * Affiliate fees are to the current token owner that is linked to the provided _code.
+     * nonReentrant protected.
+     */
     function setCode(bytes4 _code) public nonReentrant {
         require(affiliatee[msg.sender] == 0x0, "setCode: Affiliate code already set");
         require(wildlandcard.getTokenIdByCode(_code) != 0 && _code != 0x0, "setCode: Code is not valid");
@@ -362,7 +419,12 @@ contract BitMaster is Ownable, ReentrancyGuard {
         emit CodeSet(msg.sender, _code);
     }
 
-    // process fee, burn + affiliate
+    /**
+     * @notice Process fee, burn fee and affiliate fees.
+     * If burn fee is lower than total fee, an affiliate fee is computed if token_id > 0.
+     * Affiliate fees are sent to the CURRENT token owner.
+     * Difference of _amount_fee - (_burn_fee + affiliateFee) is sent to treasury.
+     */
     function handleFee(uint256 _pid, uint256 _amount_fee, uint256 _burn_fee) internal {
         PoolInfo storage pool = poolInfo[_pid];
         IERC20 token = pool.stakeToken;
@@ -390,7 +452,11 @@ contract BitMaster is Ownable, ReentrancyGuard {
 
     /// USER ACTIONS
 
-    // Deposit tokens for bit allocation.
+    /**
+     * @notice Depost token _amount in pool _pid
+     * Checks if membership is required and validates given pool id _pid.
+     * nonReentrant protected.
+     */
     function deposit(uint256 _pid, uint256 _amount) external validatePool(_pid) nonReentrant requireMembership(_pid) {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
@@ -432,7 +498,12 @@ contract BitMaster is Ownable, ReentrancyGuard {
         emit EmitDeposit(msg.sender, _pid, _amount, lockedFor);
     }
 
-    // Withdraw tokens.
+    /**
+     * @notice Withdraw token _amount from pool _pid
+     * Membership is not required, i.e., user can always withdraw their token regardless of membership mechanism.
+     * Validates given pool id _pid.
+     * nonReentrant protected.
+     */
     function withdraw(uint256 _pid, uint256 _amount) external validatePool(_pid) nonReentrant {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
@@ -461,9 +532,13 @@ contract BitMaster is Ownable, ReentrancyGuard {
         emit EmitWithdraw(msg.sender, _pid, _amount);
     }
 
-    // Withdraw without caring about rewards. EMERGENCY ONLY.
-    // Bound to locked time
-    // Simplified fee processing (fee deducted and sent to treasury)
+    /**
+     * @notice Withdraw without caring about rewards. EMERGENCY ONLY.
+     * Locked timer needs to be 0.
+     * Simplified fee processing (fee deducted and sent to treasury). No affiliate processing for simplicity.
+     * Validates given pool id _pid.
+     * nonReentrant protected.
+     */
     function emergencyWithdraw(uint256 _pid) public validatePool(_pid) nonReentrant {
         require(timeToUnlock(_pid, msg.sender) == 0, "withdraw: tokens are still locked.");
         PoolInfo storage pool = poolInfo[_pid];
@@ -472,36 +547,48 @@ contract BitMaster is Ownable, ReentrancyGuard {
         user.amount = 0;
         user.rewardDebt = 0;
         uint256 amount_fee = 0;
-        if (pool.withdrawFeeBP > 0 && !IsExcludedFromFees[msg.sender]) {
-            amount_fee = _amount.mul(pool.withdrawFeeBP).div(MAX_PERCENT);
-            // fee is deducted but simplified processed due to complexity of called function handleFee
-            // uint256 burn_fee = amount_fee.mul(pool.burnWithdrawFeeBP).div(pool.withdrawFeeBP);
-            // handleFee(_pid, amount_fee, burn_fee);
-            pool.stakeToken.safeTransfer(treasuryaddr, amount_fee);
+        if (_amount != 0) {
+            if (pool.withdrawFeeBP > 0 && !IsExcludedFromFees[msg.sender]) {
+                amount_fee = _amount.mul(pool.withdrawFeeBP).div(MAX_PERCENT);
+                // fee is deducted but simplified processed due to complexity of called function handleFee
+                // uint256 burn_fee = amount_fee.mul(pool.burnWithdrawFeeBP).div(pool.withdrawFeeBP);
+                // handleFee(_pid, amount_fee, burn_fee);
+                pool.stakeToken.safeTransfer(treasuryaddr, amount_fee);
+            }
+            // transfer token minues penalty fee
+            pool.stakeToken.safeTransfer(address(msg.sender), _amount.sub(amount_fee));
         }
-        // transfer token minues penalty fee
-        pool.stakeToken.safeTransfer(address(msg.sender), _amount.sub(amount_fee));
         // emit event
         emit EmitEmergencyWithdraw(msg.sender, _pid, _amount);
     }
 
     /// SECTION HELPERS
 
-    // Safe bit transfer function, just in case if rounding error causes pool to not have enough bits.
+    /**
+     * @notice Safe bit transfer function, just in case if rounding error causes pool to not have enough bits.
+     */
     function safeBitTransfer(address _to, uint256 _amount) internal {
         ram.safeBitTransfer(_to, _amount);
     }
 
-    // Update treasury address by the previous tresaruy address.
+    /**
+     * @notice Update treasury address by the previous tresaruy address.
+     * Can only be called by current treasury address. 
+     */
     function tres(address _treasuryaddr) public {
         require(msg.sender == treasuryaddr, "treasury: wut?");
-        require(msg.sender != address(0), "treasury: 0x0 address is not the best idea here");
+        require(_treasuryaddr != address(0), "treasury: 0x0 address is not the best idea here");
         treasuryaddr = _treasuryaddr;
         emit EmitTreasuryChanged(_treasuryaddr);
     }
 
-    /// SECTION ADMIN    
-    
+    /// SECTION ADMIN 
+
+    /**
+     * @notice Set start block any time after deployment.
+     * Can only be called once if startBlock == 0.
+     * onlyOwner protected.
+     */
     function setStartblock(uint256 _block) public onlyOwner {
         require(
             _block >= block.number,
@@ -511,27 +598,48 @@ contract BitMaster is Ownable, ReentrancyGuard {
             startBlock == 0,
             "set startblock: start block already set"
         );
+        for (uint256 pid = 0; pid < poolInfo.length; pid++) {
+            PoolInfo storage pool = poolInfo[pid];
+            pool.lastRewardBlock = _block;
+        }
         startBlock = _block;
+        emit SetStartblock(_block);
     }
     
+    /**
+     * @notice Pause minting.
+     * Optional: all pools are updated before changing pause state.
+     * onlyOwner protected.
+     */
     function setPaused(bool _paused, bool _withUpdate) external onlyOwner {
         // only in case of emergency.
         if (_withUpdate) {
             // update all pools before activation/deactivation
             _massUpdatePools();
         }
-        paused = _paused;   
+        paused = _paused;  
+        emit SetPaused(_paused);
     }
 
+    /**
+     * @notice Whitelist addresse -> Makes _address a member. Useful for partner contracts.
+     * onlyOwner protected.
+     */
     function whiteListAddress(address _address) external onlyOwner {
         // whitelist addresses as members, such as partner contracts    
         // cannot be undone as this might mess up the partners' contracts     
-        isWhiteListed[_address] = true;   
+        isWhiteListed[_address] = true;  
+        emit WhiteListed(_address);   
     }
 
+    /**
+     * @notice Exclude address from fee -> Useful for partner contracts that cannot handle fees.
+     * onlyOwner protected.
+     */
     function excludeFromFees(address _address) external onlyOwner {
         // whitelist addresses as non-fee-payers, such as partner contracts  
         // cannot be undone as this might mess up the partners' contracts      
-        IsExcludedFromFees[_address] = true;   
+        IsExcludedFromFees[_address] = true; 
+        emit ExcludedFromFees(_address);  
     }
 }

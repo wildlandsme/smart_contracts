@@ -30,18 +30,18 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     uint256 duration = 30 days; 
     uint256 finishOfVest = RELEASES * duration;
     mapping(address => Vest) public vests;
-    uint256 start;
-    uint256 finish;
+    uint256 public start;
+    uint256 public finish;
 
     modifier onlyCrowdsale() {
-        require(_msgSender() == crowdsaleAddress);
+        require(_msgSender() == crowdsaleAddress, "TokenVesting: Only crowdsale can call this function.");
         _;
     }
 
     constructor(address _token) {
         require(
             _token != address(0),
-            "TokenVestings: invalid zero address for token provided"
+            "TokenVesting: invalid zero address for token provided"
         );
 
         token = ERC20(_token);
@@ -49,14 +49,22 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         totalLimit = 1e6 * (10**token.decimals());
     }
 
+    /**
+     * @notice Set crowdsale address.
+     * onlyOwner protected.
+     */
     function setCrowdsaleAddress(address _crowdsaleAddress) public onlyOwner {
         require(
             _crowdsaleAddress != address(0),
-            "TokenVestings: invalid zero address for crowdsale"
+            "TokenVesting: invalid zero address for crowdsale"
         );
         crowdsaleAddress = _crowdsaleAddress;
     }
 
+    /**
+     * @notice Add a new purchased _value of tokens.
+     * onlyCrowdsale protected.
+     */
     function vest(
         address _to,
         uint256 _value,
@@ -79,7 +87,6 @@ contract TokenVesting is Ownable, ReentrancyGuard {
 
         
         if (vests[_to].value == 0) {
-            // vests[_to].releasesCount = 10;
             vests[_to].revokable = _revokable;
             vests[_to].revoked = false;
         }
@@ -90,6 +97,11 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         emit NewVest(_msgSender(), _to, _value);
     }
 
+    /**
+     * @notice Revoke added vest.
+     * Not possible for vests added by crowdsale.
+     * onlyOwner protected.
+     */
     function revoke(address _holder) public onlyOwner {
         Vest storage vested = vests[_holder];
 
@@ -106,12 +118,22 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         emit RevokeVest(_holder, refund);
     }
 
+    /**
+     * @notice Start vesting period.
+     * Only crowdsale. Will be called once the sale is completed.
+     * onlyCrowdsale protected.
+     */
     function startVesting(uint256 _start) public onlyCrowdsale {
         require(finish == 0, "TokenVesting: already started!");
         start = _start;
         finish = _start.add(finishOfVest);
     }
 
+    /**
+     * @notice Calculate amount of already vested tokens.
+     * Can also return the amount of unlocked vested tokens.
+     * For external use only.
+     */
     function vestedTokens(address _holder, bool unlocked)
         external
         view
@@ -133,6 +155,11 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         return vestedAmount;
     }
 
+    /**
+     * @notice Calculate amount of already vested tokens.
+     * Return full _vested.value if vesting period is finished.
+     * For internal use only.
+     */
     function calculateVestedTokens(Vest memory _vested)
         private
         view
@@ -144,20 +171,27 @@ contract TokenVesting is Ownable, ReentrancyGuard {
 
         if (start > block.timestamp)
             return 0;
+        // 40% are initially unlocked right away
         uint256 initalUnlock = 2;
         uint256 timePassedAfterStart = block.timestamp.sub(start);
+        // Consider initial unlock
         uint256 availableReleases = timePassedAfterStart.div(duration) + initalUnlock;
+        // RELEASES = 3 -> 5 releases in total
         uint256 tokensPerRelease = _vested.value.div(RELEASES + initalUnlock);
 
         return availableReleases.mul(tokensPerRelease);
     }
 
+    /**
+     * @notice Countdown to be displayed on frontend. 
+     * Returns next vesting timestamp if nothing is transferrable, else 0 (transferrable amount is unlocked).
+     */
     function countdown(address _holder) external view returns (uint256){
         if (block.timestamp >= finish) {
             return 0;
         }
         Vest storage vested = vests[_holder];
-        // check vested amount, if greater 0, vesting is still active
+        // check vested amount, if greater 0, vesting is still unlocked
         uint256 vestedAmount = calculateVestedTokens(vested);
         uint256 transferable = vestedAmount.sub(vested.transferred);
         if (transferable > 0) {
@@ -167,14 +201,19 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         uint256 timePassedAfterStart = block.timestamp.sub(start);
         uint256 availableReleases = timePassedAfterStart.div(duration);
         // return unlock timestamp in unix time
-        return start.add(duration.mul(availableReleases + 1)); //.sub(timePassedAfterStart);
+        return start.add(duration.mul(availableReleases + 1));
     }
 
+    /**
+     * @notice Claim vested tokens. 
+     * Returns if nothing to vest or nothing is unlocked. 
+     * nonReentrant protected.
+     */
     function unlockVestedTokens() external nonReentrant {
         require(start != 0, "vesting: not started yet");
         Vest storage vested = vests[_msgSender()];
-        require(vested.value != 0);
-        require(!vested.revoked);
+        require(vested.value != 0, "vesting: no tokens to vest");
+        require(!vested.revoked, "vesting: revoked");
 
         uint256 vestedAmount = calculateVestedTokens(vested);
         if (vestedAmount == 0) {
