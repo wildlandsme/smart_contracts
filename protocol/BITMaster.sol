@@ -96,8 +96,8 @@ contract BitMaster is Ownable, ReentrancyGuard {
     event CodeSuccess(bytes4 code, uint256 tokenId);
     event CodeSet(address indexed user, bytes4 code);
     event SetStartTimestamp(uint256 startTimestamp);
-    event ExcludedFromFees(address user);
-    event WhiteListed(address user);
+    event ExcludedFromFees(address indexed user, bool value);
+    event WhiteListed(address indexed user, bool value);
     event SetPaused(bool paused);
 
     constructor(
@@ -646,7 +646,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
     function whiteListAddress(address _address, bool _value) external onlyOwner {
         // whitelist addresses as members, such as partner contracts    
         isWhiteListed[_address] = _value;  
-        emit WhiteListed(_address);   
+        emit WhiteListed(_address, _value);   
     }
 
     /**
@@ -658,6 +658,6 @@ contract BitMaster is Ownable, ReentrancyGuard {
     function excludeFromFees(address _address, bool _value) external onlyOwner {
         // whitelist addresses as non-fee-payers, such as partner contracts  +   
         IsExcludedFromFees[_address] = _value; 
-        emit ExcludedFromFees(_address);  
+        emit ExcludedFromFees(_address, _value);  
     }
 }
