@@ -110,7 +110,6 @@ contract BitMaster is Ownable, ReentrancyGuard {
         ram = _ram;
         wildlandcard = _wildlandcard;
         treasuryaddr = _treasuryaddr;
-        startTimestamp = block.timestamp;
         // staking pool
         poolInfo.push(PoolInfo({
             stakeToken: _bit,
