@@ -144,14 +144,6 @@ contract BitMaster is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @dev Check that no pool is added twice.
-     */
-    modifier nonDuplicated(IERC20 _lpToken) {
-        require(poolExistence[_lpToken] == false, "add: existing pool");
-        _;
-    }
-
-    /**
      * @dev Check if membership is required and if so, check if msg.sender has membership (see isMember function).
      */
     modifier requireMembership(uint256 _pid) {
@@ -178,7 +170,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
      * @param _withUpdate true if pools should be updated before change
      * @param _requireMembership is user membership required for staking?
      */
-    function add(uint256 _allocPoint, IERC20 _token, uint256 _lockTimer, uint16 _depositFeeBP, uint16 _burnDepositFee, uint16 _withdrawFeeBP, uint16 _burnWithdrawFee, bool _withUpdate, bool _requireMembership) public onlyOwner nonDuplicated(_token) {
+    function add(uint256 _allocPoint, IERC20 _token, uint256 _lockTimer, uint16 _depositFeeBP, uint16 _burnDepositFee, uint16 _withdrawFeeBP, uint16 _burnWithdrawFee, bool _withUpdate, bool _requireMembership) public onlyOwner {
         require(_depositFeeBP <= MAX_PERCENT.div(10), "add: invalid deposit fee basis points"); // max 10%
         require(_burnDepositFee <= _depositFeeBP, "add: invalid burn deposit fee"); // max 100% of deposit fee
         require(_withdrawFeeBP <= MAX_PERCENT.div(10), "add: invalid withdraw fee basis points"); // max 10%
