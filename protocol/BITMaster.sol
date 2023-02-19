@@ -332,7 +332,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
         }
         uint256 lpSupply = pool.stakedAmount;
         if (lpSupply == 0 || pool.allocPoint == 0) {
-            lastTimestamp = block.timestamp;
+            pool.lastRewardTimestamp = block.timestamp;
             return;
         }
         uint256 multiplier = getMultiplier(lastTimestamp, block.timestamp);
