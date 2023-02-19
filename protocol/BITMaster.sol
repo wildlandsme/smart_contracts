@@ -75,7 +75,6 @@ contract BitMaster is Ownable, ReentrancyGuard {
     uint256 public totalAllocPointWithoutPool; // in 1e3
     // The block number when bit mining starts.
     uint256 public startTimestamp; // in 1e0
-    mapping(IERC20 => bool) public poolExistence;
     bool public paused;
     // codes of affiliatees
     mapping (address => bytes4) public affiliatee;
@@ -124,7 +123,6 @@ contract BitMaster is Ownable, ReentrancyGuard {
             requireMembership: true,
             stakedAmount: 0
         }));
-        poolExistence[_bit] = true;
         totalAllocPoint = 1000;
     }
 
@@ -198,7 +196,6 @@ contract BitMaster is Ownable, ReentrancyGuard {
             requireMembership: _requireMembership,
             stakedAmount: 0
         }));
-        poolExistence[_token] = true;
         updateStakingPool();
         emit EmitAdd(address(_token), _allocPoint, _lockTimer, _depositFeeBP, _burnDepositFee, _withdrawFeeBP, _burnWithdrawFee, _requireMembership);
     }
