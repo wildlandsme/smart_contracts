@@ -13,6 +13,7 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     event NewVest(address indexed _from, address indexed _to, uint256 _value);
     event UnlockVest(address indexed _holder, uint256 _value);
     event RevokeVest(address indexed _holder, uint256 _refund);
+    event SetCrowdsale(address crowsale);
 
     struct Vest {
         uint256 value;
@@ -29,7 +30,6 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     mapping(address => Vest) public vests;
     uint256 public start;
     uint256 public finish;
-    event SetCrowdsale(address crowsale);
 
     modifier onlyCrowdsale() {
         require(_msgSender() == crowdsaleAddress, "TokenVesting: Only crowdsale can call this function.");
@@ -166,7 +166,7 @@ contract TokenVesting is Ownable, ReentrancyGuard {
      * @dev Countdown to be displayed on frontend. 
      * Returns next vesting timestamp if nothing is transferrable, else 0 (transferrable amount is unlocked).
      * @param _holder user address
-     * @return 0 if unlocked, else timestamp when unlocked
+     * @return 0 if unlocked, else timestamp when locked
      */
     function countdown(address _holder) external view returns (uint256){
         if (block.timestamp >= finish) {
