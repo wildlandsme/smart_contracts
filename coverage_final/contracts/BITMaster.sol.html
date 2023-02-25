@@ -35,9 +35,9 @@
         <span class='fraction'>28/28</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">95.83% </span>
+        <span class="strong">95.79% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>184/192</span>
+        <span class='fraction'>182/190</span>
       </div>
     </div>
   </div>
@@ -704,11 +704,7 @@
 659
 660
 661
-662
-663
-664
-665</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+662</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -834,7 +830,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -908,7 +903,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12×</span>
 <span class="cline-any cline-yes">12×</span>
 <span class="cline-any cline-yes">12×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1426,9 +1420,9 @@ contract BitMaster is Ownable, ReentrancyGuard {
     
 &nbsp;
     // The bit TOKEN!
-    BitGold public bit;
+    BitGold public immutable bit;
     // The ram... where rewards are stored until users unstake or collect
-    BitRAM public ram;
+    BitRAM public immutable ram;
     uint32 public constant MAX_PERCENT = 1e4; // for avoiding errors while programming, never use magic numbers :)
     uint256 public constant DECIMALS_TOKEN = 1e18;
     uint256 public constant DECIMALS_SHARE_REWARD = 1e18;
@@ -1448,12 +1442,11 @@ contract BitMaster is Ownable, ReentrancyGuard {
     uint256 public totalAllocPointWithoutPool; // in 1e3
     // The block number when bit mining starts.
     uint256 public startTimestamp; // in 1e0
-    mapping(IERC20 =&gt; bool) public poolExistence;
     bool public paused;
     // codes of affiliatees
     mapping (address =&gt; bytes4) public affiliatee;
     // member cards serve as affiliate token to earn part of staking fees that have to be paid when staking (non-inflationary)
-    IWildlandCards public wildlandcard;
+    IWildlandCards public immutable wildlandcard;
 &nbsp;
     // white list addresses as member and exclude from fees (e.g., partner contracts)
     mapping (address =&gt; bool) public isWhiteListed;
@@ -1469,8 +1462,8 @@ contract BitMaster is Ownable, ReentrancyGuard {
     event CodeSuccess(bytes4 code, uint256 tokenId);
     event CodeSet(address indexed user, bytes4 code);
     event SetStartTimestamp(uint256 startTimestamp);
-    event ExcludedFromFees(address user);
-    event WhiteListed(address user);
+    event ExcludedFromFees(address indexed user, bool value);
+    event WhiteListed(address indexed user, bool value);
     event SetPaused(bool paused);
 &nbsp;
     constructor(
@@ -1483,7 +1476,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
         ram = _ram;
         wildlandcard = _wildlandcard;
         treasuryaddr = _treasuryaddr;
-        startTimestamp = block.timestamp;
+        startTimestamp = block.timestamp - 1;
         // staking pool
         poolInfo.push(PoolInfo({
             stakeToken: _bit,
@@ -1498,7 +1491,6 @@ contract BitMaster is Ownable, ReentrancyGuard {
             requireMembership: true,
             stakedAmount: 0
         }));
-        poolExistence[_bit] = true;
         totalAllocPoint = 1000;
     }
 &nbsp;
@@ -1572,7 +1564,6 @@ contract BitMaster is Ownable, ReentrancyGuard {
             requireMembership: _requireMembership,
             stakedAmount: 0
         }));
-        poolExistence[_token] = true;
         updateStakingPool();
         emit EmitAdd(address(_token), _allocPoint, _lockTimer, _depositFeeBP, _burnDepositFee, _withdrawFeeBP, _burnWithdrawFee, _requireMembership);
     }
@@ -1706,7 +1697,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
         }
         uint256 lpSupply = pool.stakedAmount;
         if (lpSupply == 0 || <span class="branch-1 cbranch-no" title="branch not covered" >pool.allocPoint == 0</span>) {
-            lastTimestamp = block.timestamp;
+            pool.lastRewardTimestamp = block.timestamp;
             return;
         }
         uint256 multiplier = getMultiplier(lastTimestamp, block.timestamp);
@@ -2020,7 +2011,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
     function whiteListAddress(address _address, bool _value) external onlyOwner {
         // whitelist addresses as members, such as partner contracts    
         isWhiteListed[_address] = _value;  
-        emit WhiteListed(_address);   
+        emit WhiteListed(_address, _value);   
     }
 &nbsp;
     /**
@@ -2032,7 +2023,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
     function excludeFromFees(address _address, bool _value) external onlyOwner {
         // whitelist addresses as non-fee-payers, such as partner contracts  +   
         IsExcludedFromFees[_address] = _value; 
-        emit ExcludedFromFees(_address);  
+        emit ExcludedFromFees(_address, _value);  
     }
 }
 &nbsp;</pre></td></tr>
@@ -2041,7 +2032,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Feb 18 2023 14:52:57 GMT+0100 (Central European Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Feb 25 2023 20:42:04 GMT+0100 (Central European Standard Time)
 </div>
 </div>
 <script src="../prettify.js"></script>

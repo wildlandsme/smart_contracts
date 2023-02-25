@@ -53,9 +53,9 @@ contract BitMaster is Ownable, ReentrancyGuard {
     
 
     // The bit TOKEN!
-    BitGold public bit;
+    BitGold public immutable bit;
     // The ram... where rewards are stored until users unstake or collect
-    BitRAM public ram;
+    BitRAM public immutable ram;
     uint32 public constant MAX_PERCENT = 1e4; // for avoiding errors while programming, never use magic numbers :)
     uint256 public constant DECIMALS_TOKEN = 1e18;
     uint256 public constant DECIMALS_SHARE_REWARD = 1e18;
@@ -79,7 +79,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
     // codes of affiliatees
     mapping (address => bytes4) public affiliatee;
     // member cards serve as affiliate token to earn part of staking fees that have to be paid when staking (non-inflationary)
-    IWildlandCards public wildlandcard;
+    IWildlandCards public immutable wildlandcard;
 
     // white list addresses as member and exclude from fees (e.g., partner contracts)
     mapping (address => bool) public isWhiteListed;

@@ -9,23 +9,22 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 contract Crowdsale is Context, Ownable, ReentrancyGuard {
-    using SafeMath for uint256;
     using Address for address;
     using SafeERC20 for ERC20;
 
     // tokens and contracts
-    ERC20 public token;
-    IERC721 public memberCard;
-    TokenVesting public vestingContract;
+    ERC20 public immutable token;
+    IERC721 public immutable memberCard;
+    TokenVesting public immutable vestingContract;
 
     // sale addresses
     address payable public treasury_1;
     address payable public treasury_2;
         
     // rates
-    uint256 public tokenAmountRateOne = 1667; // per ETH // 40% off -> 66% more tokens
-    uint256 public tokenAmountRateTwo = 1250;  // per ETH // 20% off -> 25% more tokens
-    uint256 public tokenAmountRateThree = 1000;  // per ETH 
+    uint256 public constant tokenAmountRateOne = 1667; // per ETH // 40% off -> 66% more tokens
+    uint256 public constant tokenAmountRateTwo = 1250;  // per ETH // 20% off -> 25% more tokens
+    uint256 public constant tokenAmountRateThree = 1000;  // per ETH 
     uint256 public tokensRaised;
 
     // limits
@@ -33,7 +32,7 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
     uint256 public limitPhaseTwo; 
     uint256 public limitPhaseThree;
 
-    uint256 public minimumBuyAmount = 1 * 1e16; // 0.01 ETH
+    uint256 public constant minimumBuyAmount = 1 * 1e16; // 0.01 ETH
     bool public isIcoCompleted = false;
     bool public hasIcoPaused = false;
 
@@ -43,16 +42,22 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
     uint256 public startCrowdsaleTime;
     uint256 public startSecondRoundTime;
     uint256 public startThirdRoundTime;
-
     uint256 public whiteListSpots = 100;
+    bool public extendedRoundOne = false;
+    bool public extendedRoundTwo = false;
 
     // whitelisted addressed
     mapping(address => bool) public whiteListed;
 
     event TokenBuy(address indexed buyer, uint256 value, uint256 amount);
     event Whitelist(address indexed whitelisted);
+    event WhitelistMultiple(address[] addresses, bool value);
     event Close();
     event SetTime(string indexed round, uint256 timestamp);
+    event TreasuryChanged(address treasury1, address treasury2);
+    event Paused(bool paused);
+    event ExtendFirstRound(bool extended);
+    event ExtendSecondRound(bool extended);
 
     modifier whenIcoCompleted() {
         require(
@@ -62,8 +67,9 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
     }
 
     modifier onlyAfterStart() {
+        uint256 _startTime = startCrowdsaleTime;
         require(
-            block.timestamp >= startCrowdsaleTime && startCrowdsaleTime != 0,
+            block.timestamp >= _startTime && _startTime != 0,
             "Crowdsale: crowdsale not started yet"
         );
         _;
@@ -120,9 +126,10 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         treasury_1 = _treasury_1;
         treasury_2 = _treasury_2;
 
-        limitPhaseOne = 75 * 1e3 * (10**token.decimals()); // + 75k
-        limitPhaseTwo = 225 * 1e3 * (10**token.decimals()); // + 150k (225k)
-        limitPhaseThree = 525 * 1e3 * (10**token.decimals()); // + 300k (525k)
+        uint256 _decimals = ERC20(_token).decimals();
+        limitPhaseOne = 75 * 1e3 * (10**_decimals); // + 75k
+        limitPhaseTwo = 225 * 1e3 * (10**_decimals); // + 150k (225k)
+        limitPhaseThree = 525 * 1e3 * (10**_decimals); // + 300k (525k)
     }
 
     /**
@@ -137,6 +144,7 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
             require(_grantees[i] != address(0), "Crowdsale: Invalid address for grantee");
             whiteListed[_grantees[i]] = set;
         }
+        emit WhitelistMultiple(_grantees, set);
     }
 
     /**
@@ -144,25 +152,18 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
      * Cannot be called after presale has started.
      */
     function secureWhitelistSpot() external {
+        uint256 _spots = whiteListSpots;
         require(
             block.timestamp < startCrowdsaleTime,
             "Crowdsale: crowdsale already started"
         );
-        require(whiteListSpots > 0, 
+        require(_spots > 0, 
             "Crowdsale: no spot left.");
         require(!whiteListed[msg.sender], 
             "Crowdsale: already whitelisted.");
-        whiteListSpots -= 1;
+        whiteListSpots = _spots - 1;
         whiteListed[msg.sender] = true;
         emit Whitelist(msg.sender);
-    }
-
-    /**
-     * @dev Return available whitelist spots.
-     * @return amount of available white list spots
-     */
-    function getWhitelistSpots() external view returns (uint256) {
-        return whiteListSpots;
     }
 
     /**
@@ -176,6 +177,7 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         require (_treasury_2 != address(0), "Crowdsale: invalid address 2");
         treasury_1 = _treasury_1;
         treasury_2 = _treasury_2;
+        emit TreasuryChanged(treasury_1, treasury_2);
     }
     /**
      * @dev Set white list address.
@@ -193,62 +195,69 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         uint256 _amount = msg.value;
         // tokens to buy
         uint256 tokensToBuy = 0;
+        uint256 _limitOne = limitPhaseOne;
+        uint256 _limitTwo = limitPhaseTwo;
+        uint256 _limitThree = limitPhaseThree;
+        uint256 _raised = tokensRaised;
+        uint256 _2ndRoundTime = startSecondRoundTime;
+        uint256 _3rdRoundTime = startThirdRoundTime;
 
-        if (tokensRaised < limitPhaseOne) {
+        if (_raised < _limitOne) {
             tokensToBuy = _getTokensAmount(_amount, tokenAmountRateOne);
-            // round 1 is only for whitelisted addresses
+            // round 1 is only for whitelisted addresses or for wmc card holders if extended
             require(
-                whiteListed[_msgSender()], 
+                whiteListed[_msgSender()] || (extendedRoundOne && memberCard.balanceOf(_msgSender()) > 0) || extendedRoundTwo, 
                 "Crowdsale: Sender not whitelisted."
             );
             require(
                 (_amount >= minimumBuyAmount) ||
-                    // safetey case to allow for lower purchase if limit is reached
-                    (tokensToBuy >= (limitPhaseOne - tokensRaised)),
+                    // safety case to allow for lower purchase if limit is reached
+                    (tokensToBuy >= (_limitOne - _raised)),
                 "Crowdsale: minimum eth amount not sent."
             );
-            if (tokensRaised + tokensToBuy > limitPhaseOne) {
+            if (_raised + tokensToBuy > _limitOne) {
                 // adjust tokensToBuy
-                tokensToBuy = limitPhaseOne.sub(tokensRaised);
+                tokensToBuy = _limitOne - _raised;
                 // set actual cost based on available tokens
                 _amount = _getETHAmount(tokensToBuy, tokenAmountRateOne);
             }
-        } else if (tokensRaised >= limitPhaseOne && tokensRaised < limitPhaseTwo && isIcoFirstRoundCompleted) {
+        } else if (_raised < _limitTwo && isIcoFirstRoundCompleted) {
             require(
-                startSecondRoundTime > 0 && block.timestamp >= startSecondRoundTime,
+                _2ndRoundTime > 0 && block.timestamp >= _2ndRoundTime,
                 "Crowdsale: second round not started!"
             );
+            // only for wmc card holders or public if extended
             require(
-                memberCard.balanceOf(_msgSender()) > 0, 
+                memberCard.balanceOf(_msgSender()) > 0  || extendedRoundTwo, 
                 "Crowdsale: only for member card holders."
             );
             tokensToBuy = _getTokensAmount(_amount, tokenAmountRateTwo);
             require(
                 (_amount >= minimumBuyAmount) ||
-                    (tokensToBuy >= (limitPhaseTwo - tokensRaised)),
+                    (tokensToBuy >= (_limitTwo - _raised)),
                 "Crowdsale: minimum eth amount not sent."
             );
-            if (tokensRaised + tokensToBuy > limitPhaseTwo) {
+            if (_raised + tokensToBuy > _limitTwo) {
                 // adjust tokensToBuy
-                tokensToBuy = limitPhaseTwo.sub(tokensRaised);
+                tokensToBuy = _limitTwo - _raised;
                 // set actual cost based on available tokens
                 _amount = _getETHAmount(tokensToBuy, tokenAmountRateTwo);
             }
-        } else if (tokensRaised >= limitPhaseTwo && tokensRaised < limitPhaseThree && isIcoSecondRoundCompleted) {
+        } else if (_raised < _limitThree && isIcoSecondRoundCompleted) {
             require(
-                startThirdRoundTime > 0 && block.timestamp >= startThirdRoundTime,
+                _3rdRoundTime > 0 && block.timestamp >= _3rdRoundTime,
                 "Crowdsale: third round not started!"
             );
             // public presale
             tokensToBuy = _getTokensAmount(_amount, tokenAmountRateThree);
             require(
                 (_amount >= minimumBuyAmount) ||
-                    (tokensToBuy >= (limitPhaseThree - tokensRaised)),
+                    (tokensToBuy >= (_limitThree - _raised)),
                 "Crowdsale: minimum eth amount not sent."
             );
-            if (tokensRaised + tokensToBuy > limitPhaseThree) {
+            if (_raised + tokensToBuy > _limitThree) {
                 // adjust tokensToBuy
-                tokensToBuy = limitPhaseThree.sub(tokensRaised);
+                tokensToBuy = _limitThree - _raised;
                 // set actual cost based on available tokens
                 _amount = _getETHAmount(tokensToBuy, tokenAmountRateThree);
             }
@@ -261,30 +270,30 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
 
         token.safeTransfer(address(vestingContract), tokensToBuy);
         // transfer funds to treasury addresses
-        uint256 split_1 = _amount.div(2);
+        uint256 split_1 = _amount / 2;
         treasury_1.transfer(split_1);
-        treasury_2.transfer(_amount.sub(split_1));
+        treasury_2.transfer(_amount - split_1);
         if (_amount < msg.value){
             // refund the rest back to sender if _amount < msg.value
-            payable(_msgSender()).transfer(msg.value.sub(_amount));
+            payable(_msgSender()).transfer(msg.value - _amount);
         }
         // non-revokable vest
-        vestingContract.vest(_msgSender(), tokensToBuy, false);
-        emit TokenBuy(_msgSender(), _amount, tokensToBuy);
-        // set raised token amount
-        tokensRaised += tokensToBuy;
+        vestingContract.vest(_msgSender(), tokensToBuy);
         // check limits for round 1 and 2
-        if (tokensRaised >= limitPhaseOne) {
+        if (_raised + tokensToBuy >= _limitOne) {
             isIcoFirstRoundCompleted = true;
         }
-        if (tokensRaised >= limitPhaseTwo) {
+        if (_raised + tokensToBuy >= _limitTwo) {
             isIcoSecondRoundCompleted = true;
         }
+        // set raised token amount
+        tokensRaised = _raised + tokensToBuy;
+        emit TokenBuy(_msgSender(), _amount, tokensToBuy);
     }
 
     /**
      * @dev Get ETH amount given a _tokenAmount and the respective _tokenAmountRate per ETH.
-     * @param _tokenAmount amont of tokens to be purchased
+     * @param _tokenAmount amount of tokens to be purchased
      * @param _tokenAmountRate amount of tokens per eth
      * @return eth cost
      */
@@ -294,7 +303,7 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         returns (uint256)
     {
         // tokens -> rate * amount -> amount = tokens/rate
-        return _tokenAmount.div(_tokenAmountRate);
+        return _tokenAmount / _tokenAmountRate;
     }
 
     /**
@@ -309,11 +318,11 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         returns (uint256)
     {
         // tokens -> rate * _value
-        return _value.mul(_tokenAmountRate);
+        return _value * _tokenAmountRate;
     }
 
     /**
-     * @dev Close crowedsale.
+     * @dev Close crowdsale.
      * onlyOwner protected.
      */
     function closeCrowdsale() public onlyOwner {
@@ -323,15 +332,16 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
     }
 
     /**
-     * @dev Pause crowedsale.
+     * @dev Pause crowdsale.
      * onlyOwner protected.
      */
     function togglePauseCrowdsale() public onlyOwner {
         hasIcoPaused = !hasIcoPaused;
+        emit Paused(hasIcoPaused);
     }
 
     /**
-     * @dev Start crowedsale.
+     * @dev Start crowdsale.
      * onlyOwner protected.
      * @param _time unix time stamp
      */
@@ -373,6 +383,26 @@ contract Crowdsale is Context, Ownable, ReentrancyGuard {
         );
         startThirdRoundTime = _time;
         emit SetTime("3rd", _time);
+    }
+
+   /**
+     * @dev Extend 1st round.
+     * onlyOwner protected.
+     * @param _extended is the 1st round to be extended for wmc card holder?
+     */
+    function extendRoundOne(bool _extended) public onlyOwner {
+        extendedRoundOne = _extended;
+        emit ExtendFirstRound(_extended);
+    }
+
+   /**
+     * @dev Extend 2nd round.
+     * onlyOwner protected.
+     * @param _extended is the 2nd round to be extended for public?
+     */
+    function extendRoundTwo(bool _extended) public onlyOwner {
+        extendedRoundTwo = _extended;
+        emit ExtendSecondRound(_extended);
     }
 
     /**
