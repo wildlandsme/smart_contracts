@@ -87,12 +87,9 @@ contract BitMaster is Ownable, ReentrancyGuard {
 
     event EmitDeposit(address indexed user, uint256 indexed pid, uint256 amount, uint256 lockedFor);
     event EmitWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
-    event EmitEmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
     event EmitSet(uint256 pid, uint256 allocPoint, uint256 lockTimer, uint16 depositFeeBP, uint16 burnDepositFeeBP, uint16 withdrawFeeBP, uint16 burnWithdrawFeeBP, bool isMember);
     event EmitAdd(address token, uint256 allocPoint, uint256 lockTimer, uint16 depositFeeBP, uint16 burnDepositFeeBP, uint16 withdrawFeeBP, uint16 burnWithdrawFeeBP, bool isMember);
     event EmitTreasuryChanged(address _new);
-    event CodeFailed(uint256 tokenId);
-    event CodeSuccess(bytes4 code, uint256 tokenId);
     event CodeSet(address indexed user, bytes4 code);
     event SetStartTimestamp(uint256 startTimestamp);
     event ExcludedFromFees(address indexed user, bool value);
@@ -153,7 +150,6 @@ contract BitMaster is Ownable, ReentrancyGuard {
 
     /** 
      * @dev Add a new lp to the pool. Can only be called by the owner.
-     * It will be automatically checked if pool is duplicate.
      * Fee: Max fee 10% = fee base points <= 1000 (MAX_PERCENT = 1e4).
      * _lockTimer is measured in unix time.
      * onlyOwner protected.
@@ -216,22 +212,23 @@ contract BitMaster is Ownable, ReentrancyGuard {
      * @param _requireMembership is user membership required for staking?
      */
     function set(uint256 _pid, uint256 _allocPoint, uint256 _lockTimer, uint16 _depositFeeBP, uint16 _burnDepositFee, uint16 _withdrawFeeBP, uint16 _burnWithdrawFee, bool _withUpdate, bool _requireMembership) public onlyOwner validatePool(_pid) {
+        PoolInfo storage pool = poolInfo[_pid];
         require(_depositFeeBP <= MAX_PERCENT.div(10), "set: invalid deposit fee basis points"); // max 10%
         require(_burnDepositFee <= _depositFeeBP, "set: invalid burn deposit fee"); // max 100% of deposit fee
         require(_withdrawFeeBP <= MAX_PERCENT.div(10), "set: invalid withdraw fee basis points"); // max 10%
         require(_burnWithdrawFee <= _withdrawFeeBP, "set: invalid burn withdraw fee"); // max 100% of withdraw fee
         require(_lockTimer <= 30 days, "set: invalid time locked. Max allowed is 30 days in seconds");
-        if (_withUpdate)
+        if (_withUpdate) 
             _massUpdatePools();
-        uint256 prevAllocPoint = poolInfo[_pid].allocPoint;
+        uint256 prevAllocPoint = pool.allocPoint;
         // update values
-        poolInfo[_pid].allocPoint = _allocPoint;
-        poolInfo[_pid].depositFeeBP = _depositFeeBP;
-        poolInfo[_pid].burnDepositFee = _burnDepositFee;
-        poolInfo[_pid].withdrawFeeBP = _withdrawFeeBP;
-        poolInfo[_pid].burnWithdrawFee = _burnWithdrawFee;
-        poolInfo[_pid].lockTimer = _lockTimer;
-        poolInfo[_pid].requireMembership = _requireMembership;
+        pool.allocPoint = _allocPoint;
+        pool.depositFeeBP = _depositFeeBP;
+        pool.burnDepositFee = _burnDepositFee;
+        pool.withdrawFeeBP = _withdrawFeeBP;
+        pool.burnWithdrawFee = _burnWithdrawFee;
+        pool.lockTimer = _lockTimer;
+        pool.requireMembership = _requireMembership;
         if (prevAllocPoint != _allocPoint) {
             totalAllocPoint = totalAllocPoint.sub(prevAllocPoint).add(_allocPoint);
             // update alloc points for pools other than pool _pid = 0
@@ -653,7 +650,7 @@ contract BitMaster is Ownable, ReentrancyGuard {
      * @param _value enable/disable?
      */
     function excludeFromFees(address _address, bool _value) external onlyOwner {
-        // whitelist addresses as non-fee-payers, such as partner contracts  +   
+        // whitelist addresses as non-fee-payers, such as partner contracts  
         IsExcludedFromFees[_address] = _value; 
         emit ExcludedFromFees(_address, _value);  
     }
